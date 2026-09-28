@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lesson 4 — ARP | CCNA 200-301 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a121d;--panel:#101b29;--panel2:#0d1622;--line:#1e2f43;--text:#e9eef5;--muted:#8ea3bd;--accent:#3ee6d6;--accent2:#6d8dff;--warn:#f5c451;--good:#38d17a;--bad:#ef5a72;--radius:14px;--maxw:960px}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans','Tajawal',sans-serif;line-height:1.85;padding-bottom:80px;overflow-x:hidden}
+code,.mono{font-family:'IBM Plex Mono',monospace;overflow-wrap:anywhere}
+img{max-width:100%;height:auto;display:block;margin:0 auto}
+p,li,td,th,h1,h2,h3{overflow-wrap:break-word;word-break:break-word}
+
+/* ===== language system: EVERYTHING is English unless the toggle says otherwise ===== */
+body.lang-en .ar{display:none!important}
+body.lang-ar .en{display:none!important}
+body.lang-en .flip .en{display:none!important}
+body.lang-en .flip .ar{display:block!important}
+body.lang-ar .flip .ar{display:none!important}
+body.lang-ar .flip .en{display:block!important}
+.ar{font-family:'Tajawal',sans-serif;direction:rtl;text-align:right}
+span.ar{direction:rtl;unicode-bidi:isolate}
+ul.ar,ol.ar{padding-inline-start:0;padding-inline-end:22px}
+
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,18,29,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.lesson-tag{color:var(--muted);font-size:.85rem}
+.progress-wrap{flex:1;min-width:120px;max-width:280px;height:6px;background:var(--panel2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.progress-bar{height:100%;width:36%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.langswitch{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:3px;gap:2px}
+.langswitch button{border:none;background:transparent;color:var(--muted);font-weight:700;padding:6px 14px;border-radius:99px;cursor:pointer;font-size:.82rem}
+.langswitch button.active{background:var(--accent);color:#04141a}
+
+.shell{max-width:1180px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:1fr}
+@media(min-width:1020px){.shell{grid-template-columns:210px minmax(0,var(--maxw))}.toc{display:block!important}}
+.toc{display:none;position:sticky;top:78px;align-self:start;padding:28px 0;font-size:.85rem}
+.toc a{display:block;color:var(--muted);text-decoration:none;padding:7px 0;border-inline-start:2px solid var(--line);padding-inline-start:12px;margin-bottom:2px}
+.toc a:hover,.toc a.active{color:var(--accent);border-inline-start-color:var(--accent)}
+.toc-title{color:var(--text);font-weight:700;font-size:.8rem;margin-bottom:10px;padding-inline-start:12px}
+
+.hero{padding:34px 0 10px}
+.hero h1{font-size:clamp(1.5rem,3vw,2.2rem);margin:0 0 4px;font-weight:700}
+.hero .sub{color:var(--muted);margin-bottom:22px}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);padding:8px 14px;border-radius:99px;font-size:.85rem;color:var(--muted);margin-bottom:20px}
+.chip b{color:var(--accent)}
+main{min-width:0}
+section{margin:44px 0;scroll-margin-top:76px}
+h2{font-size:1.3rem;border-inline-start:4px solid var(--accent);padding-inline-start:12px;margin-bottom:14px}
+h3{font-size:1.05rem;color:var(--accent2);margin:22px 0 10px}
+p{margin:0 0 14px;color:#dbe4f0}
+ul,ol{padding-inline-start:22px;margin:0 0 14px}
+li{margin-bottom:8px;color:#dbe4f0}
+.badge{display:inline-block;background:var(--panel2);color:var(--accent);font-size:.75rem;padding:3px 10px;border-radius:99px;margin-bottom:10px}
+
+.para-block{margin-bottom:18px}
+.tr-btn{display:inline-flex;margin-top:2px;font-size:.78rem;color:var(--accent2);background:transparent;border:1px solid var(--line);padding:4px 12px;border-radius:99px;cursor:pointer}
+.tr-btn:hover{border-color:var(--accent2)}
+
+.term{border-bottom:1.5px dotted var(--accent);cursor:help;position:relative;color:#fff;font-weight:600}
+.term .tip{visibility:hidden;opacity:0;position:absolute;bottom:135%;left:0;background:#04141a;color:var(--accent);border:1px solid var(--accent);padding:8px 12px;border-radius:8px;font-size:.85rem;z-index:20;transition:opacity .15s;font-family:'Tajawal',sans-serif;direction:rtl;text-align:right;box-shadow:0 6px 20px rgba(0,0,0,.5);width:max-content;max-width:min(270px,70vw);font-weight:400}
+.term:hover .tip,.term.tap .tip{visibility:visible;opacity:1}
+
+.src{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:18px 0;overflow:hidden}
+.src-label{font-size:.75rem;color:var(--muted);margin-bottom:10px}
+.src-label::before{content:"📘 "}
+.extra{background:linear-gradient(180deg,rgba(245,196,81,.08),rgba(245,196,81,.03));border:1px solid rgba(245,196,81,.4);border-radius:var(--radius);padding:18px 20px;margin:18px 0}
+.extra .lab{color:var(--warn);font-weight:700;font-size:.85rem;margin-bottom:8px}
+.extra .lab::before{content:"⚡ "}
+.extra p,.extra li{color:#f0e3c0}
+
+.cli{background:#050b12;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:14px 0;direction:ltr;text-align:left;white-space:pre;font-family:'IBM Plex Mono',monospace;font-size:.82rem;line-height:1.6}
+.cli b{color:var(--accent)}
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:480px}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:start}
+th{background:var(--panel2);color:var(--accent)}
+.mono-cell{font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:left}
+
+.img-card{background:#050b12;border:1px solid var(--line);border-radius:12px;padding:14px;margin:16px 0}
+.img-card figcaption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:10px}
+.img-fallback{display:none;text-align:center;padding:26px 14px;background:var(--panel2);border:1px dashed var(--line);border-radius:10px;color:#dbe4f0;font-size:.9rem}
+
+.quiz-intro{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+.q-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:16px}
+.q-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.q-num{color:var(--accent);font-size:.8rem;font-weight:700}
+.q-text{font-weight:600;margin-bottom:14px;font-size:1.02rem}
+.q-card[data-lang=ar] .q-text,.q-card[data-lang=ar] .explain,.q-card[data-lang=ar] .opt span{font-family:'Tajawal',sans-serif;direction:rtl;text-align:right}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:.15s}
+.opt:hover{border-color:var(--accent2)}
+.opt input{accent-color:var(--accent)}
+.opt.correct{border-color:var(--good);background:rgba(56,209,122,.1)}
+.opt.wrong{border-color:var(--bad);background:rgba(239,90,114,.1)}
+.opt.disabled{pointer-events:none;opacity:.9}
+.q-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn{background:var(--accent2);color:#04141a;border:none;padding:9px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem}
+.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn.tiny{padding:5px 12px;font-size:.75rem}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.explain{display:none;margin-top:12px;padding:12px 14px;background:var(--panel2);border-radius:8px;border-inline-start:3px solid var(--accent);font-size:.9rem;color:#c7d4e6}
+.explain.show{display:block}
+.q-result{font-size:.85rem;font-weight:700;margin-top:8px}
+.q-result.ok{color:var(--good)}.q-result.no{color:var(--bad)}
+
+.lesson-nav{max-width:1180px;margin:50px auto 0;padding:20px;display:flex;justify-content:space-between;border-top:1px solid var(--line);gap:12px}
+.lesson-nav a{color:var(--text);text-decoration:none;background:var(--panel);border:1px solid var(--line);padding:12px 18px;border-radius:10px;font-size:.9rem;display:flex;flex-direction:column;gap:2px;flex:1}
+.lesson-nav a .k{color:var(--muted);font-size:.75rem}
+.lesson-nav a strong{color:var(--accent)}
+.lesson-nav a.next{text-align:right;align-items:flex-end}
+.source-footer{max-width:1180px;margin:20px auto;padding:0 20px;color:var(--muted);font-size:.78rem;text-align:center}
+</style>
+</head>
+<body class="lang-en">
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span>
+    <span class="en">CCNA 200-301 Study</span><span class="ar">مذاكرة CCNA 200-301</span>
+    <span class="lesson-tag">— Network Fundamentals</span></div>
+  <div class="progress-wrap"><div class="progress-bar"></div></div>
+  <div class="langswitch">
+    <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
+    <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
+  </div>
+  <div class="lesson-tag">4 / 11</div>
+</div>
+
+<div class="shell">
+  <nav class="toc">
+    <div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div>
+    <a href="#recap"><span class="en">Recap quiz</span><span class="ar">مراجعة</span></a>
+    <a href="#why"><span class="en">Why ARP?</span><span class="ar">ليه ARP؟</span></a>
+    <a href="#table"><span class="en">The ARP table</span><span class="ar">جدول ARP</span></a>
+    <a href="#how"><span class="en">Request &amp; reply</span><span class="ar">الطلب والرد</span></a>
+    <a href="#wireshark"><span class="en">Wireshark</span><span class="ar">Wireshark</span></a>
+    <a href="#forum"><span class="en">Common questions</span><span class="ar">أسئلة شائعة</span></a>
+    <a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="chip">📍 <span class="en">Position in OSI: between <b>Layer 2</b> and <b>Layer 3</b></span><span class="ar">مكانه في OSI: بين <b>الطبقة 2</b> و<b>الطبقة 3</b></span></div>
+      <h1>ARP (Address Resolution Protocol) explained</h1>
+      <div class="sub"><span class="en">Lesson 4 — how a computer finds a destination MAC address</span><span class="ar">الدرس الرابع — إزاي الجهاز بيعرف عنوان MAC بتاع الوجهة</span></div>
+    </div>
+
+    <section id="recap">
+      <span class="badge"><span class="en">🔁 Recap — previous lesson: IPv4 Packet Header</span><span class="ar">🔁 مراجعة — الدرس السابق: هيدر IPv4</span></span>
+      <h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2>
+      <div id="recapArea"></div>
+    </section>
+
+    <section id="why">
+      <h2><span class="en">Why do we need ARP?</span><span class="ar">ليه محتاجين ARP؟</span></h2>
+      <div class="src">
+        <div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div>
+        <div class="para-block">
+          <div class="en">
+            <p>If you learned about the OSI Model and <span class="term">encapsulation<span class="tip">التغليف — إضافة هيدر كل طبقة حوالين البيانات</span></span> / decapsulation you know that when two computers on the <span class="term">LAN<span class="tip">الشبكة المحلية</span></span> want to communicate with each other the following will happen:</p>
+            <ul>
+              <li>An IP packet is created with a source and destination IP address carrying the data from an application.</li>
+              <li>The IP packet will be encapsulated in an Ethernet frame with a source and destination <span class="term">MAC address<span class="tip">العنوان الفيزيائي لكرت الشبكة</span></span>.</li>
+            </ul>
+            <p>The sending computer will of course know its source MAC address, but how does it know the destination MAC address? That's where <span class="term">ARP<span class="tip">Address Resolution Protocol — بروتوكول تحويل عنوان IP إلى عنوان MAC</span></span> comes into play.</p>
+          </div>
+          <div class="ar">
+            <p>لو درست OSI Model وعملية encapsulation / decapsulation تعرف إن لما جهازين على الـ LAN يحبوا يتكلموا مع بعض بيحصل ده:</p>
+            <ul>
+              <li>بيتعمل IP packet فيه عنوان IP مصدر ووجهة، وبيشيل البيانات من التطبيق.</li>
+              <li>الـ IP packet بيتغلّف جوه Ethernet frame فيه عنوان MAC مصدر ووجهة.</li>
+            </ul>
+            <p>الجهاز المرسل طبعًا عارف عنوان MAC بتاعه (المصدر)، لكن إزاي هيعرف عنوان MAC الوجهة؟ هنا بيجي دور ARP.</p>
+          </div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+
+        <h3><span class="en">The example</span><span class="ar">المثال</span></h3>
+        <div class="para-block">
+          <div class="en">
+            <p>We have two computers, H1 and H2, each with an IP address and a MAC address (H1: <span class="mono">192.168.1.1</span>, MAC <span class="mono">AAA</span>; H2: <span class="mono">192.168.1.2</span>, MAC <span class="mono">BBB</span>). Sitting behind H1, we open a command prompt and type:</p>
+          </div>
+          <div class="ar"><p>عندنا جهازين H1 و H2، كل واحد له IP و MAC (H1: <span class="mono">192.168.1.1</span> و MAC <span class="mono">AAA</span>؛ H2: <span class="mono">192.168.1.2</span> و MAC <span class="mono">BBB</span>). واحنا قاعدين على H1 بنفتح command prompt ونكتب:</p></div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+        <div class="cli">C:\Users\H1&gt;<b>ping 192.168.1.2</b>
+Pinging 192.168.1.2 with 32 bytes of data:
+Reply from 192.168.1.2: bytes=32 time=15ms TTL=57
+Reply from 192.168.1.2: bytes=32 time=15ms TTL=57
+Reply from 192.168.1.2: bytes=32 time=14ms TTL=57
+Reply from 192.168.1.2: bytes=32 time=17ms TTL=57
+
+Ping statistics for 192.168.1.2:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 14ms, Maximum = 17ms, Average = 15ms</div>
+        <div class="para-block">
+          <div class="en">
+            <p>Ping uses the <span class="term">ICMP<span class="tip">بروتوكول رسائل التحكم — بيستخدمه ping</span></span> protocol, and IP uses the network layer (layer 3). Our IP packet will have a source IP address of <span class="mono">192.168.1.1</span> and a destination IP address of <span class="mono">192.168.1.2</span>. The next step is to put our IP packet in an Ethernet frame, where we set source MAC address <span class="mono">AAA</span> and destination MAC address <span class="mono">BBB</span>.</p>
+            <p>Now wait a second… how does H1 know the MAC address of H2? We know the IP address because we typed it, but there is no way for H1 to know the MAC address of H2. Another protocol solves this problem for us: ARP.</p>
+          </div>
+          <div class="ar">
+            <p>ping بيستخدم بروتوكول ICMP، وIP شغال على طبقة الشبكة (الطبقة 3). الـ IP packet هيبقى فيه عنوان IP مصدر <span class="mono">192.168.1.1</span> ووجهة <span class="mono">192.168.1.2</span>. الخطوة الجاية إننا نحط الـ IP packet جوه Ethernet frame، ونكتب فيه MAC المصدر <span class="mono">AAA</span> وMAC الوجهة <span class="mono">BBB</span>.</p>
+            <p>استنى شوية… H1 عرف منين عنوان MAC بتاع H2؟ عنوان الـ IP عارفينه لأننا كتبناه، لكن مفيش أي طريقة إن H1 يعرف الـ MAC بتاع H2 لوحده. في بروتوكول تاني بيحل المشكلة دي، وهو ARP.</p>
+          </div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="table">
+      <h2><span class="en">The ARP table</span><span class="ar">جدول ARP</span></h2>
+      <div class="src">
+        <div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div>
+        <div class="cli">C:\Users\H1&gt;<b>arp -a</b>
+
+Interface: 192.168.1.1 --- 0xb
+  Internet Address      Physical Address      Type
+  192.168.1.2           00-0c-29-63-af-d0     dynamic
+  192.168.1.255         ff-ff-ff-ff-ff-ff     static
+  224.0.0.22            01-00-5e-00-00-16     static
+  224.0.0.252           01-00-5e-00-00-fc     static
+  239.255.255.250       01-00-5e-7f-ff-fa     static
+  255.255.255.255       ff-ff-ff-ff-ff-ff     static</div>
+        <div class="para-block">
+          <div class="en"><p>Above is an example of an <span class="term">ARP table<span class="tip">جدول بيخزّن الربط بين IP و MAC</span></span> on H1. There is only one learned entry: this computer has learned that the IP address <span class="mono">192.168.1.2</span> has been mapped to the MAC address <span class="mono">00:0C:29:63:AF:D0</span>.</p></div>
+          <div class="ar"><p>ده مثال على جدول ARP في H1. فيه إدخال واحد متعلَّم بس: الجهاز ده اتعلّم إن عنوان الـ IP <span class="mono">192.168.1.2</span> مربوط بعنوان الـ MAC <span class="mono">00:0C:29:63:AF:D0</span>.</p></div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+        <div class="extra">
+          <div class="lab"><span class="en">Extra note (not from the PDF)</span><span class="ar">ملحوظة إضافية (مش من المرجع)</span></div>
+          <div class="en"><p><b>dynamic</b> entries are learned through ARP (and expire after a while); <b>static</b> entries are added automatically by the OS for broadcast/multicast addresses, so they don't need ARP. In the exam, remember that only <span class="mono">dynamic</span> entries prove ARP was used.</p></div>
+          <div class="ar"><p>الإدخالات <b>dynamic</b> بتتعلّم عن طريق ARP (وبتنتهي بعد فترة)، أما <b>static</b> فالنظام بيضيفها تلقائي لعناوين الـ broadcast والـ multicast فمش محتاجة ARP. للامتحان: بس الإدخالات الـ dynamic هي اللي بتثبت إن ARP اشتغل.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <h2><span class="en">ARP request &amp; ARP reply</span><span class="ar">طلب ARP والرد عليه</span></h2>
+      <div class="src">
+        <div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div>
+
+        <figure class="img-card">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgMzQwIiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiPjxkZWZzPjxtYXJrZXIgaWQ9InIiIHZpZXdCb3g9IjAgMCAxMCAxMCIgcmVmWD0iOCIgcmVmWT0iNSIgbWFya2VyV2lkdGg9IjgiIG1hcmtlckhlaWdodD0iOCIgb3JpZW50PSJhdXRvIj48cGF0aCBkPSJNMCwwIEwxMCw1IEwwLDEwIHoiIGZpbGw9IiNlZjVhNzIiLz48L21hcmtlcj48bWFya2VyIGlkPSJnIiB2aWV3Qm94PSIwIDAgMTAgMTAiIHJlZlg9IjgiIHJlZlk9IjUiIG1hcmtlcldpZHRoPSI4IiBtYXJrZXJIZWlnaHQ9IjgiIG9yaWVudD0iYXV0byI+PHBhdGggZD0iTTAsMCBMMTAsNSBMMCwxMCB6IiBmaWxsPSIjMzhkMTdhIi8+PC9tYXJrZXI+PC9kZWZzPjxyZWN0IHdpZHRoPSI3NjAiIGhlaWdodD0iMzQwIiByeD0iMTIiIGZpbGw9IiMwNTBiMTIiLz48dGV4dCB4PSIzODAiIHk9IjM2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZWY1YTcyIiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNzAwIj5BUlAgUmVxdWVzdCAoYnJvYWRjYXN0KTwvdGV4dD4KPHRleHQgeD0iMzgwIiB5PSI2MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxNCI+IldobyBoYXMgMTkyLjE2OC4xLjI/IFRlbGwgMTkyLjE2OC4xLjEiICAgRHN0IE1BQyA9IEZGOkZGOkZGOkZGOkZGOkZGPC90ZXh0PjxnIG9wYWNpdHk9IjEiPjxyZWN0IHg9IjIwIiB5PSIxNDAiIHdpZHRoPSIxNTAiIGhlaWdodD0iNzQiIHJ4PSIxMCIgZmlsbD0iIzEwMWIyOSIgc3Ryb2tlPSIjNmQ4ZGZmIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iOTUiIHk9IjE2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZkOGRmZiIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjcwMCI+SDE8L3RleHQ+Cjx0ZXh0IHg9Ijk1IiB5PSIxODciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNkYmU0ZjAiIGZvbnQtc2l6ZT0iMTMiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPjE5Mi4xNjguMS4xPC90ZXh0Pgo8dGV4dCB4PSI5NSIgeT0iMjA0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOGVhM2JkIiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIj5NQUM6IEFBQTwvdGV4dD48L2c+PHJlY3QgeD0iMzIwIiB5PSIxNTUiIHdpZHRoPSIxMjAiIGhlaWdodD0iNDQiIHJ4PSI4IiBmaWxsPSIjMGQxNjIyIiBzdHJva2U9IiMzZWU2ZDYiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIzODAiIHk9IjE4MyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzNlZTZkNiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCI+U3dpdGNoPC90ZXh0PjxnIG9wYWNpdHk9IjEiPjxyZWN0IHg9IjU5MCIgeT0iOTAiIHdpZHRoPSIxNTAiIGhlaWdodD0iNzQiIHJ4PSIxMCIgZmlsbD0iIzEwMWIyOSIgc3Ryb2tlPSIjMzhkMTdhIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNjY1IiB5PSIxMTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzOGQxN2EiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiPkgyPC90ZXh0Pgo8dGV4dCB4PSI2NjUiIHk9IjEzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxMyIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSI+MTkyLjE2OC4xLjI8L3RleHQ+Cjx0ZXh0IHg9IjY2NSIgeT0iMTU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOGVhM2JkIiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIj5NQUM6IEJCQjwvdGV4dD48L2c+PGcgb3BhY2l0eT0iMSI+PHJlY3QgeD0iNTkwIiB5PSIyMTUiIHdpZHRoPSIxNTAiIGhlaWdodD0iNzQiIHJ4PSIxMCIgZmlsbD0iIzEwMWIyOSIgc3Ryb2tlPSIjZTA3YmUwIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNjY1IiB5PSIyNDEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNlMDdiZTAiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiPkgzPC90ZXh0Pgo8dGV4dCB4PSI2NjUiIHk9IjI2MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxMyIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSI+MTkyLjE2OC4xLjM8L3RleHQ+Cjx0ZXh0IHg9IjY2NSIgeT0iMjc5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOGVhM2JkIiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIj5NQUM6IENDQzwvdGV4dD48L2c+PGxpbmUgeDE9IjE3MCIgeTE9IjE3NyIgeDI9IjMxOCIgeTI9IjE3NyIgc3Ryb2tlPSIjZWY1YTcyIiBzdHJva2Utd2lkdGg9IjMiIG1hcmtlci1lbmQ9InVybCgjcikiLz4KPGxpbmUgeDE9IjQ0MCIgeTE9IjE3MCIgeDI9IjU4OCIgeTI9IjEyNyIgc3Ryb2tlPSIjZWY1YTcyIiBzdHJva2Utd2lkdGg9IjMiIG1hcmtlci1lbmQ9InVybCgjcikiLz4KPGxpbmUgeDE9IjQ0MCIgeTE9IjE4NiIgeDI9IjU4OCIgeTI9IjI1MiIgc3Ryb2tlPSIjZWY1YTcyIiBzdHJva2Utd2lkdGg9IjMiIG1hcmtlci1lbmQ9InVybCgjcikiLz4KPHRleHQgeD0iMzgwIiB5PSIzMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4ZWEzYmQiIGZvbnQtc2l6ZT0iMTMiPkV2ZXJ5IGRldmljZSBpbiB0aGUgYnJvYWRjYXN0IGRvbWFpbiByZWNlaXZlcyB0aGUgcmVxdWVzdDwvdGV4dD48L3N2Zz4=" alt="ARP request broadcast from H1 to all hosts" onerror="imgFail(this)">
+          <div class="img-fallback">🖼️ Diagram: H1 (192.168.1.1, MAC AAA) sends an ARP Request to destination MAC FF:FF:FF:FF:FF:FF; every host on the network receives it. — Search: "ARP request broadcast diagram"</div>
+          <figcaption><span class="en">ARP Request — broadcast to everyone on the LAN</span><span class="ar">ARP Request — بث لكل الأجهزة على الشبكة</span></figcaption>
+        </figure>
+
+        <div class="para-block">
+          <div class="en">
+            <p>We are sitting behind H1 and want to send a ping to H2. The ARP table is empty, so we have no clue what the MAC address of H2 is. The first thing that happens is that H1 sends an <b>ARP Request</b>. This message basically says <i>"Who has 192.168.1.2 and what is your MAC address?"</i> Since H1 doesn't know the MAC address, it uses the <span class="term">broadcast<span class="tip">بث — رسالة بتوصل لكل الأجهزة</span></span> MAC address as the destination (<span class="mono">FF:FF:FF:FF:FF:FF</span>). This message will reach all computers in the network.</p>
+          </div>
+          <div class="ar">
+            <p>إحنا قاعدين على H1 ونحب نبعت ping لـ H2. جدول ARP فاضي فمش عارفين الـ MAC بتاع H2. أول حاجة بتحصل إن H1 بيبعت <b>ARP Request</b>. الرسالة دي معناها: <i>"مين عنده 192.168.1.2 وإيه عنوان الـ MAC بتاعه؟"</i> ولأن H1 مش عارف الـ MAC، بيستخدم عنوان الـ broadcast (<span class="mono">FF:FF:FF:FF:FF:FF</span>) كوجهة. فالرسالة دي هتوصل لكل الأجهزة في الشبكة.</p>
+          </div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+
+        <figure class="img-card">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgMzQwIiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiPjxkZWZzPjxtYXJrZXIgaWQ9InIiIHZpZXdCb3g9IjAgMCAxMCAxMCIgcmVmWD0iOCIgcmVmWT0iNSIgbWFya2VyV2lkdGg9IjgiIG1hcmtlckhlaWdodD0iOCIgb3JpZW50PSJhdXRvIj48cGF0aCBkPSJNMCwwIEwxMCw1IEwwLDEwIHoiIGZpbGw9IiNlZjVhNzIiLz48L21hcmtlcj48bWFya2VyIGlkPSJnIiB2aWV3Qm94PSIwIDAgMTAgMTAiIHJlZlg9IjgiIHJlZlk9IjUiIG1hcmtlcldpZHRoPSI4IiBtYXJrZXJIZWlnaHQ9IjgiIG9yaWVudD0iYXV0byI+PHBhdGggZD0iTTAsMCBMMTAsNSBMMCwxMCB6IiBmaWxsPSIjMzhkMTdhIi8+PC9tYXJrZXI+PC9kZWZzPjxyZWN0IHdpZHRoPSI3NjAiIGhlaWdodD0iMzQwIiByeD0iMTIiIGZpbGw9IiMwNTBiMTIiLz48dGV4dCB4PSIzODAiIHk9IjM2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMzhkMTdhIiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNzAwIj5BUlAgUmVwbHkgKHVuaWNhc3QpPC90ZXh0Pgo8dGV4dCB4PSIzODAiIHk9IjYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjE0Ij4iMTkyLjE2OC4xLjIgaXMgYXQgQkJCIiAgIFNyYyBNQUMgPSBCQkIsIERzdCBNQUMgPSBBQUE8L3RleHQ+PGcgb3BhY2l0eT0iMSI+PHJlY3QgeD0iMjAiIHk9IjE0MCIgd2lkdGg9IjE1MCIgaGVpZ2h0PSI3NCIgcng9IjEwIiBmaWxsPSIjMTAxYjI5IiBzdHJva2U9IiM2ZDhkZmYiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI5NSIgeT0iMTY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmQ4ZGZmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNzAwIj5IMTwvdGV4dD4KPHRleHQgeD0iOTUiIHk9IjE4NyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxMyIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSI+MTkyLjE2OC4xLjE8L3RleHQ+Cjx0ZXh0IHg9Ijk1IiB5PSIyMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4ZWEzYmQiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPk1BQzogQUFBPC90ZXh0PjwvZz48cmVjdCB4PSIzMjAiIHk9IjE1NSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSI0NCIgcng9IjgiIGZpbGw9IiMwZDE2MjIiIHN0cm9rZT0iIzNlZTZkNiIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjM4MCIgeT0iMTgzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjM2VlNmQ2IiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNzAwIj5Td2l0Y2g8L3RleHQ+PGcgb3BhY2l0eT0iMSI+PHJlY3QgeD0iNTkwIiB5PSI5MCIgd2lkdGg9IjE1MCIgaGVpZ2h0PSI3NCIgcng9IjEwIiBmaWxsPSIjMTAxYjI5IiBzdHJva2U9IiMzOGQxN2EiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI2NjUiIHk9IjExNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzM4ZDE3YSIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjcwMCI+SDI8L3RleHQ+Cjx0ZXh0IHg9IjY2NSIgeT0iMTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjEzIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIj4xOTIuMTY4LjEuMjwvdGV4dD4KPHRleHQgeD0iNjY1IiB5PSIxNTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4ZWEzYmQiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPk1BQzogQkJCPC90ZXh0PjwvZz48ZyBvcGFjaXR5PSIwLjQ1Ij48cmVjdCB4PSI1OTAiIHk9IjIxNSIgd2lkdGg9IjE1MCIgaGVpZ2h0PSI3NCIgcng9IjEwIiBmaWxsPSIjMTAxYjI5IiBzdHJva2U9IiNlMDdiZTAiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI2NjUiIHk9IjI0MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2UwN2JlMCIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9IjcwMCI+SDM8L3RleHQ+Cjx0ZXh0IHg9IjY2NSIgeT0iMjYyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjEzIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIj4xOTIuMTY4LjEuMzwvdGV4dD4KPHRleHQgeD0iNjY1IiB5PSIyNzkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4ZWEzYmQiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiPk1BQzogQ0NDPC90ZXh0PjwvZz48bGluZSB4MT0iNTg4IiB5MT0iMTI3IiB4Mj0iNDQwIiB5Mj0iMTcwIiBzdHJva2U9IiMzOGQxN2EiIHN0cm9rZS13aWR0aD0iMyIgbWFya2VyLWVuZD0idXJsKCNnKSIgb3BhY2l0eT0iMCIvPgo8bGluZSB4MT0iNTkwIiB5MT0iMTQwIiB4Mj0iNDQyIiB5Mj0iMTcyIiBzdHJva2U9IiMzOGQxN2EiIHN0cm9rZS13aWR0aD0iMyIvPgo8bGluZSB4MT0iMzIwIiB5MT0iMTc3IiB4Mj0iMTcyIiB5Mj0iMTc3IiBzdHJva2U9IiMzOGQxN2EiIHN0cm9rZS13aWR0aD0iMyIgbWFya2VyLWVuZD0idXJsKCNnKSIvPgo8dGV4dCB4PSIzODAiIHk9IjMyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzhlYTNiZCIgZm9udC1zaXplPSIxMyI+T25seSBIMSBnZXRzIHRoZSBhbnN3ZXIuIEgxIHN0b3JlcyBpdCBpbiBpdHMgQVJQIHRhYmxlIGFuZCBzdGFydHMgc2VuZGluZyBkYXRhLjwvdGV4dD48L3N2Zz4=" alt="ARP reply from H2 to H1" onerror="imgFail(this)">
+          <div class="img-fallback">🖼️ Diagram: H2 (192.168.1.2, MAC BBB) answers H1 directly with an ARP Reply: source MAC BBB, destination MAC AAA. — Search: "ARP reply unicast diagram"</div>
+          <figcaption><span class="en">ARP Reply — sent straight back to H1</span><span class="ar">ARP Reply — بيرجع مباشرة لـ H1</span></figcaption>
+        </figure>
+
+        <div class="para-block">
+          <div class="en">
+            <p>H2 replies with an <b>ARP Reply</b>, basically saying <i>"that's me! And this is my MAC address."</i> H1 can now add the MAC address to its ARP table and start forwarding data towards H2.</p>
+          </div>
+          <div class="ar">
+            <p>H2 بيرد بـ <b>ARP Reply</b> ومعناه: <i>"أنا هو! وده عنوان الـ MAC بتاعي."</i> دلوقتي H1 يقدر يضيف الـ MAC لجدول ARP بتاعه ويبدأ يبعت البيانات لـ H2.</p>
+          </div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="wireshark">
+      <h2><span class="en">ARP in Wireshark</span><span class="ar">ARP في Wireshark</span></h2>
+      <div class="src">
+        <div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div>
+        <div class="para-block">
+          <div class="en"><p>If you want to see this in action you can look at it in <span class="term">Wireshark<span class="tip">أداة لالتقاط وتحليل الحزم</span></span>. Two packets are captured: the request (destination "Broadcast", so it is flooded on the network) and the reply (H2 sends its MAC address to H1).</p></div>
+          <div class="ar"><p>لو عايز تشوف ده عمليًا تقدر تشوفه في Wireshark. بيتلقط packet-ين: الطلب (الوجهة "Broadcast" فبيتعمله flood على الشبكة) والرد (H2 بيبعت الـ MAC بتاعه لـ H1).</p></div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+        <div class="table-wrap"><table>
+          <tr><th>No.</th><th>Time</th><th>Source</th><th>Destination</th><th>Protocol</th><th>Length</th><th>Info</th></tr>
+          <tr><td class="mono-cell">1</td><td class="mono-cell">0.000000</td><td class="mono-cell">Vmware_e7:0f:2e</td><td class="mono-cell">Broadcast</td><td>ARP</td><td class="mono-cell">42</td><td class="mono-cell">Who has 192.168.1.2? Tell 192.168.1.1</td></tr>
+          <tr><td class="mono-cell">2</td><td class="mono-cell">0.000206</td><td class="mono-cell">Vmware_63:af:d0</td><td class="mono-cell">Vmware_e7:0f:2e</td><td>ARP</td><td class="mono-cell">42</td><td class="mono-cell">192.168.1.2 is at 00:0c:29:63:af:d0</td></tr>
+        </table></div>
+
+        <figure class="img-card">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgNDAyIiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiPjxyZWN0IHdpZHRoPSI3NjAiIGhlaWdodD0iNDAyIiByeD0iMTIiIGZpbGw9IiMwNTBiMTIiLz48dGV4dCB4PSIzODAiIHk9IjMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjM2VlNmQ2IiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iNzAwIj5BUlAgbWVzc2FnZSBmaWVsZHMgKGluc2lkZSB0aGUgRXRoZXJuZXQgZnJhbWUpPC90ZXh0PjxyZWN0IHg9IjQwIiB5PSI1MCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIzMiIgZmlsbD0iIzEwMWIyOSIgc3Ryb2tlPSIjNmQ4ZGZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcng9IjUiLz48dGV4dCB4PSIxNTUiIHk9IjcxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmQ4ZGZmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIj5IYXJkd2FyZSB0eXBlPC90ZXh0PjxyZWN0IHg9IjI3NCIgeT0iNTAiIHdpZHRoPSI0NDYiIGhlaWdodD0iMzIiIGZpbGw9IiMwZDE2MjIiIHN0cm9rZT0iIzFlMmY0MyIgcng9IjUiLz48dGV4dCB4PSI0OTciIHk9IjcxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjEzIj5FdGhlcm5ldCAoMSk8L3RleHQ+PHJlY3QgeD0iNDAiIHk9Ijg4IiB3aWR0aD0iMjMwIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMTAxYjI5IiBzdHJva2U9IiM2ZDhkZmYiIHN0cm9rZS13aWR0aD0iMS41IiByeD0iNSIvPjx0ZXh0IHg9IjE1NSIgeT0iMTA5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmQ4ZGZmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIj5Qcm90b2NvbCB0eXBlPC90ZXh0PjxyZWN0IHg9IjI3NCIgeT0iODgiIHdpZHRoPSI0NDYiIGhlaWdodD0iMzIiIGZpbGw9IiMwZDE2MjIiIHN0cm9rZT0iIzFlMmY0MyIgcng9IjUiLz48dGV4dCB4PSI0OTciIHk9IjEwOSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxMyI+SVAgKDB4MDgwMCk8L3RleHQ+PHJlY3QgeD0iNDAiIHk9IjEyNiIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIzMiIgZmlsbD0iIzEwMWIyOSIgc3Ryb2tlPSIjNmQ4ZGZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcng9IjUiLz48dGV4dCB4PSIxNTUiIHk9IjE0NyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZkOGRmZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjcwMCI+SGFyZHdhcmUgc2l6ZTwvdGV4dD48cmVjdCB4PSIyNzQiIHk9IjEyNiIgd2lkdGg9IjQ0NiIgaGVpZ2h0PSIzMiIgZmlsbD0iIzBkMTYyMiIgc3Ryb2tlPSIjMWUyZjQzIiByeD0iNSIvPjx0ZXh0IHg9IjQ5NyIgeT0iMTQ3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjEzIj42PC90ZXh0PjxyZWN0IHg9IjQwIiB5PSIxNjQiIHdpZHRoPSIyMzAiIGhlaWdodD0iMzIiIGZpbGw9IiMxMDFiMjkiIHN0cm9rZT0iIzZkOGRmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHJ4PSI1Ii8+PHRleHQgeD0iMTU1IiB5PSIxODUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2ZDhkZmYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiPlByb3RvY29sIHNpemU8L3RleHQ+PHJlY3QgeD0iMjc0IiB5PSIxNjQiIHdpZHRoPSI0NDYiIGhlaWdodD0iMzIiIGZpbGw9IiMwZDE2MjIiIHN0cm9rZT0iIzFlMmY0MyIgcng9IjUiLz48dGV4dCB4PSI0OTciIHk9IjE4NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxMyI+NDwvdGV4dD48cmVjdCB4PSI0MCIgeT0iMjAyIiB3aWR0aD0iMjMwIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMTAxYjI5IiBzdHJva2U9IiNlZjVhNzIiIHN0cm9rZS13aWR0aD0iMS41IiByeD0iNSIvPjx0ZXh0IHg9IjE1NSIgeT0iMjIzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZWY1YTcyIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIj5PcGNvZGU8L3RleHQ+PHJlY3QgeD0iMjc0IiB5PSIyMDIiIHdpZHRoPSI0NDYiIGhlaWdodD0iMzIiIGZpbGw9IiMwZDE2MjIiIHN0cm9rZT0iIzFlMmY0MyIgcng9IjUiLz48dGV4dCB4PSI0OTciIHk9IjIyMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxMyI+cmVxdWVzdCAoMSkgLyByZXBseSAoMik8L3RleHQ+PHJlY3QgeD0iNDAiIHk9IjI0MCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIzMiIgZmlsbD0iIzEwMWIyOSIgc3Ryb2tlPSIjMzhkMTdhIiBzdHJva2Utd2lkdGg9IjEuNSIgcng9IjUiLz48dGV4dCB4PSIxNTUiIHk9IjI2MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzM4ZDE3YSIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjcwMCI+U2VuZGVyIE1BQzwvdGV4dD48cmVjdCB4PSIyNzQiIHk9IjI0MCIgd2lkdGg9IjQ0NiIgaGVpZ2h0PSIzMiIgZmlsbD0iIzBkMTYyMiIgc3Ryb2tlPSIjMWUyZjQzIiByeD0iNSIvPjx0ZXh0IHg9IjQ5NyIgeT0iMjYxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjEzIj53aG8gaXMgYXNraW5nIC8gYW5zd2VyaW5nPC90ZXh0PjxyZWN0IHg9IjQwIiB5PSIyNzgiIHdpZHRoPSIyMzAiIGhlaWdodD0iMzIiIGZpbGw9IiMxMDFiMjkiIHN0cm9rZT0iIzM4ZDE3YSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHJ4PSI1Ii8+PHRleHQgeD0iMTU1IiB5PSIyOTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzOGQxN2EiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiPlNlbmRlciBJUDwvdGV4dD48cmVjdCB4PSIyNzQiIHk9IjI3OCIgd2lkdGg9IjQ0NiIgaGVpZ2h0PSIzMiIgZmlsbD0iIzBkMTYyMiIgc3Ryb2tlPSIjMWUyZjQzIiByeD0iNSIvPjx0ZXh0IHg9IjQ5NyIgeT0iMjk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjEzIj5JUCBvZiB3aG8gaXMgYXNraW5nIC8gYW5zd2VyaW5nPC90ZXh0PjxyZWN0IHg9IjQwIiB5PSIzMTYiIHdpZHRoPSIyMzAiIGhlaWdodD0iMzIiIGZpbGw9IiMxMDFiMjkiIHN0cm9rZT0iI2Y1YzQ1MSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHJ4PSI1Ii8+PHRleHQgeD0iMTU1IiB5PSIzMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmNWM0NTEiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiPlRhcmdldCBNQUM8L3RleHQ+PHJlY3QgeD0iMjc0IiB5PSIzMTYiIHdpZHRoPSI0NDYiIGhlaWdodD0iMzIiIGZpbGw9IiMwZDE2MjIiIHN0cm9rZT0iIzFlMmY0MyIgcng9IjUiLz48dGV4dCB4PSI0OTciIHk9IjMzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2RiZTRmMCIgZm9udC1zaXplPSIxMyI+emVyb3MgaW4gYSByZXF1ZXN0LCBhc2tlcidzIE1BQyBpbiBhIHJlcGx5PC90ZXh0PjxyZWN0IHg9IjQwIiB5PSIzNTQiIHdpZHRoPSIyMzAiIGhlaWdodD0iMzIiIGZpbGw9IiMxMDFiMjkiIHN0cm9rZT0iI2Y1YzQ1MSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHJ4PSI1Ii8+PHRleHQgeD0iMTU1IiB5PSIzNzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmNWM0NTEiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiPlRhcmdldCBJUDwvdGV4dD48cmVjdCB4PSIyNzQiIHk9IjM1NCIgd2lkdGg9IjQ0NiIgaGVpZ2h0PSIzMiIgZmlsbD0iIzBkMTYyMiIgc3Ryb2tlPSIjMWUyZjQzIiByeD0iNSIvPjx0ZXh0IHg9IjQ5NyIgeT0iMzc1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZGJlNGYwIiBmb250LXNpemU9IjEzIj50aGUgSVAgYmVpbmcgcmVzb2x2ZWQgKHJlcXVlc3QpPC90ZXh0Pjwvc3ZnPg==" alt="ARP message fields: request vs reply" onerror="imgFail(this)">
+          <div class="img-fallback">🖼️ Diagram: ARP message fields — Hardware type, Protocol type, Hardware size, Protocol size, Opcode, Sender MAC/IP, Target MAC/IP. — Search: "ARP packet format"</div>
+          <figcaption><span class="en">Fields inside the ARP message (values from the capture)</span><span class="ar">الحقول اللي جوه رسالة ARP (القيم من الـ capture)</span></figcaption>
+        </figure>
+
+        <div class="table-wrap"><table>
+          <tr><th>Field</th><th>ARP Request (frame 1)</th><th>ARP Reply (frame 2)</th></tr>
+          <tr><td>Frame size</td><td class="mono-cell">42 bytes (336 bits)</td><td class="mono-cell">42 bytes (336 bits)</td></tr>
+          <tr><td>Ethernet II — Src</td><td class="mono-cell">00:0c:29:e7:0f:2e</td><td class="mono-cell">00:0c:29:63:af:d0</td></tr>
+          <tr><td>Ethernet II — Dst</td><td class="mono-cell">ff:ff:ff:ff:ff:ff (Broadcast)</td><td class="mono-cell">00:0c:29:e7:0f:2e</td></tr>
+          <tr><td>Hardware type</td><td class="mono-cell">Ethernet (1)</td><td class="mono-cell">Ethernet (1)</td></tr>
+          <tr><td>Protocol type</td><td class="mono-cell">IP (0x0800)</td><td class="mono-cell">IP (0x0800)</td></tr>
+          <tr><td>Hardware size</td><td class="mono-cell">6</td><td class="mono-cell">6</td></tr>
+          <tr><td>Protocol size</td><td class="mono-cell">4</td><td class="mono-cell">4</td></tr>
+          <tr><td>Opcode</td><td class="mono-cell">request (1)</td><td class="mono-cell">reply (2)</td></tr>
+          <tr><td>Sender MAC</td><td class="mono-cell">00:0c:29:e7:0f:2e</td><td class="mono-cell">00:0c:29:63:af:d0</td></tr>
+          <tr><td>Sender IP</td><td class="mono-cell">192.168.1.1</td><td class="mono-cell">192.168.1.2</td></tr>
+          <tr><td>Target MAC</td><td class="mono-cell">00:00:00:00:00:00</td><td class="mono-cell">00:0c:29:e7:0f:2e</td></tr>
+          <tr><td>Target IP</td><td class="mono-cell">192.168.1.2</td><td class="mono-cell">192.168.1.1</td></tr>
+        </table></div>
+        <div class="para-block">
+          <div class="en"><p>You can see that H2 sends its MAC address in the ARP reply to H1. That's all the source shows about ARP.</p></div>
+          <div class="ar"><p>تقدر تشوف إن H2 بيبعت الـ MAC بتاعه في الـ ARP reply لـ H1. ده كل اللي المرجع بيوضحه عن ARP.</p></div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="forum">
+      <h2><span class="en">Common questions from the lesson forum</span><span class="ar">أسئلة شائعة من منتدى الدرس</span></h2>
+      <div class="src">
+        <div class="src-label"><span class="en">From the source (PDF forum)</span><span class="ar">من المرجع (منتدى الـ PDF)</span></div>
+        <div class="para-block">
+          <div class="en">
+            <ul>
+              <li><b>Q:</b> Why does the ARP <i>request</i> show <span class="mono">00:00:00:00:00:00</span> as Target MAC instead of <span class="mono">FF:FF:FF:FF:FF:FF</span>?<br><b>Instructor:</b> <span class="mono">FF:FF:FF:FF:FF:FF</span> in binary is all 1s — it is broadcast within the broadcast domain, so the ARP request reaches all devices in it. <i>(The asker replied that this didn't explain the zeros in the screenshot; see the note below.)</i></li>
+              <li><b>Q:</b> Can you explain the same scenario with 2 switches and 2 routers in between? (Computer A — Switch1 — Router1 — Router2 — Switch2 — Computer B)<br><i>(No answer is shown in the PDF; see the note below.)</i></li>
+            </ul>
+          </div>
+          <div class="ar">
+            <ul>
+              <li><b>سؤال:</b> ليه الـ ARP <i>request</i> بيوري <span class="mono">00:00:00:00:00:00</span> في Target MAC بدل <span class="mono">FF:FF:FF:FF:FF:FF</span>؟<br><b>المدرّب:</b> <span class="mono">FF:FF:FF:FF:FF:FF</span> بالثنائي كله 1، يعني بيتبعت broadcast جوه الـ broadcast domain وبكده الطلب بيوصل لكل الأجهزة فيه. <i>(السائل رد إن ده مش بيفسّر الأصفار في الصورة؛ شوف الملحوظة تحت.)</i></li>
+              <li><b>سؤال:</b> ممكن تشرح نفس السيناريو بس بـ 2 switch و2 router في النص؟ (Computer A — Switch1 — Router1 — Router2 — Switch2 — Computer B)<br><i>(مفيش إجابة ظاهرة في الـ PDF؛ شوف الملحوظة تحت.)</i></li>
+            </ul>
+          </div>
+          <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+        </div>
+        <div class="extra">
+          <div class="lab"><span class="en">Extra note — answers (not from the PDF)</span><span class="ar">ملحوظة إضافية — إجابات (مش من المرجع)</span></div>
+          <div class="para-block">
+            <div class="en">
+              <p><b>Zeros vs. FF:FF…:</b> two different places. The <i>Ethernet</i> destination is <span class="mono">FF:FF:FF:FF:FF:FF</span> (so everyone receives the frame). The <i>ARP message inside</i> has a "Target MAC" field that means "the thing I'm asking for" — it's unknown, so it's filled with zeros.</p>
+              <p><b>Routers in between:</b> ARP never crosses a router — it stays inside one broadcast domain. Computer A ARPs for its <i>default gateway's</i> MAC (Router1's interface), Router1 ARPs on the Router1–Router2 link, and so on. The IP addresses stay the same end to end, while the MAC addresses change at every hop.</p>
+            </div>
+            <div class="ar">
+              <p><b>الأصفار مقابل FF:FF…:</b> دول مكانين مختلفين. وجهة الـ <i>Ethernet</i> هي <span class="mono">FF:FF:FF:FF:FF:FF</span> (عشان الكل يستلم الـ frame). أما رسالة الـ <i>ARP جوّاه</i> فيها حقل "Target MAC" معناه "اللي بسأل عليه" — ده مجهول فبيتملي أصفار.</p>
+              <p><b>لو في راوترات في النص:</b> ARP عمره ما بيعدي راوتر — بيفضل جوه broadcast domain واحد. Computer A بيعمل ARP على الـ MAC بتاع الـ <i>default gateway</i> (واجهة Router1)، وRouter1 بيعمل ARP على اللينك بينه وبين Router2، وهكذا. عناوين الـ IP بتفضل زي ما هي من الأول للآخر، بينما عناوين الـ MAC بتتغير في كل hop.</p>
+            </div>
+            <button class="tr-btn" onclick="toggleParaLang(this)"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="summary">
+      <h2><span class="en">Summary</span><span class="ar">ملخص الدرس</span></h2>
+      <div class="src">
+        <div class="en"><ul>
+          <li>An Ethernet frame needs a destination MAC; ARP finds the MAC that belongs to a known IP address.</li>
+          <li>ARP Request = broadcast (<span class="mono">FF:FF:FF:FF:FF:FF</span>): "Who has this IP?" — Opcode 1.</li>
+          <li>ARP Reply = the owner answers directly with its MAC — Opcode 2.</li>
+          <li>The answer is stored in the ARP table (<span class="mono">arp -a</span>) so the next packets can be sent right away.</li>
+        </ul></div>
+        <div class="ar"><ul>
+          <li>الـ Ethernet frame محتاج MAC وجهة؛ ARP بيلاقي الـ MAC اللي بيخص عنوان IP معروف.</li>
+          <li>ARP Request = broadcast (<span class="mono">FF:FF:FF:FF:FF:FF</span>): "مين عنده الـ IP ده؟" — Opcode 1.</li>
+          <li>ARP Reply = صاحب الـ IP بيرد مباشرة بالـ MAC بتاعه — Opcode 2.</li>
+          <li>الرد بيتخزن في جدول ARP (<span class="mono">arp -a</span>) عشان الـ packets الجاية تتبعت على طول.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2><span class="en">🧠 Lesson quiz</span><span class="ar">🧠 اختبار الدرس</span></h2>
+      <p class="quiz-intro"><span class="en">Wrong = red, correct = green. Reveal the answer any time and translate any question with the 🌐 button.</span><span class="ar">غلط = أحمر، صح = أخضر. تقدر تشوف الإجابة في أي وقت وتترجم أي سؤال بزرار 🌐.</span></p>
+      <div id="quizArea"></div>
+    </section>
+  </main>
+</div>
+
+<div class="lesson-nav">
+  <a class="prev" href="lesson-03-ipv4-header.html"><span class="k"><span class="en">Previous</span><span class="ar">السابق</span></span><strong>IPv4 Packet Header</strong></a>
+  <a class="next" href="lesson-05-tcp-udp.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>Introduction to TCP and UDP</strong></a>
+</div>
+<div class="source-footer">Source: 04-arp__address_resolution_protocol__explained.pdf — NetworkLessons.com (CCNA 200-301, Unit 2) · Yellow boxes = extra notes outside the source · Diagrams are self-drawn SVG images embedded in this file</div>
+
+<script>
+const UI = {
+  en:{tr:'🌐 Translate to Arabic', trBack:'🌐 Show English', check:'Check answer', reveal:'Reveal correct answer', q:'Question', ok:'✔ Correct', no:'✘ Not quite — the correct answer is green', qlang:'🌐 العربية'},
+  ar:{tr:'🌐 Translate to Arabic', trBack:'🌐 عرض بالإنجليزية', check:'تحقق من الإجابة', reveal:'إظهار الإجابة الصحيحة', q:'سؤال', ok:'✔ إجابة صحيحة', no:'✘ غير صحيحة — الصح باللون الأخضر', qlang:'🌐 English'}
+};
+const curLang = () => document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+function arShown(pb){ return (curLang()==='ar') !== pb.classList.contains('flip'); }
+function updBtn(pb){
+  const b = pb.querySelector(':scope > .tr-btn'); if(!b) return;
+  b.textContent = arShown(pb) ? (curLang()==='ar' ? UI.ar.trBack : '🌐 عرض بالإنجليزية') : UI.en.tr;
+  if(arShown(pb) && curLang()==='en') b.textContent = '🌐 Show English';
+}
+function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
+function setGlobalLang(l){
+  document.body.classList.toggle('lang-ar', l==='ar');
+  document.body.classList.toggle('lang-en', l==='en');
+  document.documentElement.lang = l;
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.getElementById('btnAr').classList.toggle('active', l==='ar');
+  document.querySelectorAll('.para-block').forEach(pb=>{ pb.classList.remove('flip'); updBtn(pb); });
+  document.querySelectorAll('.q-card').forEach(c=>applyQuizLang(c, l));
+}
+function imgFail(img){ img.style.display='none'; const f=img.parentElement.querySelector('.img-fallback'); if(f) f.style.display='block'; }
+
+document.querySelectorAll('.para-block').forEach(updBtn);
+document.querySelectorAll('.term').forEach(t=>t.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.term.tap').forEach(o=>{if(o!==t)o.classList.remove('tap')});t.classList.toggle('tap');}));
+document.addEventListener('click',()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+const tocLinks=[...document.querySelectorAll('.toc a')], secs=tocLinks.map(a=>document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll',()=>{let i=0;secs.forEach((s,k)=>{if(s&&s.getBoundingClientRect().top<120)i=k});tocLinks.forEach(a=>a.classList.remove('active'));tocLinks[i]&&tocLinks[i].classList.add('active');});
+
+/* ===== quiz ===== */
+function applyQuizLang(card, l){
+  const it=card._item, T=UI[l];
+  card.dataset.lang=l;
+  card.querySelector('.q-text').textContent=it.q[l];
+  card.querySelectorAll('.opt span').forEach((s,i)=>s.textContent=it.opts[i][l]);
+  card.querySelector('.explain').textContent=it.explain[l];
+  card.querySelector('.q-num').textContent=T.q+' '+card._n+' / '+card._total;
+  card.querySelector('.check').textContent=T.check;
+  card.querySelector('.reveal').textContent=T.reveal;
+  card.querySelector('.qlang').textContent=T.qlang;
+  const r=card.querySelector('.q-result'); if(card._state) r.textContent = card._state==='ok'?T.ok:T.no;
+}
+function buildQuiz(id, items){
+  const area=document.getElementById(id);
+  items.forEach((it,qi)=>{
+    const card=document.createElement('div'); card.className='q-card'; card._item=it; card._n=qi+1; card._total=items.length;
+    card.innerHTML=`<div class="q-top"><div class="q-num"></div><button class="btn secondary tiny qlang"></button></div>
+      <div class="q-text"></div><div class="opts"></div>
+      <div class="q-actions"><button class="btn check" disabled></button><button class="btn secondary reveal"></button></div>
+      <div class="q-result"></div><div class="explain"></div>`;
+    const ow=card.querySelector('.opts');
+    it.opts.forEach((o,oi)=>{const lb=document.createElement('label');lb.className='opt';lb.innerHTML=`<input type="radio" name="${id}-${qi}" value="${oi}"><span></span>`;ow.appendChild(lb);});
+    area.appendChild(card);
+    applyQuizLang(card, curLang());
+    card.querySelector('.qlang').onclick=()=>applyQuizLang(card, card.dataset.lang==='en'?'ar':'en');
+    const chk=card.querySelector('.check'), rev=card.querySelector('.reveal'), ex=card.querySelector('.explain'), labs=card.querySelectorAll('.opt'), res=card.querySelector('.q-result');
+    card.querySelectorAll('input').forEach(r=>r.onchange=()=>chk.disabled=false);
+    chk.onclick=()=>{const c=card.querySelector('input:checked'); if(!c) return; const ci=+c.value;
+      labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct'); else if(i===ci) l.classList.add('wrong');});
+      card._state = ci===it.correct?'ok':'no'; res.className='q-result '+card._state; res.textContent=UI[card.dataset.lang][card._state];
+      ex.classList.add('show'); chk.disabled=true;};
+    rev.onclick=()=>{labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct');}); ex.classList.add('show');};
+  });
+}
+
+buildQuiz('recapArea',[
+ {q:{en:"What happens when a router decrements an IPv4 packet's TTL to 0?",ar:"إيه اللي بيحصل لما راوتر ينقّص TTL لحزمة IPv4 لحد 0؟"},
+  opts:[{en:"It forwards the packet anyway",ar:"بيفوّرد الحزمة عادي"},{en:"It drops the packet and sends an ICMP time-exceeded message to the sender",ar:"بيرمي الحزمة ويبعت رسالة ICMP time-exceeded للمرسل"},{en:"It fragments the packet",ar:"بيقسّم الحزمة"},{en:"It resets the header checksum",ar:"بيعمل reset للـ checksum"}],correct:1,
+  explain:{en:"TTL prevents packets from looping forever. At 0 the router drops the packet and notifies the sender via ICMP.",ar:"TTL بيمنع الحزم من الدوران للأبد. عند 0 الراوتر بيرمي الحزمة ويبلّغ المرسل بـ ICMP."}},
+ {q:{en:"Which Protocol field value means UDP?",ar:"أنهي قيمة في حقل Protocol معناها UDP؟"},
+  opts:[{en:"6",ar:"6"},{en:"1",ar:"1"},{en:"17",ar:"17"},{en:"4",ar:"4"}],correct:2,
+  explain:{en:"TCP = 6, UDP = 17.",ar:"TCP = 6، UDP = 17."}},
+ {q:{en:"What is the minimum IPv4 header length?",ar:"إيه أقل طول لهيدر IPv4؟"},
+  opts:[{en:"8 bytes",ar:"8 بايت"},{en:"20 bytes",ar:"20 بايت"},{en:"40 bytes",ar:"40 بايت"},{en:"60 bytes",ar:"60 بايت"}],correct:1,
+  explain:{en:"20 bytes (IHL = 5); up to 60 bytes with Options.",ar:"20 بايت (IHL = 5)؛ ولحد 60 بايت لو في Options."}}
+]);
+
+buildQuiz('quizArea',[
+ {q:{en:"What problem does ARP solve?",ar:"ARP بيحل أنهي مشكلة؟"},
+  opts:[{en:"Finding the MAC address that belongs to a known IP address",ar:"إيجاد عنوان الـ MAC اللي بيخص عنوان IP معروف"},{en:"Finding the IP address for a domain name",ar:"إيجاد عنوان الـ IP لاسم دومين"},{en:"Encrypting Ethernet frames",ar:"تشفير Ethernet frames"},{en:"Choosing the best route to a network",ar:"اختيار أفضل مسار لشبكة"}],correct:0,
+  explain:{en:"The sender knows the destination IP but needs the destination MAC to build the Ethernet frame — ARP provides it. (Domain names → IP is DNS, a later lesson.)",ar:"المرسل عارف IP الوجهة لكن محتاج MAC الوجهة عشان يبني الـ Ethernet frame — ARP هو اللي بيجيبه. (تحويل الدومين لـ IP ده DNS، في درس لاحق.)"}},
+ {q:{en:"What destination MAC address does an ARP Request use?",ar:"ARP Request بيستخدم أنهي MAC وجهة؟"},
+  opts:[{en:"00:00:00:00:00:00",ar:"00:00:00:00:00:00"},{en:"FF:FF:FF:FF:FF:FF",ar:"FF:FF:FF:FF:FF:FF"},{en:"The MAC of the default gateway",ar:"الـ MAC بتاع الـ default gateway"},{en:"The MAC of H2",ar:"الـ MAC بتاع H2"}],correct:1,
+  explain:{en:"H1 doesn't know H2's MAC, so it broadcasts to FF:FF:FF:FF:FF:FF (all 1s) and every device in the network receives the request.",ar:"H1 مش عارف MAC بتاع H2 فبيعمل broadcast على FF:FF:FF:FF:FF:FF (كله 1) وكل جهاز في الشبكة بيستلم الطلب."}},
+ {q:{en:"Who receives an ARP Request?",ar:"مين بيستلم ARP Request؟"},
+  opts:[{en:"Only H2",ar:"H2 بس"},{en:"Only the router",ar:"الراوتر بس"},{en:"All computers in the network",ar:"كل الأجهزة في الشبكة"},{en:"Only devices with a dynamic ARP entry",ar:"بس الأجهزة اللي عندها dynamic ARP entry"}],correct:2,
+  explain:{en:"It's a broadcast, so it reaches all computers in the network; only the owner of the requested IP answers.",ar:"هو broadcast فبيوصل لكل الأجهزة في الشبكة؛ بس صاحب الـ IP المطلوب هو اللي بيرد."}},
+ {q:{en:"In the ARP Reply from H2 to H1, what are the source and destination MAC addresses?",ar:"في ARP Reply من H2 لـ H1، إيه الـ MAC المصدر والوجهة؟"},
+  opts:[{en:"Source BBB, destination AAA",ar:"المصدر BBB والوجهة AAA"},{en:"Source AAA, destination BBB",ar:"المصدر AAA والوجهة BBB"},{en:"Source BBB, destination FF:FF:FF:FF:FF:FF",ar:"المصدر BBB والوجهة FF:FF:FF:FF:FF:FF"},{en:"Source AAA, destination FF:FF:FF:FF:FF:FF",ar:"المصدر AAA والوجهة FF:FF:FF:FF:FF:FF"}],correct:0,
+  explain:{en:"H2 (MAC BBB) answers H1 (MAC AAA) directly — the reply is not broadcast.",ar:"H2 (MAC BBB) بيرد على H1 (MAC AAA) مباشرة — الرد مش broadcast."}},
+ {q:{en:"Which Windows command shows the ARP table?",ar:"أنهي أمر في Windows بيعرض جدول ARP؟"},
+  opts:[{en:"ipconfig /all",ar:"ipconfig /all"},{en:"arp -a",ar:"arp -a"},{en:"ping -a",ar:"ping -a"},{en:"tracert",ar:"tracert"}],correct:1,
+  explain:{en:"arp -a lists the IP → MAC mappings (dynamic and static).",ar:"arp -a بيعرض ربط IP → MAC (الـ dynamic والـ static)."}},
+ {q:{en:"In the Wireshark capture, what Opcode values do ARP request and reply use?",ar:"في الـ capture بتاع Wireshark، إيه قيم Opcode للـ request والـ reply؟"},
+  opts:[{en:"Request = 2, Reply = 1",ar:"Request = 2، Reply = 1"},{en:"Request = 1, Reply = 2",ar:"Request = 1، Reply = 2"},{en:"Both = 1",ar:"الاتنين = 1"},{en:"Request = 0, Reply = 1",ar:"Request = 0، Reply = 1"}],correct:1,
+  explain:{en:"The capture shows Opcode: request (1) and Opcode: reply (2).",ar:"الـ capture بيوري Opcode: request (1) وOpcode: reply (2)."}}
+]);
+</script>
+</body>
+</html>

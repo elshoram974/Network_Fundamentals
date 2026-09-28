@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الدرس 1 — نموذج OSI | مذاكرة CCNA 200-301</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a121d;
+  --panel:#101b29;
+  --panel2:#0d1622;
+  --line:#1e2f43;
+  --text:#e9eef5;
+  --muted:#8ea3bd;
+  --accent:#3ee6d6;   /* teal - core network signal color */
+  --accent2:#6d8dff;  /* blue - secondary */
+  --warn:#f5c451;     /* yellow - "extra / not from source" */
+  --good:#38d17a;
+  --bad:#ef5a72;
+  --radius:14px;
+  --maxw:840px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:70px}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Tajawal','IBM Plex Sans',sans-serif;
+  line-height:1.9;
+  padding-bottom:80px;
+}
+.en{font-family:'IBM Plex Sans',sans-serif; direction:ltr; unicode-bidi:isolate}
+code, .mono{font-family:'IBM Plex Mono',monospace; direction:ltr; unicode-bidi:isolate}
+
+/* ===== top bar ===== */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(10,18,29,.92); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:700}
+.topbar .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 10px var(--accent)}
+.topbar .lesson-tag{color:var(--muted); font-size:.85rem}
+.progress-wrap{flex:1; max-width:260px; height:6px; background:var(--panel2); border-radius:99px; overflow:hidden; border:1px solid var(--line)}
+.progress-bar{height:100%; width:8%; background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+/* ===== OSI layer stack hero ===== */
+.hero{max-width:var(--maxw); margin:34px auto 10px; padding:0 18px}
+.hero h1{font-size:1.9rem; margin:0 0 6px; font-weight:900}
+.hero .sub{color:var(--muted); font-size:1rem; margin-bottom:22px}
+.osi-stack{display:flex; flex-direction:column; gap:4px; margin:22px 0 30px}
+.osi-stack .layer{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 16px; border-radius:8px; font-weight:600; color:#04141a;
+  font-family:'IBM Plex Sans',sans-serif; cursor:pointer; transition:transform .15s;
+}
+.osi-stack .layer:hover{transform:translateX(-4px)}
+.osi-stack .layer span.num{opacity:.65; font-size:.8rem; margin-inline-end:8px}
+.L7{background:#3ee6d6}.L6{background:#5fd1e6}.L5{background:#6dbaf0}
+.L4{background:#6d8dff}.L3{background:#8f7dfc}.L2{background:#b57bf0}.L1{background:#e07be0}
+
+/* ===== content ===== */
+main{max-width:var(--maxw); margin:0 auto; padding:0 18px}
+section{margin:44px 0}
+h2{font-size:1.35rem; border-inline-start:4px solid var(--accent); padding-inline-start:12px; margin-bottom:14px}
+h3{font-size:1.1rem; color:var(--accent2); margin:22px 0 10px}
+p{margin:0 0 14px; color:#dbe4f0}
+ul,ol{padding-inline-start:22px; margin:0 0 14px}
+li{margin-bottom:8px; color:#dbe4f0}
+
+.para-block{position:relative; margin-bottom:18px}
+.tr-btn{
+  display:inline-flex; align-items:center; gap:6px; margin-top:2px;
+  font-size:.78rem; color:var(--accent2); background:transparent; border:1px solid var(--line);
+  padding:4px 10px; border-radius:99px; cursor:pointer; font-family:inherit;
+}
+.tr-btn:hover{border-color:var(--accent2)}
+.tr-box{
+  display:none; margin-top:8px; padding:10px 14px; background:var(--panel2);
+  border-inline-start:3px solid var(--accent2); border-radius:6px; color:#c7d4e6; font-size:.95rem;
+}
+.tr-box.show{display:block}
+
+/* term tooltip */
+.term{
+  border-bottom:1.5px dotted var(--accent); cursor:help; position:relative; color:#fff; font-weight:600;
+}
+.term .tip{
+  visibility:hidden; opacity:0; position:absolute; bottom:135%; right:50%; transform:translateX(50%);
+  background:#04141a; color:var(--accent); border:1px solid var(--accent); padding:8px 12px; border-radius:8px;
+  font-size:.85rem; white-space:nowrap; z-index:20; transition:opacity .15s; font-family:'Tajawal',sans-serif; direction:rtl;
+  box-shadow:0 6px 20px rgba(0,0,0,.5);
+}
+.term:hover .tip, .term.tap .tip{visibility:visible; opacity:1}
+
+/* source content card */
+.src{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px; margin:18px 0}
+.src .src-label{font-size:.75rem; color:var(--muted); margin-bottom:10px; display:flex; align-items:center; gap:6px}
+.src .src-label::before{content:"📘"}
+
+/* extra / not-from-source box */
+.extra{
+  background:linear-gradient(180deg,rgba(245,196,81,.08),rgba(245,196,81,.03));
+  border:1px solid rgba(245,196,81,.4); border-radius:var(--radius); padding:18px 20px; margin:18px 0;
+}
+.extra .lab{color:var(--warn); font-weight:700; font-size:.85rem; margin-bottom:8px; display:flex; align-items:center; gap:6px}
+.extra .lab::before{content:"⚡"}
+.extra p, .extra li{color:#f0e3c0}
+
+/* code / CLI block */
+.cli{background:#050b12; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow-x:auto; margin:14px 0}
+.cli .l{color:#9fe6ff}
+.cli .c{color:#5fe08a}
+
+table{width:100%; border-collapse:collapse; margin:14px 0; font-size:.92rem}
+th,td{border:1px solid var(--line); padding:9px 12px; text-align:right}
+th{background:var(--panel2); color:var(--accent)}
+.mono-cell{font-family:'IBM Plex Mono',monospace; direction:ltr; text-align:left}
+
+/* diagram: frame anatomy */
+.frame-diagram{display:flex; flex-direction:column; gap:0; border-radius:10px; overflow:hidden; margin:16px 0; border:1px solid var(--line)}
+.frame-diagram .row{display:flex}
+.frame-diagram .seg{padding:14px 10px; font-size:.8rem; text-align:center; font-family:'IBM Plex Mono',monospace; color:#04141a}
+.fd-eth{background:#e07be0; flex:0 0 14%}
+.fd-ip{background:#6d8dff; flex:0 0 20%}
+.fd-tcp{background:#3ee6d6; flex:0 0 20%}
+.fd-http{background:#38d17a; flex:1}
+
+/* quiz */
+.quiz-intro{color:var(--muted); font-size:.9rem; margin-bottom:18px}
+.q-card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px; margin-bottom:16px}
+.q-card .q-num{color:var(--accent); font-size:.8rem; font-weight:700; margin-bottom:6px}
+.q-card .q-text{font-weight:700; margin-bottom:14px; font-size:1.02rem}
+.opt{
+  display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--line); border-radius:8px;
+  margin-bottom:8px; cursor:pointer; transition:.15s;
+}
+.opt:hover{border-color:var(--accent2)}
+.opt input{accent-color:var(--accent)}
+.opt.correct{border-color:var(--good); background:rgba(56,209,122,.1)}
+.opt.wrong{border-color:var(--bad); background:rgba(239,90,114,.1)}
+.opt.disabled{pointer-events:none; opacity:.85}
+.q-actions{display:flex; gap:10px; margin-top:12px}
+.btn{
+  background:var(--accent2); color:#04141a; border:none; padding:9px 18px; border-radius:8px; font-weight:700;
+  cursor:pointer; font-family:inherit; font-size:.9rem;
+}
+.btn.secondary{background:transparent; border:1px solid var(--line); color:var(--muted)}
+.btn:disabled{opacity:.4; cursor:not-allowed}
+.explain{
+  display:none; margin-top:12px; padding:12px 14px; background:var(--panel2); border-radius:8px;
+  border-inline-start:3px solid var(--accent); font-size:.92rem; color:#c7d4e6;
+}
+.explain.show{display:block}
+.q-result{font-size:.85rem; font-weight:700; margin-top:8px}
+.q-result.ok{color:var(--good)}
+.q-result.no{color:var(--bad)}
+
+/* footer nav */
+.lesson-nav{
+  max-width:var(--maxw); margin:50px auto 0; padding:20px 18px; display:flex; justify-content:space-between;
+  border-top:1px solid var(--line); gap:12px;
+}
+.lesson-nav a{
+  color:var(--text); text-decoration:none; background:var(--panel); border:1px solid var(--line);
+  padding:12px 18px; border-radius:10px; font-size:.9rem; display:flex; flex-direction:column; gap:2px; flex:1;
+}
+.lesson-nav a.next{text-align:left; align-items:flex-end}
+.lesson-nav a .k{color:var(--muted); font-size:.75rem}
+.lesson-nav a strong{color:var(--accent)}
+.lesson-nav .disabled{opacity:.4; pointer-events:none}
+
+.source-footer{max-width:var(--maxw); margin:20px auto; padding:0 18px; color:var(--muted); font-size:.78rem; text-align:center}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> مذاكرة CCNA 200-301 <span class="lesson-tag">— أساسيات الشبكات</span></div>
+  <div class="progress-wrap"><div class="progress-bar"></div></div>
+  <div class="lesson-tag">1 / 11</div>
+</div>
+
+<div class="hero">
+  <h1 class="en">Introduction to the OSI Model</h1>
+  <div class="sub">الدرس الأول — مقدمة إلى نموذج OSI</div>
+
+  <div class="osi-stack" id="osiStack">
+    <div class="layer L7"><span><span class="num">7</span>Application</span><span>تطبيقات</span></div>
+    <div class="layer L6"><span><span class="num">6</span>Presentation</span><span>تمثيل البيانات</span></div>
+    <div class="layer L5"><span><span class="num">5</span>Session</span><span>الجلسة</span></div>
+    <div class="layer L4"><span><span class="num">4</span>Transport</span><span>النقل</span></div>
+    <div class="layer L3"><span><span class="num">3</span>Network</span><span>الشبكة</span></div>
+    <div class="layer L2"><span><span class="num">2</span>Data Link</span><span>ربط البيانات</span></div>
+    <div class="layer L1"><span><span class="num">1</span>Physical</span><span>الطبقة الفيزيائية</span></div>
+  </div>
+</div>
+
+<main>
+
+<section>
+  <h2>مفيش امتحان على درس سابق — ده أول درس 👋</h2>
+  <div class="extra">
+    <div class="lab">من الدرس الجاني، كل درس هيبدأ بـ "امتحان سريع" على اللي فات</div>
+    <p>عشان تتأكد إن المعلومة ثبتت قبل ما تكمل. دلوقتي يلا نبدأ بالأساس اللي كل حاجة في الشبكات مبنية عليه: <b class="en">OSI Model</b>.</p>
+  </div>
+</section>
+
+<section id="intro">
+  <h2>ليه نموذج OSI أصلاً؟</h2>
+  <div class="src">
+    <div class="src-label">من المرجع (PDF — Introduction to the OSI Model)</div>
+    <div class="para-block">
+      <p>في البداية، كانت كل شركة (vendor) بتعمل الشبكات بطريقتها الخاصة، وحلول شركة ما كانتش بتشتغل مع حلول شركة تانية. عشان يحلوا المشكلة دي، نظمة <span class="term">ISO<span class="tip">المنظمة الدولية للمعايير</span></span> (International Organization for Standardization) عملت نموذج <span class="term">OSI<span class="tip">Open Systems Interconnection — نموذج طبقي لتوصيل الأنظمة المفتوحة</span></span> وطلعته سنة 1984.</p>
+      <button class="tr-btn" onclick="toggleTr(this)">🌐 ترجم الفقرة</button>
+      <div class="tr-box">في الأول، تطوير الشبكات كان فوضى. كل شركة كانت بتعمل حل خاص بيها، ومشكلة إن حل شركة ما كانش بيشتغل مع حل شركة تانية. من هنا جاءت فكرة نموذج OSI: نقسّم الشبكة لطبقات، بحيث شركات الهاردوير تصمم للطبقات الفيزيائية، وشركات تانية تطور سوفت وير لطبقة التطبيقات — وبما إن الكل متفق على نفس النموذج المفتوح، أي جهاز من أي شركة يقدر يشتغل مع التاني.</div>
+    </div>
+    <p>نموذج OSI مش بس بيخلي الأجهزة متوافقة مع بعض — هو كمان من <b>أفضل الطرق</b> اللي بتتعلم بيها الشبكات، فهتلاقي الناس بترجع له كتير وهي بتشرح أي بروتوكول.</p>
+  </div>
+
+  <div class="extra">
+    <div class="lab">ملحوظة (مش من المرجع)</div>
+    <p>فكّر في OSI مش كبروتوكول شغّال فعليًا، لكن كـ <b>خريطة ذهنية</b> بتساعدك تحط أي بروتوكول (HTTP, TCP, IP, Ethernet...) في مكانه الصح، وتفهم مين بيتكلم مع مين.</p>
+  </div>
+</section>
+
+<section id="layers">
+  <h2>الطبقات السبعة بالتفصيل</h2>
+  <div class="src">
+    <div class="src-label">من المرجع</div>
+    <p>هنمشي من تحت لفوق (من الطبقة الفيزيائية للتطبيقات):</p>
+    <ul>
+      <li><b class="en">Physical Layer:</b> بتوصف مستويات الفولت، التوقيت، معدلات نقل البيانات الفيزيائية، والموصلات (<span class="term">connectors<span class="tip">الموصّلات/الأسلاك</span></span>). أي حاجة تقدر "تلمسها" فيزيائيًا موجودة هنا.</li>
+      <li><b class="en">Data Link:</b> بتتأكد إن البيانات متنسّقة بالشكل الصح، بتكتشف الأخطاء، وبتضمن توصيل البيانات بشكل موثوق. هنا تعيش <span class="term">Ethernet<span class="tip">إيثرنت — تقنية الربط الشائعة في الشبكات المحلية</span></span> و<span class="term">MAC Addresses<span class="tip">العنوان الفيزيائي الثابت لكرت الشبكة</span></span> و<span class="term">Ethernet frames<span class="tip">إطار إيثرنت — وحدة البيانات في هذه الطبقة</span></span>.</li>
+      <li><b class="en">Network:</b> مسؤولة عن الاتصال واختيار المسار (<span class="term">routing<span class="tip">التوجيه — اختيار أفضل مسار للبيانات</span></span>). هنا تعيش <span class="term">IPv4<span class="tip">بروتوكول الإنترنت الإصدار 4</span></span> و<span class="term">IPv6</span>. كل جهاز في الشبكة لازم يكون له عنوان فريد.</li>
+      <li><b class="en">Transport:</b> مسؤولة عن نقل البيانات. لما تنزّل صفحة من الإنترنت، الصفحة بتتبعت على هيئة <span class="term">segments<span class="tip">أجزاء/قطاعات — وحدة بيانات طبقة النقل</span></span>.
+        <ul>
+          <li><b class="en">TCP</b> بروتوكول بينقل البيانات بشكل <b>موثوق</b> (reliable).</li>
+          <li><b class="en">UDP</b> بروتوكول بينقل البيانات بشكل <b>غير موثوق</b> (unreliable).</li>
+        </ul>
+      </li>
+      <li><b class="en">Session:</b> مسؤولة عن إنشاء وإدارة وإنهاء الجلسات (<span class="term">sessions<span class="tip">الجلسة — اتصال منطقي مستمر بين جهازين</span></span>) بين جهازين.</li>
+      <li><b class="en">Presentation:</b> بتتأكد إن المعلومة قابلة للقراءة لطبقة التطبيقات، عن طريق تنسيق وتنظيم البيانات (زي التوافق بين <span class="term">ASCII</span> و<span class="term">EBCDIC</span>).</li>
+      <li><b class="en">Application:</b> هنا تطبيقاتك: الإيميل، تصفح الإنترنت (<span class="term">HTTP</span>)، <span class="term">FTP<span class="tip">بروتوكول نقل الملفات</span></span>، وغيرهم كتير.</li>
+    </ul>
+    <p>الطبقات الأربعة الأولى (Physical → Transport) مهمة لـ<b>الشبكات</b> نفسها، والتلاتة اللي فوق (Session, Presentation, Application) خاصة بـ<b>التطبيقات</b>.</p>
+  </div>
+
+  <h3 class="en">"All People Seem To Need Data Processing"</h3>
+  <div class="src">
+    <p>جملة بتساعدك تفتكر الطبقات من فوق لتحت (Application → Physical):</p>
+    <table>
+      <tr><th>الحرف</th><th>الطبقة</th></tr>
+      <tr><td class="mono-cell">A</td><td>Application</td></tr>
+      <tr><td class="mono-cell">P</td><td>Presentation</td></tr>
+      <tr><td class="mono-cell">S</td><td>Session</td></tr>
+      <tr><td class="mono-cell">T</td><td>Transport</td></tr>
+      <tr><td class="mono-cell">N</td><td>Network</td></tr>
+      <tr><td class="mono-cell">D</td><td>Data Link</td></tr>
+      <tr><td class="mono-cell">P</td><td>Physical</td></tr>
+    </table>
+  </div>
+
+  <h3 class="en">"People Do Need To See Pamela Anderson"</h3>
+  <div class="src">
+    <p>وده يفتكرك الطبقات من تحت لفوق (Physical → Application) — المرجع بيقول إن الجملة دي بتضحك الطلاب في الكلاس 😄</p>
+    <table>
+      <tr><th>الحرف</th><th>الطبقة</th></tr>
+      <tr><td class="mono-cell">P</td><td>Physical</td></tr>
+      <tr><td class="mono-cell">D</td><td>Data Link</td></tr>
+      <tr><td class="mono-cell">N</td><td>Network</td></tr>
+      <tr><td class="mono-cell">T</td><td>Transport</td></tr>
+      <tr><td class="mono-cell">S</td><td>Session</td></tr>
+      <tr><td class="mono-cell">P</td><td>Presentation</td></tr>
+      <tr><td class="mono-cell">A</td><td>Application</td></tr>
+    </table>
+  </div>
+
+  <div class="extra">
+    <div class="lab">أهم حاجة تفتكرها</div>
+    <p>مش ممكن "تقفز" طبقة. البيانات لازم تعدي بكل الطبقات السبعة بالترتيب — سواء وهي نازلة (Sending) أو طالعة (Receiving). زي ما مش هتحط جواب في صندوق البريد من غير ما تكتب اسمك واسم المستلم على الظرف الأول.</p>
+  </div>
+</section>
+
+<section id="realworld">
+  <h2>مثال واقعي: تحميل صفحة من الإنترنت</h2>
+  <div class="src">
+    <div class="src-label">من المرجع</div>
+    <ol>
+      <li>بتفتح المتصفح وتكتب رابط. الطلب بيروح للسيرفر باستخدام <span class="term">HTTP<span class="tip">بروتوكول نقل النص التشعبي — بروتوكول طبقة التطبيقات</span></span> (طبقة Application).</li>
+      <li>طبقة <b class="en">Presentation</b> بتنظم شكل المعلومة.</li>
+      <li>طبقة <b class="en">Session</b> بتفصل بين كل الجلسات المختلفة.</li>
+      <li>حسب التطبيق، هيتم اختيار <b class="en">TCP</b> (موثوق) أو <b class="en">UDP</b> (غير موثوق) — وهنا هيختار TCP عشان يضمن وصول الصفحة كاملة.</li>
+      <li>جهازك له <b class="en">IP Address</b> فريد (زي 192.168.1.1)، وهيتم بناء <b class="en">IP packet</b> يحتوي على بيانات الطبقات اللي فوق + عنوان المصدر والوجهة.</li>
+      <li><b class="en">IP packet</b> هيتحط جوه <b class="en">Ethernet Frame</b> اللي فيه عنوان <b class="en">MAC</b> بتاع جهازك وعنوان MAC بتاع السيرفر.</li>
+      <li>وأخيرًا، كل حاجة بتتحول لـ bits وتتبعت عن طريق إشارات كهربية على الكابل.</li>
+    </ol>
+  </div>
+
+  <h3>تشبيه البريد 📮</h3>
+  <div class="src">
+    <ol>
+      <li>تكتب خطاب</li>
+      <li>تحطه في ظرف</li>
+      <li>تكتب اسمك واسم المستلم على الظرف</li>
+      <li>تحط الظرف في صندوق البريد</li>
+      <li>محتوى الصندوق بيروح لمكتب البريد المركزي</li>
+      <li>الظرف بيتوصل للمستلم</li>
+      <li>المستلم بيفتح الظرف ويقرا المحتوى</li>
+    </ol>
+    <p>لو حطيت الخطاب في صندوق البريد من غير ظرف، مش هيتوصل. النزول من طبقة Application لحد Physical اسمه <span class="term">Encapsulation<span class="tip">التغليف — إضافة معلومات كل طبقة وإحاطة البيانات بها وهي نازلة</span></span>، والصعود من Physical لحد Application اسمه <span class="term">De-encapsulation<span class="tip">فك التغليف — إزالة معلومات كل طبقة وهي طالعة</span></span>.</p>
+  </div>
+</section>
+
+<section id="pdu">
+  <h2>أسماء وحدة البيانات (PDU) في كل طبقة</h2>
+  <div class="src">
+    <div class="src-label">من المرجع</div>
+    <p>كل طبقة بتسمي "طرد المعلومات" بتاعها اسم مختلف — تسمى <span class="term">PDU<span class="tip">Protocol Data Unit — وحدة بيانات البروتوكول</span></span>:</p>
+    <table>
+      <tr><th>الطبقة</th><th>اسم الوحدة (PDU)</th><th>مثال</th></tr>
+      <tr><td>Transport</td><td class="en">Segments</td><td class="mono-cell en">TCP segments</td></tr>
+      <tr><td>Network</td><td class="en">Packets</td><td class="mono-cell en">IP packets</td></tr>
+      <tr><td>Data Link</td><td class="en">Frames</td><td class="mono-cell en">Ethernet frames</td></tr>
+    </table>
+    <p>دي مجرد تسميات، فماتقولش "IP frames" أو "Ethernet packets" — كل مصطلح مربوط بطبقته.</p>
+  </div>
+</section>
+
+<section id="wireshark">
+  <h2>شوف الطبقات شغالة فعليًا بـ Wireshark</h2>
+  <div class="src">
+    <div class="src-label">من المرجع</div>
+    <p><span class="term">Wireshark<span class="tip">أداة مجانية لالتقاط وتحليل حزم الشبكة</span></span> أداة بتلقط كل البيانات الداخلة والخارجة من جهازك. تقدر تنزلها من <span class="en">wireshark.org/download.html</span>. المرجع عمل تجربة: فتح فلتر باسم:</p>
+    <div class="cli"><span class="en">http.host=="cisco.com"</span></div>
+    <p>وفتح <span class="en">http://cisco.com</span> في المتصفح، وطلع حزمة واحدة قدر يحللها طبقة طبقة. أسفل الشكل ده تصور مبسط بديل (رسمته بدل السكرين شوت الأصلي) لشكل الفريم اللي طلع في الشرح:</p>
+
+    <div class="frame-diagram">
+      <div class="row">
+        <div class="seg fd-eth">Ethernet Frame<br>(L2)</div>
+        <div class="seg fd-ip">IP Packet<br>(L3)</div>
+        <div class="seg fd-tcp">TCP Segment<br>(L4)</div>
+        <div class="seg fd-http">HTTP — GET / HTTP/1.1<br>(L7)</div>
+      </div>
+    </div>
+
+    <p>ملحوظات المرجع على الحزمة اللي اتلقطت:</p>
+    <ul>
+      <li><b>Ethernet II</b> — عنوان MAC مصدر ووجهة، ونوع المحتوى (IPv4).</li>
+      <li><b>Internet Protocol v4</b> — عنوان IP مصدر ووجهة (طبقة 3).</li>
+      <li><b>TCP</b> — بورت المصدر 60522 وبورت الوجهة 80 (طبقة 4).</li>
+      <li><b>HTTP</b> — طلب <span class="mono-cell en">GET / HTTP/1.1</span> والـ User-Agent (طبقة 7) — لاحظ إنه مفيش طبقة Session أو Presentation ظاهرة بشكل منفصل، دي حاجة طبيعية.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="summary">
+  <h2>ملخص الدرس</h2>
+  <div class="src">
+    <ul>
+      <li>OSI Model = 7 طبقات، من Physical (1) لحد Application (7).</li>
+      <li>مينفعش تقفز طبقة — التغليف (Encapsulation) نازل، فك التغليف (De-encapsulation) طالع.</li>
+      <li>كل طبقة لها اسم مختلف لوحدة البيانات: Segments (L4)، Packets (L3)، Frames (L2).</li>
+      <li>Wireshark بيوريك الطبقات دي فعليًا شغالة في أي حزمة بتتبعت من جهازك.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>🧠 اختبار الدرس</h2>
+  <p class="quiz-intro">جاوب على الأسئلة دي — لو غلط هتبان بالأحمر، ولو صح هتبان بالأخضر، وتقدر تشوف الشرح في أي وقت حتى لو جاوبت صح.</p>
+  <div id="quizArea"></div>
+</section>
+
+</main>
+
+<div class="lesson-nav">
+  <a class="prev disabled"><span class="k">السابق</span><strong>-- لا يوجد --</strong></a>
+  <a class="next" href="lesson-02-ipv4.html"><span class="k">التالي</span><strong class="en">IPv4 (Internet Protocol)</strong></a>
+</div>
+
+<div class="source-footer">المصدر الأساسي: 01-introduction_to_the_osi_model.pdf — NetworkLessons.com (CCNA 200-301, Unit 2) · الأجزاء الصفراء إضافات خارج المرجع للتوضيح فقط</div>
+
+<script>
+// paragraph translate toggle
+function toggleTr(btn){
+  const box = btn.parentElement.querySelector('.tr-box');
+  box.classList.toggle('show');
+  btn.textContent = box.classList.contains('show') ? '🌐 اخفِ الترجمة' : '🌐 ترجم الفقرة';
+}
+
+// tap-to-show tooltip on mobile
+document.querySelectorAll('.term').forEach(t=>{
+  t.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    document.querySelectorAll('.term.tap').forEach(o=>{ if(o!==t) o.classList.remove('tap'); });
+    t.classList.toggle('tap');
+  });
+});
+document.addEventListener('click', ()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+
+// ===== QUIZ =====
+const quiz = [
+  {
+    q: "نموذج OSI اتعمل سنة كام ومين اللي طلعه؟",
+    opts: ["1984 — ISO", "1991 — IEEE", "1978 — Cisco", "2000 — IETF"],
+    correct: 0,
+    explain: "المرجع بيقول إن ISO (International Organization for Standardization) طلعت نموذج OSI سنة 1984 عشان توحّد الشبكات بين الشركات المختلفة."
+  },
+  {
+    q: "أي طبقة فيها MAC Addresses وEthernet frames؟",
+    opts: ["Network", "Transport", "Data Link", "Physical"],
+    correct: 2,
+    explain: "طبقة Data Link (رقم 2) هي اللي فيها Ethernet وMAC Addresses وEthernet frames — بتتأكد من توصيل البيانات بشكل صحيح وتكتشف الأخطاء."
+  },
+  {
+    q: "الفرق الأساسي بين TCP وUDP في طبقة Transport؟",
+    opts: ["TCP بروتوكول موثوق، UDP غير موثوق", "TCP للفيديو فقط", "UDP بيرسل بيانات أكتر", "مفيش فرق حقيقي"],
+    correct: 0,
+    explain: "TCP بينقل البيانات بشكل reliable (موثوق)، وUDP بينقلها بشكل unreliable (غير موثوق) — التفاصيل هتيجي بالتفصيل في درس TCP/UDP الجاي."
+  },
+  {
+    q: "لما البيانات بتنزل من Application لحد Physical عشان تتبعت، العملية دي اسمها إيه؟",
+    opts: ["De-encapsulation", "Encapsulation", "Routing", "Switching"],
+    correct: 1,
+    explain: "النزول من الطبقة العليا للطبقة الأقل (تغليف البيانات بمعلومات كل طبقة) اسمه Encapsulation. العكس (الصعود) اسمه De-encapsulation."
+  },
+  {
+    q: "إيه اسم الـ PDU (وحدة البيانات) بتاعة طبقة Network؟",
+    opts: ["Segments", "Frames", "Packets", "Bits"],
+    correct: 2,
+    explain: "طبقة Network اسم وحدتها Packets (زي IP packets). طبقة Transport اسمها Segments، وطبقة Data Link اسمها Frames."
+  },
+  {
+    q: "لما فتحنا فلتر http.host==\"cisco.com\" في Wireshark ولقطنا حزمة، ليه معملناش نشوف طبقة Session وPresentation لوحدهم؟",
+    opts: [
+      "لأن الطبقتين دول مش موجودين أصلاً في الشبكات الحقيقية",
+      "لأنهم بيتدمجوا عمليًا جوه بروتوكولات زي HTTP ومش بيبانوا كطبقة منفصلة في اللقطة",
+      "لأن Wireshark مش بيقدر يلقط الطبقتين دول",
+      "لأن الاتصال كان بيستخدم UDP"
+    ],
+    correct: 1,
+    explain: "من واقع اللقطة في المرجع، طبقة Session وPresentation ماظهروش كطبقة منفصلة — البروتوكول (HTTP هنا) بياخد دورهم عمليًا، وده شائع جدًا في التطبيقات الحديثة."
+  }
+];
+
+const quizArea = document.getElementById('quizArea');
+quiz.forEach((item, qi)=>{
+  const card = document.createElement('div');
+  card.className = 'q-card';
+  card.innerHTML = `
+    <div class="q-num">سؤال ${qi+1} من ${quiz.length}</div>
+    <div class="q-text">${item.q}</div>
+    <div class="opts"></div>
+    <div class="q-actions">
+      <button class="btn check" disabled>تحقق من الإجابة</button>
+      <button class="btn secondary reveal">إظهار الإجابة الصحيحة</button>
+    </div>
+    <div class="q-result"></div>
+    <div class="explain">${item.explain}</div>
+  `;
+  const optsWrap = card.querySelector('.opts');
+  item.opts.forEach((opt, oi)=>{
+    const label = document.createElement('label');
+    label.className = 'opt';
+    label.innerHTML = `<input type="radio" name="q${qi}" value="${oi}"> <span>${opt}</span>`;
+    optsWrap.appendChild(label);
+  });
+
+  const checkBtn = card.querySelector('.check');
+  const revealBtn = card.querySelector('.reveal');
+  const result = card.querySelector('.q-result');
+  const explainBox = card.querySelector('.explain');
+  const radios = card.querySelectorAll('input[type=radio]');
+  const optLabels = card.querySelectorAll('.opt');
+
+  radios.forEach(r=>r.addEventListener('change', ()=>{ checkBtn.disabled = false; }));
+
+  checkBtn.addEventListener('click', ()=>{
+    const chosen = card.querySelector('input[type=radio]:checked');
+    if(!chosen) return;
+    const chosenIdx = parseInt(chosen.value);
+    optLabels.forEach((l,i)=>{
+      l.classList.add('disabled');
+      if(i === item.correct) l.classList.add('correct');
+      else if(i === chosenIdx) l.classList.add('wrong');
+    });
+    if(chosenIdx === item.correct){
+      result.textContent = '✔ إجابة صحيحة';
+      result.className = 'q-result ok';
+    } else {
+      result.textContent = '✘ إجابة غير صحيحة — الصح متلون بالأخضر';
+      result.className = 'q-result no';
+    }
+    explainBox.classList.add('show');
+    checkBtn.disabled = true;
+  });
+
+  revealBtn.addEventListener('click', ()=>{
+    optLabels.forEach((l,i)=>{
+      l.classList.add('disabled');
+      if(i === item.correct) l.classList.add('correct');
+    });
+    explainBox.classList.add('show');
+  });
+
+  quizArea.appendChild(card);
+});
+</script>
+</body>
+</html>

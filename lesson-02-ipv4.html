@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lesson 2 — IPv4 | CCNA 200-301 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a121d; --panel:#101b29; --panel2:#0d1622; --line:#1e2f43;
+  --text:#e9eef5; --muted:#8ea3bd; --accent:#3ee6d6; --accent2:#6d8dff;
+  --warn:#f5c451; --good:#38d17a; --bad:#ef5a72; --radius:14px;
+  --maxw:960px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:76px}
+body{margin:0; background:var(--bg); color:var(--text); font-family:'IBM Plex Sans','Tajawal',sans-serif; line-height:1.85; padding-bottom:80px}
+.ar-text{font-family:'Tajawal','IBM Plex Sans',sans-serif}
+code,.mono{font-family:'IBM Plex Mono',monospace}
+
+/* ===== language toggle & content direction ===== */
+.p-en, .li-en, .td-en{display:block}
+.p-ar, .li-ar, .td-ar{display:none}
+body.lang-ar .p-en, body.lang-ar .li-en{display:none}
+body.lang-ar .p-ar, body.lang-ar .li-ar{display:block}
+.p-ar{font-family:'Tajawal',sans-serif; direction:rtl; text-align:right}
+
+/* ===== top bar ===== */
+.topbar{position:sticky; top:0; z-index:50; background:rgba(10,18,29,.94); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
+.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-family:'Tajawal',sans-serif; white-space:nowrap}
+.topbar .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 10px var(--accent)}
+.topbar .lesson-tag{color:var(--muted); font-size:.85rem; font-family:'Tajawal',sans-serif}
+.progress-wrap{flex:1; min-width:120px; max-width:280px; height:6px; background:var(--panel2); border-radius:99px; overflow:hidden; border:1px solid var(--line)}
+.progress-bar{height:100%; width:18%; background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+.langswitch{display:flex; align-items:center; background:var(--panel2); border:1px solid var(--line); border-radius:99px; padding:3px; gap:2px}
+.langswitch button{border:none; background:transparent; color:var(--muted); font-family:'Tajawal',sans-serif; font-weight:700;
+  padding:6px 14px; border-radius:99px; cursor:pointer; font-size:.82rem}
+.langswitch button.active{background:var(--accent); color:#04141a}
+
+/* ===== layout shell — desktop gets a sticky TOC rail ===== */
+.shell{max-width:1180px; margin:0 auto; padding:0 20px; display:grid; grid-template-columns:1fr; gap:0}
+@media(min-width:1020px){
+  .shell{grid-template-columns:200px minmax(0,var(--maxw))}
+  .toc{display:block !important}
+}
+.toc{display:none; position:sticky; top:78px; align-self:start; padding:28px 0; font-size:.85rem}
+.toc a{display:block; color:var(--muted); text-decoration:none; padding:7px 0; border-inline-start:2px solid var(--line); padding-inline-start:12px; margin-bottom:2px}
+.toc a:hover, .toc a.active{color:var(--accent); border-inline-start-color:var(--accent)}
+.toc-title{font-family:'Tajawal',sans-serif; color:var(--text); font-weight:700; font-size:.8rem; margin-bottom:10px; padding-inline-start:12px}
+
+/* ===== hero ===== */
+.hero{padding:34px 0 10px}
+.hero h1{font-size:clamp(1.7rem,3vw,2.3rem); margin:0 0 4px; font-weight:700}
+.hero .sub{color:var(--muted); font-size:1rem; margin-bottom:22px; font-family:'Tajawal',sans-serif}
+.osi-chip{display:inline-flex; align-items:center; gap:8px; background:var(--panel); border:1px solid var(--line);
+  padding:8px 14px; border-radius:99px; font-size:.85rem; color:var(--muted); margin-bottom:20px; font-family:'Tajawal',sans-serif}
+.osi-chip b{color:var(--accent)}
+
+main{min-width:0}
+section{margin:44px 0; scroll-margin-top:76px}
+h2{font-size:1.35rem; border-inline-start:4px solid var(--accent); padding-inline-start:12px; margin-bottom:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+h2 .h-ar{color:var(--muted); font-family:'Tajawal',sans-serif; font-size:.85rem; font-weight:400}
+h3{font-size:1.08rem; color:var(--accent2); margin:22px 0 10px}
+p{margin:0 0 14px; color:#dbe4f0}
+ul,ol{padding-inline-start:22px; margin:0 0 14px}
+li{margin-bottom:8px; color:#dbe4f0}
+
+.para-block{position:relative; margin-bottom:18px}
+.tr-btn{display:inline-flex; align-items:center; gap:6px; margin-top:2px; font-size:.78rem; color:var(--accent2);
+  background:transparent; border:1px solid var(--line); padding:4px 10px; border-radius:99px; cursor:pointer;
+  font-family:'Tajawal',sans-serif}
+.tr-btn:hover{border-color:var(--accent2)}
+
+.term{border-bottom:1.5px dotted var(--accent); cursor:help; position:relative; color:#fff; font-weight:600}
+.term .tip{visibility:hidden; opacity:0; position:absolute; bottom:135%; left:50%; transform:translateX(-50%);
+  background:#04141a; color:var(--accent); border:1px solid var(--accent); padding:8px 12px; border-radius:8px;
+  font-size:.85rem; white-space:nowrap; z-index:20; transition:opacity .15s; font-family:'Tajawal',sans-serif; direction:rtl;
+  box-shadow:0 6px 20px rgba(0,0,0,.5); max-width:260px; white-space:normal}
+.term:hover .tip, .term.tap .tip{visibility:visible; opacity:1}
+
+.src{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px 24px; margin:18px 0}
+.src .src-label{font-size:.75rem; color:var(--muted); margin-bottom:10px; display:flex; align-items:center; gap:6px; font-family:'Tajawal',sans-serif}
+.src .src-label::before{content:"📘"}
+
+.extra{background:linear-gradient(180deg,rgba(245,196,81,.08),rgba(245,196,81,.03)); border:1px solid rgba(245,196,81,.4);
+  border-radius:var(--radius); padding:18px 20px; margin:18px 0}
+.extra .lab{color:var(--warn); font-weight:700; font-size:.85rem; margin-bottom:8px; display:flex; align-items:center; gap:6px; font-family:'Tajawal',sans-serif}
+.extra .lab::before{content:"⚡"}
+.extra p,.extra li{color:#f0e3c0}
+
+.cli{background:#050b12; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow-x:auto; margin:14px 0; direction:ltr; text-align:left}
+.cli .l{color:#9fe6ff} .cli .c{color:#5fe08a}
+
+table{width:100%; border-collapse:collapse; margin:14px 0; font-size:.92rem}
+th,td{border:1px solid var(--line); padding:9px 12px; text-align:start}
+th{background:var(--panel2); color:var(--accent)}
+.mono-cell{font-family:'IBM Plex Mono',monospace; direction:ltr; text-align:left}
+
+/* ===== custom diagrams (self-built, no external images) ===== */
+.diagram{background:#050b12; border:1px solid var(--line); border-radius:12px; padding:22px; margin:16px 0}
+.ip32{display:flex; gap:4px; direction:ltr}
+.ip32 .oct{flex:1; text-align:center; padding:14px 6px; border-radius:8px; font-family:'IBM Plex Mono',monospace}
+.ip32 .net{background:#6d8dff; color:#04141a}
+.ip32 .host{background:#e07be0; color:#04141a}
+.ip32 .lbl{font-size:.7rem; opacity:.85; display:block; margin-top:4px}
+.bits-row{display:flex; direction:ltr; gap:2px; margin:10px 0; font-family:'IBM Plex Mono',monospace; font-size:.82rem}
+.bits-row .bit{flex:1; text-align:center; background:var(--panel2); border:1px solid var(--line); padding:6px 2px; border-radius:4px}
+.class-bar{display:flex; direction:ltr; border-radius:8px; overflow:hidden; margin:8px 0; font-family:'IBM Plex Mono',monospace; font-size:.78rem}
+.class-bar div{padding:10px 4px; text-align:center; color:#04141a}
+.cb-net{background:#6d8dff} .cb-host{background:#e07be0}
+
+.quiz-intro{color:var(--muted); font-size:.9rem; margin-bottom:18px; font-family:'Tajawal',sans-serif}
+.q-card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px; margin-bottom:16px}
+.q-card .q-num{color:var(--accent); font-size:.8rem; font-weight:700; margin-bottom:6px; font-family:'Tajawal',sans-serif}
+.q-card .q-text{font-weight:700; margin-bottom:14px; font-size:1.02rem; font-family:'Tajawal',sans-serif}
+.opt{display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--line); border-radius:8px; margin-bottom:8px; cursor:pointer; transition:.15s; font-family:'Tajawal',sans-serif}
+.opt:hover{border-color:var(--accent2)}
+.opt input{accent-color:var(--accent)}
+.opt.correct{border-color:var(--good); background:rgba(56,209,122,.1)}
+.opt.wrong{border-color:var(--bad); background:rgba(239,90,114,.1)}
+.opt.disabled{pointer-events:none; opacity:.85}
+.q-actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+.btn{background:var(--accent2); color:#04141a; border:none; padding:9px 18px; border-radius:8px; font-weight:700; cursor:pointer; font-family:'Tajawal',sans-serif; font-size:.9rem}
+.btn.secondary{background:transparent; border:1px solid var(--line); color:var(--muted)}
+.btn:disabled{opacity:.4; cursor:not-allowed}
+.explain{display:none; margin-top:12px; padding:12px 14px; background:var(--panel2); border-radius:8px; border-inline-start:3px solid var(--accent); font-size:.92rem; color:#c7d4e6; font-family:'Tajawal',sans-serif}
+.explain.show{display:block}
+.q-result{font-size:.85rem; font-weight:700; margin-top:8px; font-family:'Tajawal',sans-serif}
+.q-result.ok{color:var(--good)} .q-result.no{color:var(--bad)}
+.recap-badge{display:inline-block; background:var(--panel2); color:var(--accent); font-size:.72rem; padding:3px 10px; border-radius:99px; margin-bottom:10px; font-family:'Tajawal',sans-serif}
+
+.lesson-nav{max-width:1180px; margin:50px auto 0; padding:20px 20px; display:flex; justify-content:space-between; border-top:1px solid var(--line); gap:12px}
+.lesson-nav a{color:var(--text); text-decoration:none; background:var(--panel); border:1px solid var(--line); padding:12px 18px; border-radius:10px; font-size:.9rem; display:flex; flex-direction:column; gap:2px; flex:1; font-family:'Tajawal',sans-serif}
+.lesson-nav a .k{color:var(--muted); font-size:.75rem}
+.lesson-nav a strong{color:var(--accent); font-family:'IBM Plex Sans',sans-serif}
+.source-footer{max-width:1180px; margin:20px auto; padding:0 20px; color:var(--muted); font-size:.78rem; text-align:center; font-family:'Tajawal',sans-serif}
+</style>
+</head>
+<body class="lang-en">
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> مذاكرة CCNA 200-301 <span class="lesson-tag">— Network Fundamentals</span></div>
+  <div class="progress-wrap"><div class="progress-bar"></div></div>
+  <div class="langswitch">
+    <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
+    <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
+  </div>
+  <div class="lesson-tag">2 / 11</div>
+</div>
+
+<div class="shell">
+  <nav class="toc">
+    <div class="toc-title">On this page</div>
+    <a href="#intro">Why IP?</a>
+    <a href="#structure">32-bit structure</a>
+    <a href="#header">Packet header</a>
+    <a href="#binary">Binary → decimal</a>
+    <a href="#classes">Classes A/B/C</a>
+    <a href="#private">Private vs public</a>
+    <a href="#netbcast">Network & broadcast</a>
+    <a href="#quiz">Quiz</a>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="osi-chip">📍 موقعنا في <b>OSI Model</b> — Layer 3 (Network)</div>
+      <h1>IP (Internet Protocol) Version 4 for CCNA</h1>
+      <div class="sub">الدرس الثاني — بروتوكول IPv4</div>
+    </div>
+
+    <section id="recap">
+      <div class="recap-badge">🔁 Quick recap — الدرس اللي فات</div>
+      <h2>امتحان سريع على درس OSI Model <span class="h-ar">(previous lesson recap)</span></h2>
+      <div id="recapArea"></div>
+    </section>
+
+    <section id="intro">
+      <h2>Why do we need IP? <span class="h-ar">ليه أصلاً محتاجين IP؟</span></h2>
+      <div class="src">
+        <div class="src-label">From the source (PDF)</div>
+        <div class="para-block">
+          <p class="p-en">IP uses <span class="term">Packets<span class="tip">حزمة البيانات</span></span> called IP packets to carry information. Every IP packet is a single unit of information and besides data it carries information to determine where to send the packet. IP determines where to send packets to by looking at the destination IP address.</p>
+          <p class="p-ar">بروتوكول IP بيستخدم وحدات بيانات اسمها IP packets عشان ينقل المعلومات. كل IP packet هو وحدة معلومات واحدة، وغير البيانات نفسها، بيحمل معلومات تحدد فين المفروض يروح. IP بيقرر يبعت الحزمة فين عن طريق ما يشوف عنوان IP الوجهة (destination).</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+
+        <h3>Characteristics</h3>
+        <div class="para-block">
+          <ul class="li-en">
+            <li>Operates at the <span class="term">network layer<span class="tip">الطبقة الثالثة من OSI</span></span> of the OSI model.</li>
+            <li><span class="term">Connectionless<span class="tip">بدون اتصال — لا يُنشئ جلسة قبل الإرسال</span></span> protocol: IP itself does not setup a connection, in order to transport data you need the "transport" layer and use TCP or UDP.</li>
+            <li>Every packet is treated independently; there is no order in which the packets are arriving at their destination.</li>
+            <li><span class="term">Hierarchical<span class="tip">هرمي — منظم على مستويات</span></span>: IP addresses have a hierarchy; we'll discuss this in depth when we talk about subnetting and subnet masks.</li>
+          </ul>
+          <ul class="li-ar">
+            <li>بيشتغل على <b>طبقة الشبكة (Network)</b>، يعني الطبقة التالتة في OSI.</li>
+            <li>بروتوكول <b>Connectionless</b> — يعني IP نفسه مش بيعمل اتصال (connection) قبل ما يبعت، ده شغل طبقة النقل (Transport) عن طريق TCP أو UDP.</li>
+            <li>كل حزمة (packet) بتتعامل معاها لوحدها؛ مفيش ترتيب مضمون إنها توصل بيه.</li>
+            <li>عناوين IP <b>هرمية (Hierarchical)</b> — هنشرح ده بالتفصيل لما نوصل لـ subnetting و subnet masks.</li>
+          </ul>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+
+        <div class="para-block">
+          <p class="p-en">We need an IP address to uniquely identify each network device on the network. An IP address is just like a phone number — everyone in a city who has a phone at home has a unique phone number where you can reach them.</p>
+          <p class="p-ar">محتاجين عنوان IP عشان نحدد كل جهاز على الشبكة بشكل فريد. عنوان الـ IP زيه بالظبط زي رقم التليفون — كل شخص في المدينة عنده تليفون له رقم فريد تقدر توصله بيه.</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="structure">
+      <h2>32-bit structure <span class="h-ar">تركيبة الـ 32 بت</span></h2>
+      <div class="src">
+        <div class="para-block">
+          <p class="p-en">An IP address is 32-bit and consists of 2 parts: the network part and the host part. The IP address is 32-bit, but we write it down in 4 blocks of 8 bits — 8 bits is what we call a "<span class="term">byte<span class="tip">بايت — 8 بت</span></span>" (or <span class="term">octet<span class="tip">أوكتت — نفس معنى بايت هنا</span></span>).</p>
+          <p class="p-ar">عنوان الـ IP طوله 32 بت ومكوّن من جزئين: جزء الشبكة (network) وجزء الجهاز (host). بنكتبه في 4 مجموعات كل مجموعة 8 بت، وكل 8 بت اسمها "بايت" (أو أوكتت).</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+
+        <div class="diagram">
+          <div class="ip32">
+            <div class="oct net">192<span class="lbl">Network</span></div>
+            <div class="oct net">168<span class="lbl">Network</span></div>
+            <div class="oct net">1<span class="lbl">Network</span></div>
+            <div class="oct host">1<span class="lbl">Host</span></div>
+          </div>
+        </div>
+
+        <div class="para-block">
+          <p class="p-en">Take <b class="mono">192.168.1.1</b>, a very commonly used IP address on local networks. Here the first 3 bytes are the "network" address and the last byte is the "host" address. The <span class="term">subnet mask<span class="tip">قناع الشبكة الفرعية — يحدد أي جزء من العنوان هو network وأي جزء host</span></span> — here <b class="mono">255.255.255.0</b> — tells your computer which part is the network part and which is the host part. Despite the name, it does not "hide" or "mask" anything.</p>
+          <p class="p-ar">خد مثال <b class="mono">192.168.1.1</b> وهو عنوان شائع جدًا في الشبكات المحلية. أول 3 بايتات هي جزء الـ network، والبايت الأخير هو جزء الـ host. الـ <b>subnet mask</b> — هنا <b class="mono">255.255.255.0</b> — بيقول لجهازك أي جزء network وأي جزء host. برغم الاسم، هو مش بـ"يخفي" أو "يقنّع" أي حاجة فعليًا.</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="header">
+      <h2>The IP packet header <span class="h-ar">هيدر الحزمة (مقدمة)</span></h2>
+      <div class="src">
+        <div class="para-block">
+          <p class="p-en">The actual IPv4 packet has many fields (Ver, IHL, TOS, Packet Length, Identification, Flags, Fragment Offset, Time to Live, Protocol, Header Checksum, Source Address, Destination Address, Options, Padding, Data). For now, only four fields matter to us:</p>
+          <p class="p-ar">الحزمة الفعلية فيها حقول كتير (الإصدار، طول الهيدر، نوع الخدمة، طول الحزمة، رقم التعريف، الأعلام، إزاحة الجزء، مدة البقاء، البروتوكول، checksum، عنوان المصدر، عنوان الوجهة، خيارات، بيانات إضافية). دلوقتي هنركز بس على 4 حقول:</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+        <ul class="li-en">
+          <li><b>Protocol:</b> which transport-layer protocol is used on top of IP — TCP, UDP, or something else.</li>
+          <li><b>Source Address:</b> the IP address of the device that created this packet.</li>
+          <li><b>Destination Address:</b> the IP address of the device that should receive the packet.</li>
+          <li><b>Data:</b> the actual data we're trying to get to the other side.</li>
+        </ul>
+        <ul class="li-ar">
+          <li><b>Protocol:</b> بيقول إحنا مستخدمين أي بروتوكول من طبقة النقل فوق IP — TCP ولا UDP ولا غيره.</li>
+          <li><b>Source Address:</b> عنوان الـ IP بتاع الجهاز اللي عمل الحزمة دي.</li>
+          <li><b>Destination Address:</b> عنوان الـ IP بتاع الجهاز اللي المفروض يستلمها.</li>
+          <li><b>Data:</b> البيانات الفعلية اللي بنحاول نوصلها للطرف التاني.</li>
+        </ul>
+        <div class="extra">
+          <div class="lab">ملحوظة (مش من المرجع)</div>
+          <p>باقي حقول الهيدر (زي TTL, Checksum, Fragment Offset) هتتشرح بالتفصيل في <b>الدرس الجاي — IPv4 Packet Header</b>، عشان كده مش هنعمّق فيهم دلوقتي.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="binary">
+      <h2>Binary → decimal walkthrough <span class="h-ar">تحويل ثنائي لعشري</span></h2>
+      <div class="src">
+        <div class="para-block">
+          <p class="p-en">Let's convert <b class="mono">192.168.1.1</b> to binary using the bit-value table: 128, 64, 32, 16, 8, 4, 2, 1.</p>
+          <p class="p-ar">هنحوّل <b class="mono">192.168.1.1</b> لثنائي باستخدام جدول قيمة كل بت: 128، 64، 32، 16، 8، 4، 2، 1.</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+        <div class="diagram">
+          <div class="bits-row"><div class="bit">128</div><div class="bit">64</div><div class="bit">32</div><div class="bit">16</div><div class="bit">8</div><div class="bit">4</div><div class="bit">2</div><div class="bit">1</div></div>
+          <div class="bits-row"><div class="bit">1</div><div class="bit">1</div><div class="bit">0</div><div class="bit">0</div><div class="bit">0</div><div class="bit">0</div><div class="bit">0</div><div class="bit">0</div></div>
+          <p style="text-align:center;margin-top:6px" class="mono">128 + 64 = <b style="color:var(--accent)">192</b> (first byte)</p>
+        </div>
+        <p class="p-en">Do the same for each byte: <b class="mono">168 = 128+32+8</b>, and the last two bytes are just <b class="mono">1</b> each (only the last bit set). That gives us <b class="mono">192.168.1.1</b>.</p>
+        <p class="p-ar" style="display:none" data-mirror="true">نفس الطريقة لكل بايت: <b class="mono">168 = 128+32+8</b>، وآخر بايتين قيمتهم <b class="mono">1</b> بس (آخر بت مفعّل). كده وصلنا لـ <b class="mono">192.168.1.1</b>.</p>
+      </div>
+    </section>
+
+    <section id="classes">
+      <h2>Classes A, B, C <span class="h-ar">الأصناف A و B و C</span></h2>
+      <div class="src">
+        <div class="para-block">
+          <p class="p-en">There are 3 classes: A, B, and C. The difference between them is how many hosts you can fit in each network. The first bits are "fixed" for each class:</p>
+          <p class="p-ar">في 3 أصناف: A و B و C. الفرق بينهم هو عدد الأجهزة (hosts) اللي تقدر تتحط في كل شبكة. أول بتات كل صنف "ثابتة":</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+        <table>
+          <tr><th>Class</th><th>First bits</th><th>Range</th><th>Structure</th></tr>
+          <tr><td>A</td><td class="mono-cell">0xxxxxxx</td><td class="mono-cell">0.0.0.0 – 126.255.255.255</td><td class="mono-cell">Network.Host.Host.Host</td></tr>
+          <tr><td>B</td><td class="mono-cell">10xxxxxx</td><td class="mono-cell">128.0.0.0 – 191.255.255.255</td><td class="mono-cell">Network.Network.Host.Host</td></tr>
+          <tr><td>C</td><td class="mono-cell">110xxxxx</td><td class="mono-cell">192.0.0.0 – 223.255.255.255</td><td class="mono-cell">Network.Network.Network.Host</td></tr>
+        </table>
+        <div class="diagram">
+          <div class="class-bar"><div class="cb-net" style="flex:1">Network</div><div class="cb-host" style="flex:3">Host . Host . Host</div></div>
+          <div class="class-bar"><div class="cb-net" style="flex:2">Network . Network</div><div class="cb-host" style="flex:2">Host . Host</div></div>
+          <div class="class-bar"><div class="cb-net" style="flex:3">Network . Network . Network</div><div class="cb-host" style="flex:1">Host</div></div>
+        </div>
+        <div class="para-block">
+          <p class="p-en">Class A gives you a LOT of hosts per network but few networks. Class C gives you a LOT of networks but few hosts each. Two things worth remembering: <b class="mono">127.0.0.0</b> is not in the Class A range — it's reserved for <span class="term">loopback<span class="tip">حلقة رجوع — لاختبار الجهاز نفسه، مثل 127.0.0.1</span></span> (try <span class="mono">ping 127.0.0.1</span>). There's also a Class D range starting at <b class="mono">224.0.0.0</b> used for <span class="term">multicast<span class="tip">إرسال متعدد — بث لمجموعة محددة من الأجهزة</span></span>.</p>
+          <p class="p-ar">Class A بيدّيك عدد أجهزة كبير جدًا لكل شبكة لكن عدد شبكات قليل. Class C بالعكس، شبكات كتير لكن أجهزة قليلة في كل واحدة. حاجتين تستحق الحفظ: <b class="mono">127.0.0.0</b> مش داخل مدى Class A فعليًا — هو محجوز لـ <b>loopback</b> (جرب <span class="mono">ping 127.0.0.1</span>). وكمان في مدى Class D يبدأ من <b class="mono">224.0.0.0</b> بيُستخدم لـ <b>multicast</b>.</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="private">
+      <h2>Private vs public IP addresses <span class="h-ar">عناوين خاصة وعامة</span></h2>
+      <div class="src">
+        <div class="para-block">
+          <p class="p-en"><span class="term">Public<span class="tip">عام — يُستخدم على الإنترنت مباشرة</span></span> IP addresses are used on the Internet. <span class="term">Private<span class="tip">خاص — للشبكة المحلية فقط، غير مسموح على الإنترنت</span></span> IP addresses are used on your local area network and should not be used on the Internet.</p>
+          <p class="p-ar">عناوين IP <b>العامة (Public)</b> تُستخدم على الإنترنت مباشرة. عناوين IP <b>الخاصة (Private)</b> تُستخدم في شبكتك المحلية فقط ومش المفروض تتستخدم على الإنترنت.</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+        <table>
+          <tr><th>Class</th><th>Private range</th></tr>
+          <tr><td>A</td><td class="mono-cell">10.0.0.0 – 10.255.255.255</td></tr>
+          <tr><td>B</td><td class="mono-cell">172.16.0.0 – 172.31.255.255</td></tr>
+          <tr><td>C</td><td class="mono-cell">192.168.0.0 – 192.168.255.255</td></tr>
+        </table>
+        <p class="p-en"><b class="mono">192.168.1.1</b> falls within Class C and is a private address — that's exactly why it's so common on home networks and SOHO routers.</p>
+        <p class="p-ar" style="display:none" data-mirror="true"><b class="mono">192.168.1.1</b> واقع جوه Class C وهو عنوان خاص — عشان كده هو شائع جدًا في شبكات البيوت وأجهزة الراوتر الصغيرة.</p>
+      </div>
+    </section>
+
+    <section id="netbcast">
+      <h2>Network & broadcast addresses <span class="h-ar">عنوان الشبكة وعنوان البث</span></h2>
+      <div class="src">
+        <div class="para-block">
+          <p class="p-en">Two IP addresses in every network can never be assigned to a computer: the <span class="term">network address<span class="tip">عنوان الشبكة — كل بتات الـ host تساوي صفر</span></span> (used to "define" the network) and the <span class="term">broadcast address<span class="tip">عنوان البث — كل بتات الـ host تساوي واحد، يستقبله كل الأجهزة</span></span> (received by all devices in the network).</p>
+          <p class="p-ar">في عنوانين في أي شبكة مينفعش أبدًا تتحطهم على جهاز: <b>عنوان الشبكة (Network address)</b> (بيُستخدم عشان "يعرّف" الشبكة) و<b>عنوان البث (Broadcast address)</b> (بيستقبله كل جهاز على الشبكة).</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+        <div class="para-block">
+          <p class="p-en">Set all the host bits to <b class="mono">0</b> → you get the network address. Set all the host bits to <b class="mono">1</b> → you get the broadcast address. Example with <b class="mono">192.168.1.X</b>: network address is <b class="mono">192.168.1.0</b>, broadcast address is <b class="mono">192.168.1.255</b>.</p>
+          <p class="p-ar">لو حطيت كل بتات الـ host = <b class="mono">0</b> → طلع معاك عنوان الشبكة. لو حطيتهم كلهم = <b class="mono">1</b> → طلع معاك عنوان البث. مثال بـ <b class="mono">192.168.1.X</b>: عنوان الشبكة هو <b class="mono">192.168.1.0</b>، وعنوان البث هو <b class="mono">192.168.1.255</b>.</p>
+          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 ترجم / Translate</button>
+        </div>
+      </div>
+
+      <div class="extra">
+        <div class="lab">ملحوظة (مش من المرجع)</div>
+        <p>ده أهم حاجة تتستخدم فعليًا في الشغل: لما تحدد الـ subnet لأي شبكة، أول عنوان فيها دايمًا Network address وآخر عنوان دايمًا Broadcast — الاتنين دول محجوزين، ومتديش أي منهم لجهاز أبدًا.</p>
+      </div>
+    </section>
+
+    <section id="summary">
+      <h2>Summary <span class="h-ar">ملخص الدرس</span></h2>
+      <div class="src">
+        <ul class="li-en">
+          <li>IP address = 32-bit, split into Network + Host parts, written as 4 bytes.</li>
+          <li>Subnet mask decides where the network part ends and the host part begins.</li>
+          <li>Class A/B/C differ in how many networks vs hosts they allow.</li>
+          <li>Private ranges (10.x, 172.16-31.x, 192.168.x) never appear directly on the Internet.</li>
+          <li>Every network reserves a network address (all host bits = 0) and a broadcast address (all host bits = 1) — neither can be assigned to a device.</li>
+        </ul>
+        <ul class="li-ar">
+          <li>عنوان الـ IP = 32 بت، متقسم لـ Network + Host، بنكتبه 4 بايتات.</li>
+          <li>الـ subnet mask هو اللي بيحدد فين يخلص جزء الـ network ويبدأ جزء الـ host.</li>
+          <li>Class A/B/C بيختلفوا في عدد الشبكات مقابل عدد الأجهزة المسموح بيهم.</li>
+          <li>المدى الخاص (10.x، 172.16-31.x، 192.168.x) مينفعش يظهر مباشرة على الإنترنت.</li>
+          <li>كل شبكة بتحجز عنوان شبكة (network address) وعنوان بث (broadcast address) — الاتنين مينفعش تتحطهم على جهاز.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>🧠 Lesson quiz <span class="h-ar">اختبار الدرس</span></h2>
+      <p class="quiz-intro">جاوب على الأسئلة دي — غلط = أحمر، صح = أخضر، وتقدر تشوف الشرح والإجابة الصحيحة في أي وقت.</p>
+      <div id="quizArea"></div>
+    </section>
+  </main>
+</div>
+
+<div class="lesson-nav">
+  <a class="prev" href="lesson-01-osi-model.html"><span class="k">Previous</span><strong>OSI Model</strong></a>
+  <a class="next" href="lesson-03-ipv4-header.html"><span class="k">Next</span><strong>IPv4 Packet Header</strong></a>
+</div>
+
+<div class="source-footer">Primary source: 02-ip__internet_protocol__v4_for_ccna_r_s_students.pdf — NetworkLessons.com (CCNA 200-301, Unit 2) · Yellow boxes = extra notes outside the source, not for memorization · Diagrams are custom-built, not reproduced from the PDF</div>
+
+<script>
+// ===== global language toggle =====
+function setGlobalLang(lang){
+  document.body.classList.toggle('lang-ar', lang==='ar');
+  document.body.classList.toggle('lang-en', lang==='en');
+  document.getElementById('btnEn').classList.toggle('active', lang==='en');
+  document.getElementById('btnAr').classList.toggle('active', lang==='ar');
+  // reset any per-paragraph manual overrides so the global switch always wins
+  document.querySelectorAll('.para-block').forEach(pb=>{
+    const en = pb.querySelector('.p-en, .li-en');
+    const ar = pb.querySelector('.p-ar, .li-ar');
+    if(en) en.style.display = '';
+    if(ar) ar.style.display = '';
+    const btn = pb.querySelector('.tr-btn');
+    if(btn) btn.textContent = '🌐 ' + (lang==='en' ? 'ترجم / Translate' : 'English / انجليزي');
+  });
+  document.querySelectorAll('[data-mirror]').forEach(el=>{ el.style.display = (lang==='ar') ? '' : 'none'; });
+  document.querySelectorAll('main p.p-en[data-mirror-pair]').forEach(()=>{});
+}
+
+// ===== per-paragraph override =====
+function toggleParaLang(btn){
+  const pb = btn.closest('.para-block');
+  const en = pb.querySelector('.p-en, .li-en');
+  const ar = pb.querySelector('.p-ar, .li-ar');
+  const showingEn = getComputedStyle(en).display !== 'none';
+  en.style.display = showingEn ? 'none' : '';
+  ar.style.display = showingEn ? '' : 'none';
+}
+
+// handle the two "mirror" paragraphs that don't have a wrapping .para-block toggle button
+document.querySelectorAll('[data-mirror]').forEach(el=>{ el.style.display='none'; });
+
+// tap-to-show tooltip on mobile
+document.querySelectorAll('.term').forEach(t=>{
+  t.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    document.querySelectorAll('.term.tap').forEach(o=>{ if(o!==t) o.classList.remove('tap'); });
+    t.classList.toggle('tap');
+  });
+});
+document.addEventListener('click', ()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+
+// TOC active section highlight
+const tocLinks = document.querySelectorAll('.toc a');
+const sections = [...tocLinks].map(a=>document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll', ()=>{
+  let idx = 0;
+  sections.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top < 120) idx = i; });
+  tocLinks.forEach(a=>a.classList.remove('active'));
+  if(tocLinks[idx]) tocLinks[idx].classList.add('active');
+});
+
+// ===== quiz builder (reusable) =====
+function buildQuiz(containerId, items){
+  const area = document.getElementById(containerId);
+  items.forEach((item, qi)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-num">سؤال ${qi+1} من ${items.length}</div>
+      <div class="q-text">${item.q}</div>
+      <div class="opts"></div>
+      <div class="q-actions">
+        <button class="btn check" disabled>تحقق من الإجابة</button>
+        <button class="btn secondary reveal">إظهار الإجابة الصحيحة</button>
+      </div>
+      <div class="q-result"></div>
+      <div class="explain">${item.explain}</div>
+    `;
+    const optsWrap = card.querySelector('.opts');
+    item.opts.forEach((opt, oi)=>{
+      const label = document.createElement('label');
+      label.className = 'opt';
+      label.innerHTML = `<input type="radio" name="${containerId}-q${qi}" value="${oi}"> <span>${opt}</span>`;
+      optsWrap.appendChild(label);
+    });
+    const checkBtn = card.querySelector('.check');
+    const revealBtn = card.querySelector('.reveal');
+    const result = card.querySelector('.q-result');
+    const explainBox = card.querySelector('.explain');
+    const optLabels = card.querySelectorAll('.opt');
+
+    card.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener('change', ()=>{ checkBtn.disabled = false; }));
+
+    checkBtn.addEventListener('click', ()=>{
+      const chosen = card.querySelector('input[type=radio]:checked');
+      if(!chosen) return;
+      const chosenIdx = parseInt(chosen.value);
+      optLabels.forEach((l,i)=>{
+        l.classList.add('disabled');
+        if(i === item.correct) l.classList.add('correct');
+        else if(i === chosenIdx) l.classList.add('wrong');
+      });
+      result.textContent = chosenIdx === item.correct ? '✔ إجابة صحيحة' : '✘ إجابة غير صحيحة — الصح متلون بالأخضر';
+      result.className = 'q-result ' + (chosenIdx === item.correct ? 'ok' : 'no');
+      explainBox.classList.add('show');
+      checkBtn.disabled = true;
+    });
+    revealBtn.addEventListener('click', ()=>{
+      optLabels.forEach((l,i)=>{ l.classList.add('disabled'); if(i === item.correct) l.classList.add('correct'); });
+      explainBox.classList.add('show');
+    });
+    area.appendChild(card);
+  });
+}
+
+buildQuiz('recapArea', [
+  {
+    q: "أي طبقة في OSI فيها MAC Addresses و Ethernet frames؟",
+    opts: ["Network", "Data Link", "Transport", "Physical"],
+    correct: 1,
+    explain: "Data Link (طبقة 2) هي اللي فيها MAC Addresses و Ethernet frames — درسنا ده في الدرس اللي فات."
+  },
+  {
+    q: "لما البيانات بتنزل من Application لحد Physical عشان تتبعت، العملية اسمها إيه؟",
+    opts: ["De-encapsulation", "Routing", "Encapsulation", "Switching"],
+    correct: 2,
+    explain: "Encapsulation هي النزول من طبقة لطبقة (تغليف البيانات)، والعكس Decapsulation."
+  },
+  {
+    q: "اسم الـ PDU بتاع طبقة Network إيه؟",
+    opts: ["Segments", "Frames", "Packets", "Bits"],
+    correct: 2,
+    explain: "طبقة Network اسم وحدتها Packets — ودي بالظبط اللي هندرسها بالتفصيل في درس النهاردة."
+  }
+]);
+
+buildQuiz('quizArea', [
+  {
+    q: "عنوان IP طوله كام بت، وبيتقسم لكام جزء؟",
+    opts: ["16 بت، جزء واحد", "32 بت، جزأين (Network + Host)", "64 بت، 3 أجزاء", "8 بت، جزأين"],
+    correct: 1,
+    explain: "عنوان IPv4 طوله 32 بت ومكوّن من جزئين: Network part و Host part، بنكتبه في 4 بايتات."
+  },
+  {
+    q: "الـ subnet mask وظيفته إيه بالظبط؟",
+    opts: ["يشفّر البيانات", "يحدد أي جزء من العنوان Network وأي جزء Host", "يمنع الأجهزة من الاتصال", "يزوّد سرعة الشبكة"],
+    correct: 1,
+    explain: "برغم اسمه، الـ subnet mask مابـ\"يخفيش\" حاجة — هو بس بيقول لجهازك فين يخلص جزء الـ network ويبدأ جزء الـ host."
+  },
+  {
+    q: "عنوان 172.20.5.9 واقع في مدى أي Class خاص (private)؟",
+    opts: ["Class A", "Class B", "Class C", "مش عنوان خاص أصلاً"],
+    correct: 1,
+    explain: "المدى الخاص لـ Class B هو 172.16.0.0 – 172.31.255.255، و172.20.5.9 واقع جواه."
+  },
+  {
+    q: "عنوان 127.0.0.1 بيُستخدم لإيه؟",
+    opts: ["Multicast", "Broadcast", "Loopback (اختبار الجهاز نفسه)", "Default gateway"],
+    correct: 2,
+    explain: "مدى 127.0.0.0 محجوز لـ loopback، وده بتستخدمه تتأكد إن الـ IP stack بتاع جهازك شغال (ping 127.0.0.1)."
+  },
+  {
+    q: "في شبكة 192.168.5.X، إيه هو عنوان الـ Broadcast؟",
+    opts: ["192.168.5.0", "192.168.5.1", "192.168.5.255", "192.168.5.254"],
+    correct: 2,
+    explain: "تحط كل بتات الـ host = 1 عشان توصل للـ broadcast address، فده 192.168.5.255. أما 192.168.5.0 فهو عنوان الشبكة (network address)."
+  },
+  {
+    q: "مدى Class D (224.0.0.0 وما فوق) بيُستخدم لإيه؟",
+    opts: ["أجهزة إضافية", "Multicast", "Loopback", "شبكات VPN"],
+    correct: 1,
+    explain: "مدى الـ 224.0.0.0 مخصص لـ multicast — مش بيتحط على أجهزة عادية زي Class A/B/C."
+  }
+]);
+</script>
+</body>
+</html>

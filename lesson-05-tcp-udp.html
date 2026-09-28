@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lesson 5 — TCP &amp; UDP | CCNA 200-301 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a121d;--panel:#101b29;--panel2:#0d1622;--line:#1e2f43;--text:#e9eef5;--muted:#8ea3bd;--accent:#3ee6d6;--accent2:#6d8dff;--warn:#f5c451;--good:#38d17a;--bad:#ef5a72;--radius:14px;--maxw:960px}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans','Tajawal',sans-serif;line-height:1.85;padding-bottom:80px;overflow-x:hidden}
+code,.mono{font-family:'IBM Plex Mono',monospace;overflow-wrap:anywhere}
+img{max-width:100%;height:auto;display:block;margin:0 auto}
+p,li,td,th,h1,h2,h3{overflow-wrap:break-word;word-break:break-word}
+
+/* ===== language system: EVERYTHING is English unless the toggle says otherwise ===== */
+body.lang-en .ar{display:none!important}
+body.lang-ar .en{display:none!important}
+body.lang-en .flip .en{display:none!important}
+body.lang-en .flip .ar{display:block!important}
+body.lang-ar .flip .ar{display:none!important}
+body.lang-ar .flip .en{display:block!important}
+.ar{font-family:'Tajawal',sans-serif;direction:rtl;text-align:right}
+span.ar{direction:rtl;unicode-bidi:isolate}
+ul.ar,ol.ar{padding-inline-start:0;padding-inline-end:22px}
+
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,18,29,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.lesson-tag{color:var(--muted);font-size:.85rem}
+.progress-wrap{flex:1;min-width:120px;max-width:280px;height:6px;background:var(--panel2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.progress-bar{height:100%;width:45%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.langswitch{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:3px;gap:2px}
+.langswitch button{border:none;background:transparent;color:var(--muted);font-weight:700;padding:6px 14px;border-radius:99px;cursor:pointer;font-size:.82rem}
+.langswitch button.active{background:var(--accent);color:#04141a}
+
+.shell{max-width:1180px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:1fr}
+@media(min-width:1020px){.shell{grid-template-columns:210px minmax(0,var(--maxw))}.toc{display:block!important}}
+.toc{display:none;position:sticky;top:78px;align-self:start;padding:28px 0;font-size:.85rem}
+.toc a{display:block;color:var(--muted);text-decoration:none;padding:7px 0;border-inline-start:2px solid var(--line);padding-inline-start:12px;margin-bottom:2px}
+.toc a:hover,.toc a.active{color:var(--accent);border-inline-start-color:var(--accent)}
+.toc-title{color:var(--text);font-weight:700;font-size:.8rem;margin-bottom:10px;padding-inline-start:12px}
+
+.hero{padding:34px 0 10px}
+.hero h1{font-size:clamp(1.5rem,3vw,2.2rem);margin:0 0 4px;font-weight:700}
+.hero .sub{color:var(--muted);margin-bottom:22px}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);padding:8px 14px;border-radius:99px;font-size:.85rem;color:var(--muted);margin-bottom:20px}
+.chip b{color:var(--accent)}
+main{min-width:0}
+section{margin:44px 0;scroll-margin-top:76px}
+h2{font-size:1.3rem;border-inline-start:4px solid var(--accent);padding-inline-start:12px;margin-bottom:14px}
+h3{font-size:1.05rem;color:var(--accent2);margin:22px 0 10px}
+p{margin:0 0 14px;color:#dbe4f0}
+ul,ol{padding-inline-start:22px;margin:0 0 14px}
+li{margin-bottom:8px;color:#dbe4f0}
+.badge{display:inline-block;background:var(--panel2);color:var(--accent);font-size:.75rem;padding:3px 10px;border-radius:99px;margin-bottom:10px}
+
+.para-block{margin-bottom:18px}
+.tr-btn{display:inline-flex;margin-top:2px;font-size:.78rem;color:var(--accent2);background:transparent;border:1px solid var(--line);padding:4px 12px;border-radius:99px;cursor:pointer}
+.tr-btn:hover{border-color:var(--accent2)}
+
+.term{border-bottom:1.5px dotted var(--accent);cursor:help;position:relative;color:#fff;font-weight:600}
+.term .tip{visibility:hidden;opacity:0;position:absolute;bottom:135%;left:0;background:#04141a;color:var(--accent);border:1px solid var(--accent);padding:8px 12px;border-radius:8px;font-size:.85rem;z-index:20;transition:opacity .15s;font-family:'Tajawal',sans-serif;direction:rtl;text-align:right;box-shadow:0 6px 20px rgba(0,0,0,.5);width:max-content;max-width:min(270px,70vw);font-weight:400}
+.term:hover .tip,.term.tap .tip{visibility:visible;opacity:1}
+
+.src{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:18px 0;overflow:hidden}
+.src-label{font-size:.75rem;color:var(--muted);margin-bottom:10px}
+.src-label::before{content:"📘 "}
+.extra{background:linear-gradient(180deg,rgba(245,196,81,.08),rgba(245,196,81,.03));border:1px solid rgba(245,196,81,.4);border-radius:var(--radius);padding:18px 20px;margin:18px 0}
+.extra .lab{color:var(--warn);font-weight:700;font-size:.85rem;margin-bottom:8px}
+.extra .lab::before{content:"⚡ "}
+.extra p,.extra li{color:#f0e3c0}
+
+.cli{background:#050b12;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:14px 0;direction:ltr;text-align:left;white-space:pre;font-family:'IBM Plex Mono',monospace;font-size:.82rem;line-height:1.6}
+.cli b{color:var(--accent)}
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:480px}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:start}
+th{background:var(--panel2);color:var(--accent)}
+.mono-cell{font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:left}
+
+.img-card{background:#050b12;border:1px solid var(--line);border-radius:12px;padding:14px;margin:16px 0}
+.img-card figcaption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:10px}
+.img-fallback{display:none;text-align:center;padding:26px 14px;background:var(--panel2);border:1px dashed var(--line);border-radius:10px;color:#dbe4f0;font-size:.9rem}
+
+.quiz-intro{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+.q-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:16px}
+.q-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.q-num{color:var(--accent);font-size:.8rem;font-weight:700}
+.q-text{font-weight:600;margin-bottom:14px;font-size:1.02rem}
+.q-card[data-lang=ar] .q-text,.q-card[data-lang=ar] .explain,.q-card[data-lang=ar] .opt span{font-family:'Tajawal',sans-serif;direction:rtl;text-align:right}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:.15s}
+.opt:hover{border-color:var(--accent2)}
+.opt input{accent-color:var(--accent)}
+.opt.correct{border-color:var(--good);background:rgba(56,209,122,.1)}
+.opt.wrong{border-color:var(--bad);background:rgba(239,90,114,.1)}
+.opt.disabled{pointer-events:none;opacity:.9}
+.q-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn{background:var(--accent2);color:#04141a;border:none;padding:9px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem}
+.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn.tiny{padding:5px 12px;font-size:.75rem}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.explain{display:none;margin-top:12px;padding:12px 14px;background:var(--panel2);border-radius:8px;border-inline-start:3px solid var(--accent);font-size:.9rem;color:#c7d4e6}
+.explain.show{display:block}
+.q-result{font-size:.85rem;font-weight:700;margin-top:8px}
+.q-result.ok{color:var(--good)}.q-result.no{color:var(--bad)}
+
+.lesson-nav{max-width:1180px;margin:50px auto 0;padding:20px;display:flex;justify-content:space-between;border-top:1px solid var(--line);gap:12px}
+.lesson-nav a{color:var(--text);text-decoration:none;background:var(--panel);border:1px solid var(--line);padding:12px 18px;border-radius:10px;font-size:.9rem;display:flex;flex-direction:column;gap:2px;flex:1}
+.lesson-nav a .k{color:var(--muted);font-size:.75rem}
+.lesson-nav a strong{color:var(--accent)}
+.lesson-nav a.next{text-align:right;align-items:flex-end}
+.source-footer{max-width:1180px;margin:20px auto;padding:0 20px;color:var(--muted);font-size:.78rem;text-align:center}
+</style>
+</head>
+<body class="lang-en">
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span>
+    <span class="en">CCNA 200-301 Study</span><span class="ar">مذاكرة CCNA 200-301</span>
+    <span class="lesson-tag">— Network Fundamentals</span></div>
+  <div class="progress-wrap"><div class="progress-bar"></div></div>
+  <div class="langswitch">
+    <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
+    <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
+  </div>
+  <div class="lesson-tag">5 / 11</div>
+</div>
+
+<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#recap"><span class="en">Recap quiz</span><span class="ar">مراجعة</span></a><a href="#why"><span class="en">Why two protocols?</span><span class="ar">ليه اتنين؟</span></a><a href="#compare"><span class="en">TCP vs UDP</span><span class="ar">TCP مقابل UDP</span></a><a href="#udp"><span class="en">UDP header</span><span class="ar">هيدر UDP</span></a><a href="#handshake"><span class="en">3-way handshake</span><span class="ar">الـ 3-way handshake</span></a><a href="#flow"><span class="en">Flow control</span><span class="ar">Flow control</span></a><a href="#header"><span class="en">TCP header</span><span class="ar">هيدر TCP</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">Position in OSI: <b>Layer 4</b> (Transport)</span><span class="ar">مكانه في OSI: <b>الطبقة 4</b> (Transport)</span></div>
+<h1>Introduction to TCP and UDP</h1>
+<div class="sub"><span class="en">Lesson 5 — the two transport protocols: reliable vs best-effort</span><span class="ar">الدرس الخامس — بروتوكولا النقل: الموثوق مقابل best-effort</span></div></div><section id="recap"><span class="badge"><span class="en">🔁 Recap — previous lesson: ARP</span><span class="ar">🔁 مراجعة — الدرس السابق: ARP</span></span><h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2><div id="recapArea"></div></section><section id="why"><h2><span class="en">Why two transport protocols?</span><span class="ar">ليه في بروتوكولين للنقل؟</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>In this lesson we look at our transport protocols TCP and UDP. If you know about IP and IP packets, you know that we require a transport protocol to send our IP packets. We focus on the two used most of the time:</p>
+<ul><li><b>TCP</b> (<span class="term">Transmission Control Protocol<span class="tip">بروتوكول التحكم بالإرسال</span></span>)</li><li><b>UDP</b> (<span class="term">User Datagram Protocol<span class="tip">بروتوكول داتاجرام المستخدم</span></span>)</li></ul>
+<p>So why do we have 2 different transport protocols, why do we care, and when do we need one over the other? The short answer: <b>TCP is a reliable protocol. UDP is an unreliable or best-effort protocol.</b></p>
+<p>Unreliable? Why would I want data transport that is unreliable? Let's look at two stories.</p></div><div class="ar"><p>في الدرس ده هنتكلم عن بروتوكولات النقل TCP و UDP. لو عارف IP و IP packets فأنت عارف إننا محتاجين بروتوكول نقل (transport) عشان نبعت الـ IP packets. هنركز على أكتر اتنين بيتستخدموا:</p>
+<ul><li><b>TCP</b> (Transmission Control Protocol)</li><li><b>UDP</b> (User Datagram Protocol)</li></ul>
+<p>طب ليه في اتنين، وإمتى نحتاج واحد بدل التاني؟ الإجابة المختصرة: <b>TCP بروتوكول موثوق (reliable). UDP بروتوكول غير موثوق أو best-effort.</b></p>
+<p>غير موثوق؟ ليه أصلاً عايز نقل بيانات غير موثوق؟ خلينا نشوف حكايتين.</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><h3><span class="en">Story 1 — the 20 GB movie (why we want reliable)</span><span class="ar">الحكاية 1 — فيلم 20 جيجا (ليه عايزين موثوق)</span></h3><div class="para-block"><div class="en"><p>You are downloading the latest movie in 1080p HD with 7.1 surround sound from a "download on demand" service. The file is 20 GB. After downloading 10 GB something goes wrong and a couple of IP packets don't make it to your computer. When the download finishes you try to play the movie and get all kinds of errors, so you head to the local DVD rental place.</p>
+<p>You want the transport of your download to be <b>reliable</b>, which is why we use TCP. If some IP packets don't make it to your computer, that data will be retransmitted.</p></div><div class="ar"><p>أنت بتنزّل أحدث فيلم بجودة 1080p وصوت 7.1 من خدمة "download on demand". الملف 20 جيجا، وبعد ما نزل 10 جيجا حصلت مشكلة وكام IP packet ماوصلوش لجهازك. لما التحميل يخلص وتحاول تشغّل الفيلم بتلاقي أخطاء كتير، فتروح لمحل تأجير الـ DVD.</p>
+<p>أنت عايز نقل التحميل يكون <b>موثوق (reliable)</b>، عشان كده بنستخدم TCP. لو أي IP packets ماوصلتش، البيانات دي هتتبعت تاني (retransmission).</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><h3><span class="en">Story 2 — VoIP (why we want unreliable)</span><span class="ar">الحكاية 2 — VoIP (ليه عايزين غير موثوق)</span></h3><div class="para-block"><div class="en"><p>You are the network engineer of a major company and you implement a new open-source <span class="term">VoIP<span class="tip">Voice over IP — مكالمات صوتية على شبكة IP</span></span> solution to replace the analog phones. Users complain that call quality is horrible. You find out the provider used a <b>reliable</b> transport protocol like TCP, because "we want phone calls to be reliable, right?"</p>
+<p>Wrong thinking! TCP does error correction, meaning data that didn't make it will be retransmitted. How weird would your call sound if you heard something the other person said a few seconds ago? It's real-time, so we don't want retransmission. It's better to send VoIP packets and lose a few than retransmit them afterwards; your VoIP codec can also fix packet loss up to a certain degree. Here we want a <b>best-effort</b> or <b>unreliable</b> protocol: UDP.</p></div><div class="ar"><p>أنت مهندس الشبكة في شركة كبيرة وعملت حل VoIP مفتوح المصدر بدل التليفونات الأنالوج. المستخدمين بيشتكوا إن جودة المكالمات وحشة جدًا. اكتشفت إن المزوّد استخدم بروتوكول نقل <b>موثوق</b> زي TCP لأن "إحنا عايزين المكالمات تبقى موثوقة، مش كده؟"</p>
+<p>تفكير غلط! TCP بيعمل تصحيح أخطاء، يعني أي بيانات ماوصلتش هتتبعت تاني. تخيل هتسمع إيه لو سمعت حاجة الطرف التاني قالها من كام ثانية؟ المكالمة real-time فمش عايزين retransmission. الأحسن نبعت VoIP packets ونفقد كام واحدة بدل ما نعيد إرسالها، وكمان الـ VoIP codec بيقدر يعالج فقد الـ packets لحد درجة معينة. هنا عايزين بروتوكول <b>best-effort</b> أو <b>unreliable</b>: وده UDP.</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></section><section id="compare"><h2><span class="en">TCP vs UDP at a glance</span><span class="ar">TCP مقابل UDP بنظرة سريعة</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><div class="table-wrap"><table><tr><th></th><th>TCP</th><th>UDP</th></tr>
+<tr><td><b>Connection type</b></td><td>Connection-oriented</td><td>Connectionless</td></tr>
+<tr><td><b>Sequencing</b></td><td>Yes</td><td>No</td></tr>
+<tr><td><b>Usage</b></td><td>Downloads, File sharing, Printing</td><td>VoIP, Video (streaming)</td></tr></table></div>
+<p><b>Connection type:</b> TCP is connection-oriented — it will "set up" a connection and then start transferring data (the "3-way handshake", shown below). UDP is connectionless — it just starts sending and doesn't care whether it arrives or not.</p>
+<p><b>Sequencing:</b> we use a <b>sequence number</b>; if you download a big file you must put all packets back in the right order. UDP has no sequence number.</p>
+<p>What about VoIP — don't we need packets in order at the receiver? Yes, otherwise we'd get strange conversations. UDP doesn't offer sequencing, but for VoIP it's not just UDP: we also use <b>RTP</b>, which offers sequencing (and some other features needed for VoIP).</p></div><div class="ar"><div class="table-wrap"><table><tr><th></th><th>TCP</th><th>UDP</th></tr>
+<tr><td><b>نوع الاتصال</b></td><td>Connection-oriented (موجّه بالاتصال)</td><td>Connectionless (بدون اتصال)</td></tr>
+<tr><td><b>الترتيب (Sequencing)</b></td><td>أيوه</td><td>لأ</td></tr>
+<tr><td><b>الاستخدام</b></td><td>تحميلات، مشاركة ملفات، طباعة</td><td>VoIP، فيديو (streaming)</td></tr></table></div>
+<p><b>نوع الاتصال:</b> TCP موجّه بالاتصال — بيعمل "setup" لاتصال الأول وبعدين يبدأ ينقل البيانات (الـ "3-way handshake" تحت). UDP بدون اتصال — بيبدأ يبعت على طول ومش فارق معاه وصل ولا لأ.</p>
+<p><b>الترتيب:</b> بنستخدم <b>sequence number</b>؛ لو بتنزّل ملف كبير لازم ترجّع كل الـ packets بالترتيب الصح. UDP مفيهوش sequence number.</p>
+<p>طب VoIP؟ مش محتاجين نرتّب الـ packets عند المستقبل؟ أيوه محتاجين، وإلا هنسمع كلام مبلبل. UDP مبيدّيش sequencing، لكن في VoIP مش UDP لوحده: بنستخدم كمان <b>RTP</b> اللي بيوفر sequencing (ومميزات تانية محتاجينها للـ VoIP).</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="extra"><div class="lab"><span class="en">Extra note (not from the PDF)</span><span class="ar">ملحوظة إضافية (مش من المرجع)</span></div><div class="para-block"><div class="en">The lesson lists video streaming under UDP. In real life much streaming (e.g. over HTTP) actually runs on TCP, but for the exam and for this course, follow the lesson: real-time traffic (VoIP, live video) → UDP; downloads, file sharing, printing → TCP.</div><div class="ar">المرجع حاط الـ video streaming تحت UDP. في الواقع كتير من الـ streaming (زي اللي على HTTP) بيشتغل على TCP، لكن للامتحان وللكورس اتبع المرجع: الترافيك اللحظي (VoIP، فيديو مباشر) ← UDP؛ التحميلات ومشاركة الملفات والطباعة ← TCP.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></div></section><section id="udp"><h2><span class="en">The UDP header</span><span class="ar">هيدر UDP</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><figure class="img-card"><img src="https://media.geeksforgeeks.org/wp-content/uploads/20210308175958/UDP.png" alt="UDP header: source port, destination port, length, checksum" onerror="imgFail(this)"><div class="img-fallback">🖼️ Diagram: UDP header = 16-bit source port | 16-bit destination port | 16-bit UDP length | 16-bit UDP checksum, then Data. — Search: "UDP header format"</div><figcaption><span class="en">UDP header (image: GeeksforGeeks)</span><span class="ar">هيدر UDP (الصورة: GeeksforGeeks)</span></figcaption></figure><div class="para-block"><div class="en"><div class="table-wrap"><table><tr><th>Field</th><th>Size</th></tr><tr><td>Source port</td><td>16 bit</td></tr><tr><td>Destination port</td><td>16 bit</td></tr><tr><td>UDP length</td><td>16 bit</td></tr><tr><td>UDP checksum</td><td>16 bit</td></tr><tr><td>Data</td><td>—</td></tr></table></div>
+<p>You can see how simple it is: it has the source and destination port number (this is how we know for which application the data is meant), a checksum and the length.</p></div><div class="ar"><div class="table-wrap"><table><tr><th>الحقل</th><th>الحجم</th></tr><tr><td>Source port</td><td>16 بت</td></tr><tr><td>Destination port</td><td>16 بت</td></tr><tr><td>UDP length</td><td>16 بت</td></tr><tr><td>UDP checksum</td><td>16 بت</td></tr><tr><td>Data</td><td>—</td></tr></table></div>
+<p>شوف قد إيه بسيط: فيه رقم الـ port المصدر والوجهة (بكده نعرف البيانات دي لأنهي تطبيق)، وchecksum، والـ length.</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><h3><span class="en">What we know about UDP</span><span class="ar">اللي عرفناه عن UDP</span></h3><div class="para-block"><div class="en"><ul><li>It operates on the transport layer of the OSI model.</li><li>It is a connectionless protocol: it does not set up a connection, it just sends data.</li><li>Limited error correction, because we have a checksum.</li><li>Best-effort or unreliable protocol.</li><li>No data-recovery features.</li></ul></div><div class="ar"><ul><li>شغال على طبقة النقل (Transport) في OSI.</li><li>بروتوكول connectionless: مبيعملش اتصال، بيبعت البيانات وخلاص.</li><li>تصحيح أخطاء محدود، لأن عندنا checksum.</li><li>بروتوكول best-effort أو غير موثوق.</li><li>مفيش ميزات لاسترجاع البيانات.</li></ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></section><section id="handshake"><h2><span class="en">TCP and the 3-way handshake</span><span class="ar">TCP والـ 3-way handshake</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>Since TCP is a reliable protocol, it will "set up" a connection before we start sending any data. This is the <b>3-way handshake</b>. Take two computers, H1 and H2, that want to send data to each other reliably:</p>
+<ol>
+<li>H1 sends a <b>TCP SYN</b>, telling H2 it wants to set up a connection. It includes a sequence number — to keep things simple the lesson picks <span class="mono">SEQ=1</span>.</li>
+<li>H2 responds with a <b>SYN,ACK</b>. It picks its own sequence number (<span class="mono">SEQ=100</span>, a random number) and sends <span class="mono">ACK=2</span>. ACK=2 means: "I received your SYN which had sequence number 1, and I'm ready for the next message with sequence number 2."</li>
+<li>H1 sends an <b>acknowledgement</b>: <span class="mono">SEQ=2 ACK=101</span>. It acknowledges the SEQ=100 from H2. Since H2 sent ACK=2, H1 knows it can send the next message with sequence number 2.</li>
+</ol>
+<p>Simplified:</p>
+<ul><li>H1 sends a <b>TCP SYN</b>. (I want to talk to you)</li><li>H2 sends a <b>TCP SYN,ACK</b>. (I accept that you want to talk to me, and I want to talk to you as well)</li><li>H1 sends a <b>TCP ACK</b>. (I accept that you want to talk to me)</li></ul></div><div class="ar"><p>لأن TCP بروتوكول موثوق، هو بيعمل "setup" لاتصال قبل ما نبدأ نبعت أي بيانات. ده الـ <b>3-way handshake</b>. خد جهازين H1 و H2 عايزين يبعتوا بيانات لبعض بشكل موثوق:</p>
+<ol>
+<li>H1 بيبعت <b>TCP SYN</b> ويقول لـ H2 إنه عايز يعمل اتصال. فيه sequence number — وعشان نبسّط المرجع اختار <span class="mono">SEQ=1</span>.</li>
+<li>H2 بيرد بـ <b>SYN,ACK</b>. بيختار sequence number بتاعه (<span class="mono">SEQ=100</span>، رقم عشوائي) وبيبعت <span class="mono">ACK=2</span>. معنى ACK=2: "استلمت الـ SYN بتاعك اللي كان رقمه 1، وجاهز للرسالة الجاية برقم 2."</li>
+<li>H1 بيبعت <b>acknowledgement</b>: <span class="mono">SEQ=2 ACK=101</span>. بيأكد استلام SEQ=100 من H2. ولأن H2 بعت ACK=2، H1 عارف إنه يقدر يبعت الرسالة الجاية برقم 2.</li>
+</ol>
+<p>باختصار:</p>
+<ul><li>H1 بيبعت <b>TCP SYN</b>. (عايز أتكلم معاك)</li><li>H2 بيبعت <b>TCP SYN,ACK</b>. (موافق إنك تتكلم معايا، وأنا كمان عايز أتكلم معاك)</li><li>H1 بيبعت <b>TCP ACK</b>. (موافق إنك تتكلم معايا)</li></ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><figure class="img-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Tcp_normal.svg/500px-Tcp_normal.svg.png" data-alt="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Tcp_normal.svg/250px-Tcp_normal.svg.png" alt="TCP connection diagram: handshake, data, close" onerror="imgFail(this)"><div class="img-fallback">🖼️ Diagram: client and server exchanging SYN → SYN,ACK → ACK, then data, then FIN. — Search: "TCP three-way handshake diagram"</div><figcaption><span class="en">A normal TCP connection (Wikimedia Commons: Tcp_normal.svg)</span><span class="ar">اتصال TCP عادي (Wikimedia Commons: Tcp_normal.svg)</span></figcaption></figure><div class="extra"><div class="lab"><span class="en">Extra note (not from the PDF)</span><span class="ar">ملحوظة إضافية (مش من المرجع)</span></div><div class="para-block"><div class="en">Memory trick: the ACK number is always <b>the sequence number you just received + 1</b> = "the next byte I expect". That is why SYN with SEQ=1 is answered with ACK=2, and SEQ=100 with ACK=101.</div><div class="ar">حيلة للحفظ: رقم الـ ACK دايمًا = <b>الـ sequence number اللي لسه مستلمه + 1</b> = "البايت الجاي اللي مستنيه". عشان كده SYN برقم SEQ=1 بيتردّ عليه بـ ACK=2، و SEQ=100 بـ ACK=101.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><h3><span class="en">The handshake in Wireshark</span><span class="ar">الـ handshake في Wireshark</span></h3><div class="para-block"><div class="en"><p>A real capture: computer <span class="mono">192.168.1.2</span> sets up a connection with <span class="mono">174.143.213.184</span>: it sends a TCP SYN, gets a SYN,ACK back, and finally sends a TCP ACK to finish the 3-way handshake.</p>
+<div class="table-wrap"><table><tr><th>No.</th><th>Time</th><th>Source</th><th>Destination</th><th>Info</th></tr>
+<tr><td class="mono-cell">1</td><td class="mono-cell">0.000000</td><td class="mono-cell">192.168.1.2</td><td class="mono-cell">174.143.213.184</td><td class="mono-cell">54841 &gt; http [SYN] Seq=0 Win=5840</td></tr>
+<tr><td class="mono-cell">2</td><td class="mono-cell">0.046770</td><td class="mono-cell">174.143.213.184</td><td class="mono-cell">192.168.1.2</td><td class="mono-cell">http &gt; 54841 [SYN, ACK] Seq=0 Ack=1</td></tr>
+<tr><td class="mono-cell">3</td><td class="mono-cell">0.046803</td><td class="mono-cell">192.168.1.2</td><td class="mono-cell">174.143.213.184</td><td class="mono-cell">54841 &gt; http [ACK] Seq=1 Ack=1</td></tr></table></div>
+<div class="table-wrap"><table><tr><th>Packet</th><th>Flags</th><th>Seq / Ack (relative)</th><th>Header length</th><th>Window size</th><th>Options</th></tr>
+<tr><td>SYN</td><td class="mono-cell">0x02 (SYN)</td><td class="mono-cell">Seq: 0</td><td class="mono-cell">40 bytes</td><td class="mono-cell">5840</td><td class="mono-cell">20 bytes</td></tr>
+<tr><td>SYN, ACK</td><td class="mono-cell">0x12 (SYN, ACK)</td><td class="mono-cell">Seq: 0, Ack: 1</td><td class="mono-cell">40 bytes</td><td>—</td><td>—</td></tr>
+<tr><td>ACK</td><td class="mono-cell">0x10 (ACK)</td><td class="mono-cell">Seq: 1, Ack: 1</td><td class="mono-cell">32 bytes</td><td class="mono-cell">5888 (scaled)</td><td class="mono-cell">12 bytes</td></tr></table></div>
+<p>The SYN has the SYN bit set in the Flags section. The SYN,ACK has both SYN and ACK set and acknowledges the SYN from the other computer. The final ACK is where the computer that started the handshake sets the ACK bit and acknowledges the SYN from the other side. Try it yourself: start Wireshark, capture a 3-way handshake, and look for the SYN, SYN-ACK and ACK packets and the pattern in the sequence numbers.</p></div><div class="ar"><p>capture حقيقي: الجهاز <span class="mono">192.168.1.2</span> بيعمل اتصال مع <span class="mono">174.143.213.184</span>: بيبعت TCP SYN، بيستلم SYN,ACK، وأخيرًا بيبعت TCP ACK عشان يكمّل الـ 3-way handshake.</p>
+<p>الجدولين فوق بيوروا الـ 3 packets وتفاصيلهم. الـ SYN فيه SYN bit متفعّل في قسم Flags. الـ SYN,ACK فيه SYN و ACK مع بعض وبيأكد الـ SYN من الجهاز التاني. والـ ACK الأخير هو اللي الجهاز اللي بدأ الـ handshake بيفعّل فيه ACK bit ويأكد الـ SYN من الطرف التاني. جرّب بنفسك: شغّل Wireshark والتقط 3-way handshake وشوف الـ SYN و SYN-ACK و ACK وحاول تلاقي النمط في الـ sequence numbers.</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></section><section id="flow"><h2><span class="en">Flow control and window size</span><span class="ar">Flow control وحجم الـ window</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>Once the connection is set up we can send data. One of the things TCP offers is <b>flow control</b>. Imagine a fast computer transmitting data to a smartphone: the computer could overburden the smartphone with traffic. In each TCP segment the receiver can specify in the "receive window" field how much data, in bytes, it wants to receive. The sender can only send data up to this size, so the smartphone doesn't get overburdened. The more data you can send each time, the higher your throughput.</p>
+<p><b>Example:</b> H1 has set up a connection with H2 using the 3-way handshake. H1 sends 10 bytes of data (SEQ=1), so the "window size" is 10 bytes. H2 responds with <span class="mono">ACK=11</span>, meaning "thanks, I received your 10 bytes, now send me #11 and the rest". TCP is reliable, which is why everything we receive has to be acknowledged.</p>
+<p>The larger your window size, the higher your throughput, because you send fewer ACKs compared to the data you send.</p></div><div class="ar"><p>بعد ما الاتصال يتعمل نقدر نبعت بيانات. من الحاجات اللي TCP بيقدمها <b>flow control</b>. تخيل كمبيوتر سريع بيبعت بيانات لموبايل: الكمبيوتر ممكن يحمّل الموبايل ترافيك أكتر من طاقته. في كل TCP segment المستقبل بيحدد في حقل "receive window" هو عايز يستلم كام بايت. المرسل مينفعش يبعت أكتر من الحجم ده، فالموبايل مبيتضغطش. وكل ما تقدر تبعت بيانات أكتر كل مرة، الـ throughput بيبقى أعلى.</p>
+<p><b>مثال:</b> H1 عمل اتصال مع H2 بالـ 3-way handshake. H1 بيبعت 10 بايت داتا (SEQ=1)، يعني الـ "window size" = 10 بايت. H2 بيرد بـ <span class="mono">ACK=11</span> ومعناها "شكرًا استلمت الـ 10 بايت، ابعتلي من رقم 11 وكمّل". TCP موثوق عشان كده لازم نأكد استلام كل حاجة.</p>
+<p>كل ما الـ window size أكبر، الـ throughput أعلى، لأنك بتبعت ACKs أقل مقارنة بالبيانات.</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></section><section id="header"><h2><span class="en">The TCP header and summary</span><span class="ar">هيدر TCP وملخص</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>TCP is a fairly complex protocol; its header has many more fields than UDP. The lesson focuses on these:</p>
+<div class="table-wrap"><table><tr><th>Field</th><th>Size</th><th>Meaning</th></tr>
+<tr><td>Source port / Destination port</td><td>16 bit each</td><td><b>Port numbers determine for which application the data is meant</b> (this is how we go from the transport layer up to the higher layers of the OSI model).</td></tr>
+<tr><td>Sequence number</td><td>32 bit</td><td>Used for sequencing.</td></tr>
+<tr><td>Acknowledgment number</td><td>32 bit</td><td>Used for the ACK.</td></tr>
+<tr><td>Flags</td><td>—</td><td>Where TCP sets the message types like "SYN" or "ACK".</td></tr>
+<tr><td>Window size</td><td>16 bit</td><td>How many bytes of data you will send before you want an acknowledgment from the other side.</td></tr>
+<tr><td>Checksum</td><td>16 bit</td><td>Error check.</td></tr></table></div>
+<p>The fields D.O, RSV, urgent pointer and Options are not important for this lesson. The header is followed by the Data.</p>
+<p><b>What we learned about TCP:</b></p>
+<ul><li>It's a reliable protocol.</li><li>Before you send data you set up the connection using the 3-way handshake.</li><li>After sending X amount of bytes you receive an acknowledgment (ACK) from the other side.</li><li>How many bytes you send before you get an ACK is controlled by the "window size".</li><li>TCP can do retransmissions.</li></ul></div><div class="ar"><p>TCP بروتوكول معقّد نسبيًا، والهيدر بتاعه فيه حقول أكتر بكتير من UDP. المرجع بيركز على دول:</p>
+<div class="table-wrap"><table><tr><th>الحقل</th><th>الحجم</th><th>المعنى</th></tr>
+<tr><td>Source port / Destination port</td><td>16 بت لكل واحد</td><td><b>أرقام الـ ports بتحدد البيانات دي لأنهي تطبيق</b> (كده بنطلع من طبقة النقل للطبقات الأعلى في OSI).</td></tr>
+<tr><td>Sequence number</td><td>32 بت</td><td>للترتيب (sequencing).</td></tr>
+<tr><td>Acknowledgment number</td><td>32 بت</td><td>للـ ACK.</td></tr>
+<tr><td>Flags</td><td>—</td><td>المكان اللي TCP بيحدد فيه نوع الرسالة زي "SYN" أو "ACK".</td></tr>
+<tr><td>Window size</td><td>16 بت</td><td>كام بايت هتبعتهم قبل ما تحتاج acknowledgment من الطرف التاني.</td></tr>
+<tr><td>Checksum</td><td>16 بت</td><td>فحص الأخطاء.</td></tr></table></div>
+<p>الحقول D.O و RSV و urgent pointer و Options مش مهمة في الدرس ده. بعد الهيدر بييجي الـ Data.</p>
+<p><b>اللي اتعلمناه عن TCP:</b></p>
+<ul><li>بروتوكول موثوق.</li><li>قبل ما تبعت بيانات بتعمل الاتصال بالـ 3-way handshake.</li><li>بعد ما تبعت X بايت بتستلم acknowledgment (ACK) من الطرف التاني.</li><li>عدد البايتات اللي بتبعتها قبل ما تاخد ACK بيتحكم فيه الـ "window size".</li><li>TCP بيقدر يعمل retransmissions.</li></ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><h3><span class="en">From the lesson forum</span><span class="ar">من منتدى الدرس</span></h3><div class="para-block"><div class="en"><ul><li><b>Q:</b> I have no computer background — how do I start with Wireshark? <b>Instructor:</b> dive into the OSI model first; then download Wireshark, make captures while you visit a webpage or download something, and see if you can recognize the TCP 3-way handshake and the OSI layers.</li>
+<li><b>Comment:</b> <span class="term">tcpdump<span class="tip">أداة سطر أوامر لالتقاط الترافيك على لينكس</span></span> is like Wireshark but less clunky. <b>Instructor:</b> it's a great Linux tool that needs no GUI — very useful when you SSH into a remote box. For analysis he prefers Wireshark: capture with tcpdump, then open the file in Wireshark.</li></ul></div><div class="ar"><ul><li><b>سؤال:</b> معنديش خلفية كمبيوتر — أبدأ بـ Wireshark إزاي؟ <b>المدرّب:</b> ابدأ بنموذج OSI الأول؛ بعدين نزّل Wireshark واعمل captures وأنت بتفتح صفحة ويب أو بتنزّل حاجة، وشوف لو تقدر تتعرف على TCP 3-way handshake وطبقات OSI.</li>
+<li><b>تعليق:</b> tcpdump زي Wireshark بس أخف. <b>المدرّب:</b> أداة لينكس ممتازة مش محتاجة GUI — مفيدة جدًا لما تعمل SSH لجهاز بعيد. للتحليل بيفضّل Wireshark: التقط بـ tcpdump وبعدين افتح الملف في Wireshark.</li></ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></section><section id="quiz"><h2><span class="en">🧠 Lesson quiz</span><span class="ar">🧠 اختبار الدرس</span></h2><p class="quiz-intro"><span class="en">Wrong = red, correct = green. Reveal the answer any time and translate any question with the 🌐 button.</span><span class="ar">غلط = أحمر، صح = أخضر. تقدر تشوف الإجابة في أي وقت وتترجم أي سؤال بزرار 🌐.</span></p><div id="quizArea"></div></section></main></div><div class="lesson-nav"><a class="prev" href="lesson-04-arp.html"><span class="k"><span class="en">Previous</span><span class="ar">السابق</span></span><strong>ARP</strong></a><a class="next" href="lesson-06-tcp-header.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>TCP Header</strong></a></div>
+<div class="source-footer">Source: 05-introduction_to_tcp_and_udp.pdf — NetworkLessons.com (CCNA 200-301, Unit 2) · Yellow boxes = extra notes outside the source · Images hot-linked from Wikimedia Commons / GeeksforGeeks (description shown if they fail to load)</div><script>
+const UI = {
+  en:{tr:'🌐 Translate to Arabic', trBack:'🌐 Show English', check:'Check answer', reveal:'Reveal correct answer', q:'Question', ok:'✔ Correct', no:'✘ Not quite — the correct answer is green', qlang:'🌐 العربية'},
+  ar:{tr:'🌐 Translate to Arabic', trBack:'🌐 عرض بالإنجليزية', check:'تحقق من الإجابة', reveal:'إظهار الإجابة الصحيحة', q:'سؤال', ok:'✔ إجابة صحيحة', no:'✘ غير صحيحة — الصح باللون الأخضر', qlang:'🌐 English'}
+};
+const curLang = () => document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+function arShown(pb){ return (curLang()==='ar') !== pb.classList.contains('flip'); }
+function updBtn(pb){
+  const b = pb.querySelector(':scope > .tr-btn'); if(!b) return;
+  b.textContent = arShown(pb) ? (curLang()==='ar' ? UI.ar.trBack : '🌐 عرض بالإنجليزية') : UI.en.tr;
+  if(arShown(pb) && curLang()==='en') b.textContent = '🌐 Show English';
+}
+function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
+function setGlobalLang(l){
+  document.body.classList.toggle('lang-ar', l==='ar');
+  document.body.classList.toggle('lang-en', l==='en');
+  document.documentElement.lang = l;
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.getElementById('btnAr').classList.toggle('active', l==='ar');
+  document.querySelectorAll('.para-block').forEach(pb=>{ pb.classList.remove('flip'); updBtn(pb); });
+  document.querySelectorAll('.q-card').forEach(c=>applyQuizLang(c, l));
+}
+function imgFail(img){ if(img.dataset.alt && !img.dataset.tried){ img.dataset.tried=1; img.src=img.dataset.alt; return; } img.style.display='none'; const f=img.parentElement.querySelector('.img-fallback'); if(f) f.style.display='block'; }
+
+document.querySelectorAll('.para-block').forEach(updBtn);
+document.querySelectorAll('.term').forEach(t=>t.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.term.tap').forEach(o=>{if(o!==t)o.classList.remove('tap')});t.classList.toggle('tap');}));
+document.addEventListener('click',()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+const tocLinks=[...document.querySelectorAll('.toc a')], secs=tocLinks.map(a=>document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll',()=>{let i=0;secs.forEach((s,k)=>{if(s&&s.getBoundingClientRect().top<120)i=k});tocLinks.forEach(a=>a.classList.remove('active'));tocLinks[i]&&tocLinks[i].classList.add('active');});
+
+/* ===== quiz ===== */
+function applyQuizLang(card, l){
+  const it=card._item, T=UI[l];
+  card.dataset.lang=l;
+  card.querySelector('.q-text').textContent=it.q[l];
+  card.querySelectorAll('.opt span').forEach((s,i)=>s.textContent=it.opts[i][l]);
+  card.querySelector('.explain').textContent=it.explain[l];
+  card.querySelector('.q-num').textContent=T.q+' '+card._n+' / '+card._total;
+  card.querySelector('.check').textContent=T.check;
+  card.querySelector('.reveal').textContent=T.reveal;
+  card.querySelector('.qlang').textContent=T.qlang;
+  const r=card.querySelector('.q-result'); if(card._state) r.textContent = card._state==='ok'?T.ok:T.no;
+}
+function buildQuiz(id, items){
+  const area=document.getElementById(id);
+  items.forEach((it,qi)=>{
+    const card=document.createElement('div'); card.className='q-card'; card._item=it; card._n=qi+1; card._total=items.length;
+    card.innerHTML=`<div class="q-top"><div class="q-num"></div><button class="btn secondary tiny qlang"></button></div>
+      <div class="q-text"></div><div class="opts"></div>
+      <div class="q-actions"><button class="btn check" disabled></button><button class="btn secondary reveal"></button></div>
+      <div class="q-result"></div><div class="explain"></div>`;
+    const ow=card.querySelector('.opts');
+    it.opts.forEach((o,oi)=>{const lb=document.createElement('label');lb.className='opt';lb.innerHTML=`<input type="radio" name="${id}-${qi}" value="${oi}"><span></span>`;ow.appendChild(lb);});
+    area.appendChild(card);
+    applyQuizLang(card, curLang());
+    card.querySelector('.qlang').onclick=()=>applyQuizLang(card, card.dataset.lang==='en'?'ar':'en');
+    const chk=card.querySelector('.check'), rev=card.querySelector('.reveal'), ex=card.querySelector('.explain'), labs=card.querySelectorAll('.opt'), res=card.querySelector('.q-result');
+    card.querySelectorAll('input').forEach(r=>r.onchange=()=>chk.disabled=false);
+    chk.onclick=()=>{const c=card.querySelector('input:checked'); if(!c) return; const ci=+c.value;
+      labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct'); else if(i===ci) l.classList.add('wrong');});
+      card._state = ci===it.correct?'ok':'no'; res.className='q-result '+card._state; res.textContent=UI[card.dataset.lang][card._state];
+      ex.classList.add('show'); chk.disabled=true;};
+    rev.onclick=()=>{labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct');}); ex.classList.add('show');};
+  });
+}
+
+buildQuiz('recapArea',[{q:{en:'What is the destination MAC address of an ARP Request?',ar:'إيه الـ MAC وجهة ARP Request؟'},opts:[{en:'FF:FF:FF:FF:FF:FF',ar:'FF:FF:FF:FF:FF:FF'},{en:'00:00:00:00:00:00',ar:'00:00:00:00:00:00'},{en:'The MAC of the router',ar:'الـ MAC بتاع الراوتر'},{en:'The MAC of H2',ar:'الـ MAC بتاع H2'}],correct:0,explain:{en:'It is a broadcast, so every device receives it.',ar:'هو broadcast فكل الأجهزة بتستلمه.'}},{q:{en:'Which command shows the ARP table on Windows?',ar:'أنهي أمر بيعرض جدول ARP في Windows؟'},opts:[{en:'ipconfig',ar:'ipconfig'},{en:'arp -a',ar:'arp -a'},{en:'ping',ar:'ping'},{en:'netstat',ar:'netstat'}],correct:1,explain:{en:'arp -a lists IP-to-MAC mappings.',ar:'arp -a بيعرض ربط IP بـ MAC.'}},{q:{en:'Who sends the ARP Reply?',ar:'مين بيبعت ARP Reply؟'},opts:[{en:'The router',ar:'الراوتر'},{en:'The switch',ar:'السويتش'},{en:'The host that owns the requested IP',ar:'الجهاز اللي بيملك الـ IP المطلوب'},{en:'Every host',ar:'كل الأجهزة'}],correct:2,explain:{en:'Only the owner of the IP answers, directly to the requester.',ar:'بس صاحب الـ IP بيرد، مباشرة على اللي سأل.'}}]);
+buildQuiz('quizArea',[{q:{en:'Which statement about TCP and UDP is correct?',ar:'أنهي جملة صحيحة عن TCP و UDP؟'},opts:[{en:'TCP is reliable, UDP is best-effort',ar:'TCP موثوق و UDP best-effort'},{en:'UDP is reliable, TCP is best-effort',ar:'UDP موثوق و TCP best-effort'},{en:'Both are reliable',ar:'الاتنين موثوقين'},{en:'Both are connectionless',ar:'الاتنين connectionless'}],correct:0,explain:{en:'TCP = reliable, connection-oriented. UDP = unreliable/best-effort, connectionless.',ar:'TCP موثوق وconnection-oriented. UDP غير موثوق/best-effort وconnectionless.'}},{q:{en:'Why is UDP a better fit than TCP for VoIP?',ar:'ليه UDP أنسب من TCP للـ VoIP؟'},opts:[{en:'Real-time traffic: better to lose a few packets than retransmit them late',ar:'الترافيك لحظي: أحسن نفقد كام packet من إننا نعيد إرسالهم متأخر'},{en:'UDP encrypts calls',ar:'UDP بيشفّر المكالمات'},{en:'UDP guarantees delivery',ar:'UDP بيضمن التسليم'},{en:'TCP cannot carry voice',ar:'TCP مينفعش ينقل صوت'}],correct:0,explain:{en:'Retransmitted voice would arrive seconds late and sound wrong; the codec can hide small losses.',ar:'الصوت المعاد إرساله هيوصل متأخر ويبان غلط؛ والـ codec بيقدر يخفي فقد صغير.'}},{q:{en:'What is the order of the TCP 3-way handshake?',ar:'إيه ترتيب الـ TCP 3-way handshake؟'},opts:[{en:'SYN → SYN,ACK → ACK',ar:'SYN → SYN,ACK → ACK'},{en:'ACK → SYN → SYN,ACK',ar:'ACK → SYN → SYN,ACK'},{en:'SYN,ACK → SYN → ACK',ar:'SYN,ACK → SYN → ACK'},{en:'SYN → ACK → FIN',ar:'SYN → ACK → FIN'}],correct:0,explain:{en:'H1 sends SYN, H2 answers SYN,ACK, H1 finishes with ACK.',ar:'H1 يبعت SYN، H2 يرد SYN,ACK، وH1 يخلّص بـ ACK.'}},{q:{en:"H1 sends SYN with SEQ=1. What does H2's SYN,ACK acknowledge with?",ar:'H1 بعت SYN بـ SEQ=1. H2 هيرد بـ ACK كام؟'},opts:[{en:'ACK=1',ar:'ACK=1'},{en:'ACK=2',ar:'ACK=2'},{en:'ACK=100',ar:'ACK=100'},{en:'ACK=101',ar:'ACK=101'}],correct:1,explain:{en:'ACK = received sequence number + 1, so ACK=2 ("ready for sequence number 2").',ar:'ACK = الـ sequence المستلم + 1، يعني ACK=2 ("جاهز للرقم 2").'}},{q:{en:'Which TCP field implements flow control?',ar:'أنهي حقل في TCP بيطبّق flow control؟'},opts:[{en:'Checksum',ar:'Checksum'},{en:'Window size',ar:'Window size'},{en:'Source port',ar:'Source port'},{en:'Flags',ar:'Flags'}],correct:1,explain:{en:'The window size tells the sender how many bytes it may send before it needs an ACK.',ar:'الـ window size بيقول للمرسل يقدر يبعت كام بايت قبل ما يحتاج ACK.'}},{q:{en:'In the UDP header, which item is NOT present?',ar:'في هيدر UDP، أنهي حاجة مش موجودة؟'},opts:[{en:'Source port',ar:'Source port'},{en:'Length',ar:'Length'},{en:'Sequence number',ar:'Sequence number'},{en:'Checksum',ar:'Checksum'}],correct:2,explain:{en:'UDP has only source port, destination port, length and checksum — no sequence number.',ar:'UDP فيه بس source port وdestination port وlength وchecksum — مفيش sequence number.'}},{q:{en:'What is the size of the sequence number field in the TCP header?',ar:'حجم حقل sequence number في هيدر TCP كام؟'},opts:[{en:'8 bit',ar:'8 بت'},{en:'16 bit',ar:'16 بت'},{en:'32 bit',ar:'32 بت'},{en:'64 bit',ar:'64 بت'}],correct:2,explain:{en:'32 bits for sequence number and 32 bits for the acknowledgment number.',ar:'32 بت للـ sequence و32 بت للـ acknowledgment number.'}}]);
+</script>
+</body>
+</html>
