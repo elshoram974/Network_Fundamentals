@@ -78,6 +78,7 @@ body.lang-ar .en{display:none!important}
   document.documentElement.setAttribute('data-theme', savedTheme);
   const savedLang = localStorage.getItem('ccna-lang') || 'en';
   document.documentElement.lang = savedLang;
+  document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.classList.add('lang-'+savedLang);
 })();
 function toggleTheme() {
@@ -89,6 +90,7 @@ function setGlobalLang(l){
   document.body.classList.remove('lang-en', 'lang-ar');
   document.body.classList.add('lang-'+l);
   document.documentElement.lang = l;
+  document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
   document.getElementById('btnEn').classList.toggle('active', l==='en');
   document.getElementById('btnAr').classList.toggle('active', l==='ar');
   localStorage.setItem('ccna-lang', l);

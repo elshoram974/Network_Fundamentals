@@ -186,6 +186,7 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
   document.documentElement.setAttribute('data-theme', savedTheme);
   const savedLang = localStorage.getItem('ccna-lang') || 'en';
   document.documentElement.lang = savedLang;
+  document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.classList.add('lang-'+savedLang);
 })();
 function toggleTheme() {
@@ -200,7 +201,7 @@ function toggleTheme() {
 <div class="topbar">
   <div class="brand">
     <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
-    <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
+    <span class="lesson-title">TCP Window Size Scaling</span>
   </div>
   <div class="controls">
     <button id="btnTheme" onclick="toggleTheme()" class="theme-btn" title="Toggle Light/Dark Mode">Theme</button>

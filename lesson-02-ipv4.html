@@ -186,7 +186,7 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 <div class="topbar">
   <div class="brand">
     <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
-    <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
+    <span class="lesson-title">IP (Internet Protocol) Version 4 for CCNA</span>
   </div>
   <div class="progress-wrap"><div class="progress-bar"></div></div>
   <div class="controls">
@@ -255,6 +255,7 @@ function updBtn(pb){
 }
 function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
 function setGlobalLang(l){
+  document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';
   document.body.classList.toggle('lang-ar', l==='ar');
   document.body.classList.toggle('lang-en', l==='en');
   document.documentElement.lang = l;
