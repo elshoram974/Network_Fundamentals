@@ -64,7 +64,7 @@ sec_sync = h2("sync", "TCP Global Synchronization", "المزامنة الشام
        f"عندما تزدحم الواجهة، من المحتمل أن تواجه جميع اتصالات TCP لديك حالة البداية البطيئة. ستُفقد الحزم، وبعد ذلك سيصبح لكل اتصالات TCP حجم نافذة صغير. هذا يُسمى 'المزامنة الشاملة' ({T('TCP Global Synchronization', 'انخفاض مفاجئ لسرعة كل الاتصالات في نفس الوقت')}).") +
     img("https://i.imgur.com/lDoBjgn.jpeg", "TCP Global Synchronization Graph", "Graph showing TCP Global Synchronization", "رسم بياني يوضح المزامنة الشاملة لـ TCP", 
         "Line graph showing multiple TCP connections dropping window sizes simultaneously when interface utilization peaks, resulting in poor average utilization.",
-        backup_diagram='''<div style="height:150px; position:relative; border-left:2px solid var(--line); border-bottom:2px solid var(--line); padding:10px; margin:20px 0;">
+        backup_diagram='''<div style="height:150px; position:relative; border-inline-start:2px solid var(--line); border-bottom:2px solid var(--line); padding:10px; margin:20px 0;">
   <svg viewBox="0 0 100 50" style="width:100%; height:100%; overflow:visible;">
     <polyline points="0,50 20,10 20,50 40,10 40,50 60,10 60,50" fill="none" stroke="var(--accent)" stroke-width="2"/>
     <polyline points="5,50 25,15 25,50 45,15 45,50 65,15 65,50" fill="none" stroke="var(--warn)" stroke-width="2"/>
@@ -80,7 +80,7 @@ sec_sync = h2("sync", "TCP Global Synchronization", "المزامنة الشام
        f"لمنع المزامنة الشاملة، يمكننا استخدام تقنية {T('RED', 'Random Early Detection')}. هذه الميزة تقوم بإسقاط حزم 'عشوائية' من تدفقات TCP بناءً على عدد الحزم في طابور الانتظار وعلامات TOS. عندما يتم إسقاط الحزم قبل امتلاء الطابور، يمكننا تجنب المزامنة الشاملة.") +
     img("https://www.researchgate.net/profile/Drghassan-Abed/publication/262068525/figure/fig1/AS:669418442985482@1536613202254/TCP-slow-start-and-congestion-avoidance.png", "RED Graph", "Average interface utilization with RED", "متوسط استخدام الواجهة عند تفعيل RED", 
         "Graph showing smoothed out TCP window sizes resulting in a much higher average interface utilization thanks to RED dropping random packets early.",
-        backup_diagram='''<div style="height:150px; position:relative; border-left:2px solid var(--line); border-bottom:2px solid var(--line); padding:10px; margin:20px 0;">
+        backup_diagram='''<div style="height:150px; position:relative; border-inline-start:2px solid var(--line); border-bottom:2px solid var(--line); padding:10px; margin:20px 0;">
   <svg viewBox="0 0 100 50" style="width:100%; height:100%; overflow:visible;">
     <polyline points="0,50 15,20 20,25 30,15 40,25 50,15 60,25" fill="none" stroke="var(--good)" stroke-width="2"/>
     <polyline points="5,50 20,30 25,35 35,25 45,35 55,25 65,35" fill="none" stroke="var(--accent)" stroke-width="2"/>
