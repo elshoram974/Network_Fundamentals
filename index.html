@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Academic / Editorial Theme - Avoiding the "AI" bubbly look */
 :root {
   --bg: #faf9f7;
   --panel: #ffffff;
@@ -15,13 +14,11 @@
   --line: #e4e4e7;
   --text: #27272a;
   --muted: #71717a;
-  --accent: #0f766e; /* Deep Teal */
-  --accent2: #b45309; /* Amber */
+  --accent: #0f766e;
+  --accent2: #b45309;
   --warn: #ca8a04;
   --good: #059669;
-  --bad: #dc2626;
-  --radius: 4px; /* Crisp corners, not overly rounded */
-  --maxw: 740px; /* Optimal reading width */
+  --radius: 8px;
   --font-head: 'Lora', 'Tajawal', serif;
   --font-body: 'IBM Plex Sans', 'Tajawal', sans-serif;
 }
@@ -34,9 +31,6 @@
   --muted: #a1a1aa;
   --accent: #2dd4bf;
   --accent2: #fbbf24;
-  --warn: #eab308;
-  --good: #34d399;
-  --bad: #f87171;
 }
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.8;padding-bottom:100px;transition:background-color 0.2s, color 0.2s}
@@ -45,7 +39,7 @@ body.lang-ar .en{display:none!important}
 .ar{direction:rtl;text-align:right}
 
 .topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:600;font-size:1.1rem;letter-spacing:-0.01em}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:600;font-size:1.2rem;letter-spacing:-0.01em}
 .controls{display:flex;align-items:center;gap:16px}
 .theme-btn{background:transparent;border:1px solid var(--line);border-radius:4px;padding:6px 12px;cursor:pointer;font-size:1rem;color:var(--text)}
 .theme-btn:hover{background:var(--panel2)}
@@ -53,18 +47,30 @@ body.lang-ar .en{display:none!important}
 .langswitch button{border:none;background:transparent;color:var(--muted);font-weight:600;padding:6px 16px;cursor:pointer;font-size:0.85rem;font-family:var(--font-body)}
 .langswitch button.active{background:var(--panel2);color:var(--text)}
 
-.shell{max-width:800px;margin:60px auto;padding:0 24px;}
-.hero{border-bottom:1px solid var(--line);padding-bottom:40px;margin-bottom:40px;}
-.hero h1{font-family:var(--font-head);font-size:3rem;margin:0 0 16px;color:var(--text);letter-spacing:-0.02em;line-height:1.2}
-.hero p{color:var(--muted);font-size:1.15rem;margin:0;font-family:var(--font-body);}
+.shell{max-width:860px;margin:60px auto;padding:0 24px;}
+.hero{text-align:center;margin-bottom:60px;}
+.hero h1{font-family:var(--font-head);font-size:3.5rem;margin:0 0 16px;color:var(--text);line-height:1.2}
+.hero p{color:var(--muted);font-size:1.2rem;max-width:600px;margin:0 auto;}
+
+.info-box{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);padding:32px;border-radius:var(--radius);margin-bottom:40px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);}
+.info-box h2{font-family:var(--font-head);font-size:1.6rem;color:var(--accent);margin:0 0 16px 0;}
+.info-box p{margin:0 0 16px 0;font-size:1.05rem;}
+.info-box ul{margin:0;padding-left:24px;}
+.info-box li{margin-bottom:8px;}
+
+.credit-box{background:rgba(202, 138, 4, 0.1);border:1px solid var(--warn);padding:20px;border-radius:var(--radius);margin-bottom:60px;font-size:0.95rem;text-align:center;}
+.credit-box a{color:var(--accent2);text-decoration:none;font-weight:bold;}
+.credit-box a:hover{text-decoration:underline;}
 
 .lesson-list{display:flex;flex-direction:column;gap:16px;}
-.lesson-card{display:flex;align-items:flex-start;padding:24px;background:var(--panel);border:1px solid var(--line);text-decoration:none;color:var(--text);transition:0.1s;}
-.lesson-card:hover{border-color:var(--accent);background:var(--panel2);}
-.lesson-card .num{font-family:var(--font-head);font-size:1.8rem;font-weight:400;color:var(--muted);margin-inline-end:24px;width:40px;text-align:center;}
+.lesson-card{display:flex;align-items:center;padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);text-decoration:none;color:var(--text);transition:all 0.2s;box-shadow:0 2px 4px rgba(0,0,0,0.02);}
+.lesson-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 16px rgba(0,0,0,0.05);}
+.lesson-card .num{font-family:var(--font-head);font-size:2rem;font-weight:600;color:var(--line);margin-inline-end:32px;width:50px;text-align:center;transition:color 0.2s;}
+.lesson-card:hover .num{color:var(--accent);}
 .lesson-card .info{flex:1;}
-.lesson-card h3{margin:0 0 8px;font-size:1.3rem;font-family:var(--font-head);color:var(--accent);}
-.lesson-card p{margin:0;color:var(--text);font-size:0.95rem;opacity:0.85;}
+.lesson-card h3{margin:0 0 8px;font-size:1.3rem;font-family:var(--font-head);color:var(--text);}
+.lesson-card:hover h3{color:var(--accent);}
+.lesson-card p{margin:0;color:var(--muted);font-size:1rem;}
 </style>
 <script>
 (function(){
@@ -99,18 +105,58 @@ document.addEventListener("DOMContentLoaded", () => {
     <span class="en">CCNA Study Hub</span><span class="ar">مركز مذاكرة CCNA</span>
   </div>
   <div class="controls">
-    <button id="btnTheme" onclick="toggleTheme()" class="theme-btn">Theme</button>
+    <button id="btnTheme" onclick="toggleTheme()" class="theme-btn">Theme 🌓</button>
     <div class="langswitch">
       <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
-      <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
+      <button id="btnAr" onclick="setGlobalLang('ar')">عربي</button>
     </div>
   </div>
 </div>
 <div class="shell">
   <div class="hero">
     <h1><span class="en">Network Fundamentals</span><span class="ar">أساسيات الشبكات</span></h1>
-    <p><span class="en">Comprehensive study guides for CCNA 200-301. Select a chapter to read.</span><span class="ar">دليل المذاكرة الشامل لشهادة CCNA 200-301. اختر الفصل للقراءة.</span></p>
+    <p><span class="en">Your simplified, interactive guide to passing the CCNA 200-301.</span><span class="ar">دليلك التفاعلي المبسط لاجتياز امتحان CCNA 200-301.</span></p>
   </div>
+
+  <div class="info-box">
+    <h2><span class="en">What is CCNA 200-301?</span><span class="ar">ما هي شهادة CCNA 200-301؟</span></h2>
+    <div class="en">
+      <p>The <strong>Cisco Certified Network Associate (CCNA)</strong> is one of the most respected entry-level networking certifications in the world. Earning this certification proves you have what it takes to navigate the ever-changing landscape of IT.</p>
+      <p>The 200-301 exam covers a broad range of fundamentals:</p>
+      <ul>
+        <li>Network Fundamentals (Routers, Switches, Cabling, TCP/IP)</li>
+        <li>Network Access (VLANs, Wireless)</li>
+        <li>IP Connectivity (Routing, IPv4/IPv6)</li>
+        <li>IP Services (DHCP, DNS, NAT)</li>
+        <li>Security Fundamentals</li>
+        <li>Automation and Programmability</li>
+      </ul>
+      <p>This study hub breaks down these complex topics into easy, bite-sized lessons perfectly suited for beginners.</p>
+    </div>
+    <div class="ar">
+      <p>شهادة <strong>CCNA (مساعد شبكات معتمد من سيسكو)</strong> هي واحدة من أكثر شهادات الشبكات احتراماً وقيمة للمبتدئين في العالم. الحصول عليها يثبت أن لديك الأساس القوي لفهم والتعامل مع عالم تكنولوجيا المعلومات.</p>
+      <p>يغطي امتحان 200-301 مجموعة واسعة من الأساسيات:</p>
+      <ul>
+        <li>أساسيات الشبكات (الروترات، السويتشات، الكابلات، بروتوكولات TCP/IP)</li>
+        <li>الوصول للشبكة (الشبكات الوهمية VLANs، الشبكات اللاسلكية)</li>
+        <li>اتصال IP (التوجيه Routing، عناوين IPv4/IPv6)</li>
+        <li>خدمات IP (مثل DHCP, DNS, NAT)</li>
+        <li>أساسيات الحماية والأمان</li>
+        <li>الأتمتة والبرمجة (Automation)</li>
+      </ul>
+      <p>هذا الموقع مصمم ليقوم بتفكيك هذه المواضيع المعقدة إلى دروس صغيرة وبسيطة ومناسبة تماماً لمن يبدأ من الصفر.</p>
+    </div>
+  </div>
+
+  <div class="credit-box">
+    <div class="en">
+      📝 <strong>Source Material:</strong> The core educational PDFs used in these lessons are officially sourced from <a href="https://networklessons.com" target="_blank">NetworkLessons.com</a>. We have transformed them into an interactive, bilingual format with extra simplified notes and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> ملفات الـ PDF التعليمية الأساسية المستخدمة في هذا الكورس تعود حقوقها للموقع الرسمي <a href="https://networklessons.com" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويلها إلى شكل تفاعلي ثنائي اللغة (عربي/إنجليزي) مع إضافة شروحات مبسطة جداً للمبتدئين وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
+  </div>
+
   <div class="lesson-list">
     <a href="lesson-01-osi-model.html" class="lesson-card">
       <div class="num">01</div>
@@ -152,6 +198,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="info">
         <h3><span class="en">TCP Header</span><span class="ar">ترويسة TCP</span></h3>
         <p><span class="en">Understanding the mechanics of TCP reliability</span><span class="ar">فهم آليات عمل الموثوقية في بروتوكول TCP</span></p>
+      </div>
+    </a>
+    <a href="lesson-07-tcp-window-size-scaling.html" class="lesson-card">
+      <div class="num">07</div>
+      <div class="info">
+        <h3><span class="en">TCP Window Size Scaling</span><span class="ar">ضبط حجم نافذة TCP والتحكم في الازدحام</span></h3>
+        <p><span class="en">How TCP manages traffic flow, buffers, and prevents congestion</span><span class="ar">كيف يدير TCP تدفق البيانات والذاكرة المؤقتة ويمنع الازدحام</span></p>
       </div>
     </a>
   </div>

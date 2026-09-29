@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lesson 7 — TCP Window Size Scaling | CCNA 200-301 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Academic / Editorial Theme - Avoiding the "AI" bubbly look */
+:root {
+  --bg: #faf9f7;
+  --panel: #ffffff;
+  --panel2: #f4f4f5;
+  --line: #e4e4e7;
+  --text: #27272a;
+  --muted: #71717a;
+  --accent: #0f766e; /* Deep Teal */
+  --accent2: #b45309; /* Amber */
+  --warn: #ca8a04;
+  --good: #059669;
+  --bad: #dc2626;
+  --radius: 4px; /* Crisp corners, not overly rounded */
+  --maxw: 740px; /* Optimal reading width */
+  --font-head: 'Lora', 'Tajawal', serif;
+  --font-body: 'IBM Plex Sans', 'Tajawal', sans-serif;
+}
+:root[data-theme="dark"] {
+  --bg: #121214;
+  --panel: #18181b;
+  --panel2: #27272a;
+  --line: #3f3f46;
+  --text: #e4e4e7;
+  --muted: #a1a1aa;
+  --accent: #2dd4bf;
+  --accent2: #fbbf24;
+  --warn: #eab308;
+  --good: #34d399;
+  --bad: #f87171;
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.8;font-size:1.05rem;padding-bottom:100px;transition:background-color 0.2s, color 0.2s}
+code,.mono{font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:var(--panel2);padding:2px 6px;border-radius:3px;color:var(--accent2)}
+img{max-width:100%;height:auto;display:block;margin:0 auto}
+p,li,td,th{overflow-wrap:break-word;word-break:break-word;color:var(--text)}
+
+body.lang-en .ar{display:none!important}
+body.lang-ar .en{display:none!important}
+body.lang-en .flip .en{display:none!important}
+body.lang-en .flip .ar{display:block!important}
+body.lang-ar .flip .ar{display:none!important}
+body.lang-ar .flip .en{display:block!important}
+.ar{direction:rtl;text-align:right}
+span.ar{direction:rtl;unicode-bidi:isolate}
+ul.ar,ol.ar{padding-inline-start:0;padding-inline-end:22px}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:600;font-size:1.1rem;letter-spacing:-0.01em}
+.brand a{text-decoration:none;color:var(--text);border:1px solid var(--line);padding:4px 10px;border-radius:4px;font-size:0.9rem;font-family:var(--font-body)}
+.brand a:hover{background:var(--panel2)}
+.lesson-tag{color:var(--muted);font-family:var(--font-body);font-size:0.9rem;text-transform:uppercase;letter-spacing:0.05em}
+
+.progress-wrap{flex:1;min-width:120px;max-width:200px;height:4px;background:var(--line);overflow:hidden}
+.progress-bar{height:100%;width:58%;background:var(--accent)}
+
+.controls{display:flex;align-items:center;gap:16px}
+.theme-btn{background:transparent;border:1px solid var(--line);border-radius:4px;padding:6px 12px;cursor:pointer;font-size:1rem;color:var(--text)}
+.theme-btn:hover{background:var(--panel2)}
+.langswitch{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.langswitch button{border:none;background:transparent;color:var(--muted);font-weight:600;padding:6px 16px;cursor:pointer;font-size:0.85rem;font-family:var(--font-body)}
+.langswitch button.active{background:var(--panel2);color:var(--text)}
+
+.shell{max-width:1080px;margin:40px auto 0;padding:0 24px;display:grid;grid-template-columns:1fr;gap:60px}
+@media(min-width:1020px){.shell{grid-template-columns:220px minmax(0,var(--maxw))}.toc{display:block!important}}
+.toc{display:none;position:sticky;top:100px;align-self:start;font-size:0.9rem;font-family:var(--font-body)}
+.toc a{display:block;color:var(--muted);text-decoration:none;padding:8px 0;border-inline-start:2px solid transparent;padding-inline-start:16px;margin-bottom:4px;transition:0.1s}
+.toc a:hover,.toc a.active{color:var(--text);border-inline-start-color:var(--accent)}
+.toc-title{color:var(--text);font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px;padding-inline-start:16px}
+
+.hero{padding:20px 0 40px;border-bottom:1px solid var(--line);margin-bottom:40px}
+.hero h1{font-family:var(--font-head);font-size:2.8rem;line-height:1.2;margin:0 0 16px;letter-spacing:-0.02em}
+.hero .sub{color:var(--muted);font-size:1.15rem;max-width:90%}
+.chip{display:inline-flex;align-items:center;background:var(--panel2);padding:4px 12px;font-size:0.85rem;color:var(--text);margin-bottom:24px;font-family:var(--font-body);letter-spacing:0.02em}
+
+main{min-width:0}
+section{margin:60px 0;scroll-margin-top:100px}
+h2{font-family:var(--font-head);font-size:1.8rem;margin-bottom:24px;color:var(--accent)}
+h3{font-family:var(--font-head);font-size:1.3rem;margin:32px 0 16px}
+p{margin:0 0 20px;max-width:70ch}
+ul,ol{padding-inline-start:24px;margin:0 0 24px;max-width:70ch}
+li{margin-bottom:10px}
+.badge{display:inline-block;border:1px solid var(--line);color:var(--text);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;padding:4px 10px;margin-bottom:16px}
+
+.para-block{margin-bottom:24px}
+.tr-btn{display:inline-flex;margin-top:4px;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);background:transparent;border:1px solid var(--line);padding:4px 12px;cursor:pointer}
+.tr-btn:hover{color:var(--text);border-color:var(--text)}
+
+.term{border-bottom:1px dashed var(--accent);cursor:help;position:relative;color:var(--text);font-weight:600}
+.term .tip{visibility:hidden;opacity:0;position:absolute;bottom:140%;left:0;background:var(--text);color:var(--bg);padding:8px 14px;font-size:0.9rem;z-index:20;transition:opacity .15s;font-family:var(--font-body);direction:rtl;text-align:right;width:max-content;max-width:min(280px,70vw);font-weight:400}
+.term:hover .tip,.term.tap .tip{visibility:visible;opacity:1}
+
+/* Editorial styling for source materials */
+.src{margin:32px 0;padding:0 0 0 24px;border-inline-start:3px solid var(--accent);background:transparent}
+.src-label{font-size:0.75rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px}
+
+/* Distinct styling for extra notes */
+.extra{margin:40px 0;padding:32px;background:var(--panel2);border-top:2px solid var(--warn)}
+.extra .lab{color:var(--warn);font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px}
+
+.cli{background:#0d1117;color:#c9d1d9;border-radius:4px;padding:20px;overflow-x:auto;margin:24px 0;direction:ltr;text-align:left;white-space:pre;font-family:'IBM Plex Mono',monospace;font-size:0.9rem;line-height:1.6}
+.cli b{color:#58a6ff}
+
+.table-wrap{overflow-x:auto;margin:32px 0}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;text-align:left}
+th,td{border-bottom:1px solid var(--line);padding:14px 16px;text-align:start}
+th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;letter-spacing:0.05em}
+.mono-cell{font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:left}
+
+.img-card{margin:40px 0}
+.img-card img{border:1px solid var(--line);border-radius:4px}
+.img-card figcaption{font-size:0.9rem;color:var(--muted);text-align:center;margin-top:16px;font-style:italic}
+.img-fallback{display:none;padding:32px 24px;background:var(--panel2);border:1px solid var(--line);text-align:center}
+.img-fallback .fb-desc{color:var(--muted);margin-bottom:16px}
+
+.quiz-intro{color:var(--muted);font-size:0.95rem;margin-bottom:24px}
+.q-card{border:1px solid var(--line);padding:32px;margin-bottom:24px;border-radius:var(--radius)}
+.q-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.q-num{color:var(--muted);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;font-weight:600}
+.q-text{font-weight:500;margin-bottom:24px;font-size:1.15rem;font-family:var(--font-head)}
+.q-card[data-lang=ar] .q-text,.q-card[data-lang=ar] .explain,.q-card[data-lang=ar] .opt span{direction:rtl;text-align:right}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1px solid var(--line);margin-bottom:8px;cursor:pointer;border-radius:4px;transition:0.1s}
+.opt:hover{border-color:var(--text)}
+.opt input{margin-top:6px;accent-color:var(--accent)}
+.opt.correct{border-color:var(--good);background:rgba(5,150,105,.05)}
+.opt.wrong{border-color:var(--bad);background:rgba(220,38,38,.05)}
+.opt.disabled{pointer-events:none;opacity:0.8}
+.q-actions{display:flex;gap:12px;margin-top:24px}
+.btn{background:var(--text);color:var(--bg);border:none;padding:10px 20px;font-weight:500;cursor:pointer;font-size:0.95rem;border-radius:4px;font-family:var(--font-body)}
+.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.secondary:hover{background:var(--panel2)}
+.btn.tiny{padding:6px 12px;font-size:0.8rem}
+.btn:disabled{opacity:0.3;cursor:not-allowed}
+.explain{display:none;margin-top:24px;padding:20px;background:var(--panel2);border-inline-start:3px solid var(--accent);font-size:0.95rem}
+.explain.show{display:block}
+.q-result{font-size:0.95rem;font-weight:600;margin-top:16px}
+.q-result.ok{color:var(--good)}.q-result.no{color:var(--bad)}
+
+.lesson-nav{max-width:1080px;margin:80px auto 0;padding:32px 24px;display:flex;justify-content:space-between;border-top:1px solid var(--line);gap:24px}
+.lesson-nav a{color:var(--text);text-decoration:none;border:1px solid var(--line);padding:20px;flex:1;display:flex;flex-direction:column;gap:8px;border-radius:var(--radius);transition:0.1s}
+.lesson-nav a:hover{border-color:var(--text)}
+.lesson-nav a .k{color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em}
+.lesson-nav a strong{font-size:1.1rem;font-family:var(--font-head)}
+.lesson-nav a.next{text-align:right;align-items:flex-end}
+
+.source-footer{max-width:1080px;margin:0 auto 40px;padding:0 24px;color:var(--muted);font-size:0.85rem}
+.source-footer a{color:var(--text);text-decoration:underline;text-underline-offset:4px}
+
+/* CSS Diagrams Minimalist */
+.diagram{border:1px solid var(--line);padding:32px;margin:32px 0}
+.diagram .cap{text-align:center;color:var(--muted);font-size:0.85rem;margin-top:24px;font-style:italic}
+.osi-stack{display:flex;flex-direction:column;gap:4px;max-width:400px;margin:0 auto}
+.osi-stack .layer{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--panel2);font-weight:500;color:var(--text);border:1px solid var(--line)}
+.osi-stack .layer span.num{opacity:0.5;font-size:0.85rem;margin-inline-end:12px}
+.stack-h{display:flex;gap:4px;direction:ltr;flex-wrap:wrap}
+.stack-h .seg{flex:1;min-width:100px;text-align:center;padding:16px 10px;background:var(--panel2);border:1px solid var(--line);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:0.85rem}
+.ip32{display:flex;gap:4px;direction:ltr}
+.ip32 .oct{flex:1;text-align:center;padding:16px 8px;background:var(--panel2);border:1px solid var(--line);font-family:'IBM Plex Mono',monospace}
+.ip32 .lbl{font-size:0.75rem;opacity:0.7;display:block;margin-top:8px}
+.bits-row{display:flex;direction:ltr;gap:4px;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:0.85rem}
+.bits-row .bit{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);padding:8px 4px}
+.class-bar{display:flex;direction:ltr;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:0.85rem}
+.class-bar div{padding:12px 8px;text-align:center;border:1px solid var(--line)}
+.cb-net{background:var(--panel2);color:var(--text)}
+.cb-host{background:transparent;color:var(--muted)}
+.hdr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;direction:ltr}
+.hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:12px 8px;text-align:center;font-size:0.8rem;color:var(--text)}
+.hdr-grid .f b{display:block;font-size:0.85rem;color:var(--text);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
+.hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
+</style>
+<script>
+(function(){
+  const savedTheme = localStorage.getItem('ccna-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  document.documentElement.lang = savedLang;
+  document.documentElement.classList.add('lang-'+savedLang);
+})();
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', current);
+  localStorage.setItem('ccna-theme', current);
+}
+</script>
+</head>
+<body class="lang-en">
+
+<div class="topbar">
+  <div class="brand">
+    <a href="index.html">Index</a>
+    <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
+  </div>
+  <div class="controls">
+    <button id="btnTheme" onclick="toggleTheme()" class="theme-btn" title="Toggle Light/Dark Mode">Theme</button>
+    <div class="langswitch">
+      <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
+      <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
+    </div>
+  </div>
+</div>
+<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">Contents</span><span class="ar">المحتويات</span></div><a href="#intro"><span class="en">TCP Windowing</span><span class="ar">نظام النافذة في TCP</span></a><a href="#congestion"><span class="en">Congestion & Slow Start</span><span class="ar">الازدحام والبداية البطيئة</span></a><a href="#sync"><span class="en">Global Synchronization</span><span class="ar">المزامنة الشاملة</span></a><a href="#wireshark"><span class="en">Wireshark Captures</span><span class="ar">لقطات Wireshark</span></a><a href="#conclusion"><span class="en">Conclusion</span><span class="ar">خاتمة</span></a></nav><main><div class="hero"><div class="chip"><span class="en">Unit 2: Network Fundamentals</span><span class="ar">الوحدة الثانية: أساسيات الشبكات</span></div>
+<h1>TCP Window Size Scaling</h1><div class="sub"><span class="en">Understanding how TCP manages traffic flow and congestion</span><span class="ar">فهم كيفية إدارة TCP لتدفق البيانات والازدحام</span></div></div><section id="recap"><span class="badge"><span class="en">Recap</span><span class="ar">مراجعة سريعة</span></span><h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2><div id="recapArea"></div></section><section id="intro"><h2><span class="en">What is TCP Windowing?</span><span class="ar">ما هو نظام Windowing في TCP؟</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">TCP (Transmission Control Protocol) is a connection oriented protocol which means that we keep track of how much data has been transmitted. The sender will transmit some data and the receiver has to acknowledge it. When we don't receive the acknowledgment in time then the sender will re-transmit the data.</div><div class="ar">بروتوكول TCP هو بروتوكول موجه للاتصال (Connection-oriented)، مما يعني أننا نتتبع كمية البيانات التي تم إرسالها. المرسل يقوم بإرسال بعض البيانات ويجب على المستقبل تأكيد استلامها (Acknowledge). إذا لم نستلم التأكيد في الوقت المحدد، سيقوم المرسل بإعادة إرسال البيانات.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">TCP uses 'windowing' which means that a sender will send one or more data segments and the receiver will acknowledge one or all segments. When we start a TCP connection, the hosts will use a receive buffer where we temporarily store data before the application can process it.</div><div class="ar">يستخدم TCP نظام 'النافذة' (Windowing)، مما يعني أن المرسل سيرسل جزءاً أو أكثر من البيانات (<span class="term">segments<span class="tip">أجزاء البيانات في طبقة النقل</span></span>) وسيقوم المستقبل بتأكيد استلام جزء واحد أو كل الأجزاء. عند بدء اتصال TCP، تستخدم الأجهزة 'ذاكرة تخزين مؤقت للاستقبال' (Receive Buffer) لتخزين البيانات مؤقتاً قبل أن يعالجها التطبيق.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">When the receiver sends an acknowledgment, it will tell the sender how much data it can transmit before the receiver will send an acknowledgment. We call this the window size. Basically, the window size indicates the size of the receive buffer.</div><div class="ar">عندما يرسل المستقبل تأكيداً، فإنه يخبر المرسل بكمية البيانات التي يمكنه إرسالها قبل أن يرسل المستقبل تأكيداً آخر. نطلق على هذا اسم 'حجم النافذة' (Window Size). باختصار، حجم النافذة يشير إلى حجم ذاكرة الاستقبال المؤقتة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">Typically the TCP connection will start with a small window size and every time when there is a successful acknowledgement, the window size will increase.</div><div class="ar">عادةً، يبدأ اتصال TCP بحجم نافذة صغير، وفي كل مرة يتم فيها تأكيد الاستلام بنجاح، يزداد حجم النافذة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="diagram"><div style="display:flex; justify-content:space-around; align-items:center; font-family:monospace; margin-bottom:12px;"><div style="padding:16px; border:2px solid var(--text); border-radius:8px;">Host 1</div><div style="text-align:center; color:var(--accent); font-weight:bold;">Segment 1 &rarr;<br>&larr; ACK 2</div><div style="padding:16px; border:2px solid var(--text); border-radius:8px;">Host 2</div></div><div style="display:flex; justify-content:space-around; align-items:center; font-family:monospace; margin-bottom:12px;"><div style="padding:16px; border:2px solid var(--text); border-radius:8px;">Host 1</div><div style="text-align:center; color:var(--accent); font-weight:bold;">Segment 2, 3 &rarr;<br>&larr; ACK 4</div><div style="padding:16px; border:2px solid var(--text); border-radius:8px;">Host 2</div></div><div style="display:flex; justify-content:space-around; align-items:center; font-family:monospace;"><div style="padding:16px; border:2px solid var(--text); border-radius:8px;">Host 1</div><div style="text-align:center; color:var(--accent); font-weight:bold;">Segment 4, 5, 6, 7 &rarr;<br>&larr; ACK 8</div><div style="padding:16px; border:2px solid var(--text); border-radius:8px;">Host 2</div></div><div class="cap"><span class="en">TCP Window Size increasing successfully</span><span class="ar">حجم نافذة TCP يزداد بنجاح بعد كل تأكيد</span></div></div><div class="para-block"><div class="en">In the example above the window size keeps increasing as long as the receiver sends acknowledgments for all our segments or when the window size hits a certain maximum limit. When the receiver doesn't send an acknowledgment within a certain time period (called the round-trip time) then the window size will be reduced.</div><div class="ar">في المثال السابق، يستمر حجم النافذة في الزيادة طالما أن المستقبل يرسل تأكيدات لكل أجزاء البيانات أو حتى يصل حجم النافذة إلى الحد الأقصى. عندما لا يرسل المستقبل تأكيداً خلال فترة زمنية معينة (تسمى Round-Trip Time)، يتم تقليل حجم النافذة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Think of TCP Window Size like a conversation. You start speaking slowly (small window). If the listener nods and understands (ACKs), you start speaking faster and give more information at once (increasing window). But if the listener looks confused and asks you to repeat (missing ACK or timeout), you slow down again to make sure they can process what you're saying.</div><div class="ar">تخيل حجم النافذة في TCP مثل المحادثة. تبدأ بالتحدث ببطء (نافذة صغيرة). إذا كان المستمع يهز رأسه ويفهمك (يرسل ACK)، تبدأ في التحدث بشكل أسرع وتعطيه معلومات أكثر في نفس الوقت (زيادة النافذة). ولكن إذا بدا المستمع مرتبكاً وطلب منك الإعادة (عدم وصول ACK أو تأخير)، ستقوم بإبطاء سرعتك مرة أخرى للتأكد من قدرته على استيعاب ما تقوله.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="congestion"><h2><span class="en">Congestion and TCP Slow Start</span><span class="ar">الازدحام وبداية TCP البطيئة</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">When an interface has congestion then it's possible that IP packets are dropped. To deal with this, TCP has a number of algorithms that deal with congestion control. One of them is called <span class="term">slow start<span class="tip">خوارزمية البداية البطيئة لتفادي الازدحام</span></span>.</div><div class="ar">عندما يحدث ازدحام (Congestion) في الواجهة، فمن المحتمل أن تُفقد حزم الـ IP. للتعامل مع هذا، يحتوي TCP على عدة خوارزميات للتحكم في الازدحام. إحداها تسمى 'البداية البطيئة' (<span class="term">Slow Start<span class="tip">يبدأ بحجم صغير ويتضاعف حتى يحدث ازدحام</span></span>).</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">Congestion occurs when the interface has to transmit more data than it can handle. Its queue(s) will hit a limit and packets will be dropped.</div><div class="ar">يحدث الازدحام عندما تضطر الواجهة إلى نقل بيانات أكثر مما تستطيع معالجته. حيث تصل طوابير الانتظار (Queues) إلى حدها الأقصى وتُفقد الحزم.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">With TCP slow start, the window size will initially grow exponentially (window size doubles) but once a packet is dropped, the window size will be reduced to one segment. It will then grow exponentially again until the window size is half of what it was when the congestion occurred. At that moment, the window size will grow linearly instead of exponentially.</div><div class="ar">مع خوارزمية TCP Slow Start، ينمو حجم النافذة في البداية بشكل أسي (يتضاعف الحجم)، ولكن بمجرد فقدان حزمة، يتم تقليل حجم النافذة إلى جزء واحد (Segment) فقط. ثم ينمو بشكل أسي مرة أخرى حتى يصل إلى نصف الحجم الذي كان عليه عند حدوث الازدحام. في تلك اللحظة، سينمو حجم النافذة بشكل خطي بدلاً من النمو الأسي.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="sync"><h2><span class="en">TCP Global Synchronization</span><span class="ar">المزامنة الشاملة لبروتوكول TCP</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">When an interface gets congested, it's possible that all your TCP connections will experience TCP slow start. Packets will be dropped and then all TCP connections will have a small window size. This is called <span class="term">TCP global synchronization<span class="tip">مشكلة المزامنة الشاملة حيث تتباطأ كل الاتصالات معاً</span></span>.</div><div class="ar">عندما تزدحم الواجهة، من المحتمل أن تواجه جميع اتصالات TCP لديك حالة البداية البطيئة. ستُفقد الحزم، وبعد ذلك سيصبح لكل اتصالات TCP حجم نافذة صغير. هذا يُسمى 'المزامنة الشاملة' (<span class="term">TCP Global Synchronization<span class="tip">انخفاض مفاجئ لسرعة كل الاتصالات في نفس الوقت</span></span>).</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><figure class="img-card"><img src="https://i.imgur.com/lDoBjgn.jpeg" alt="TCP Global Synchronization Graph" loading="lazy" onerror="imgFail(this)"><div class="img-fallback"><div class="fb-desc">🖼️ Line graph showing multiple TCP connections dropping window sizes simultaneously when interface utilization peaks, resulting in poor average utilization.</div><div class="fb-diagram"><div style="height:150px; position:relative; border-left:2px solid var(--line); border-bottom:2px solid var(--line); padding:10px; margin:20px 0;">
+  <svg viewBox="0 0 100 50" style="width:100%; height:100%; overflow:visible;">
+    <polyline points="0,50 20,10 20,50 40,10 40,50 60,10 60,50" fill="none" stroke="var(--accent)" stroke-width="2"/>
+    <polyline points="5,50 25,15 25,50 45,15 45,50 65,15 65,50" fill="none" stroke="var(--warn)" stroke-width="2"/>
+  </svg>
+  <div style="position:absolute; bottom:-25px; left:50%; font-size:0.8rem; color:var(--muted);">Time</div>
+  <div style="position:absolute; top:50%; left:-30px; transform:rotate(-90deg); font-size:0.8rem; color:var(--muted);">Bandwidth</div>
+</div></div></div><figcaption><span class="en">Graph showing TCP Global Synchronization</span><span class="ar">رسم بياني يوضح المزامنة الشاملة لـ TCP</span></figcaption></figure><div class="para-block"><div class="en">The orange, blue and green lines are three different TCP connections. These TCP connections start at different times and after awhile, the interface gets congested and packets of all TCP connections are dropped. What happens is that the window size of all these TCP connections will drop to one and once the interface congestion is gone, all their window sizes will increase again.</div><div class="ar">الخطوط البرتقالي والأزرق والأخضر تمثل ثلاثة اتصالات TCP مختلفة. تبدأ في أوقات مختلفة، وبعد فترة، تزدحم الواجهة وتُفقد حزم من كل الاتصالات. ما يحدث هو أن حجم النافذة لكل هذه الاتصالات ينخفض إلى 1، وبمجرد زوال الازدحام، تزداد أحجام النوافذ مرة أخرى.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">The interface then gets congested again, the window size drops back to one and the story repeats itself. The result of this is that we don't use all the available bandwidth that our interface has to offer. If you look at the dashed line you can see that the average interface utilization isn't very high.</div><div class="ar">ثم تزدحم الواجهة مرة أخرى، وينخفض حجم النافذة إلى 1 وتتكرر القصة. نتيجة لذلك، لا نستخدم كل النطاق الترددي (Bandwidth) المتاح في الواجهة. إذا نظرت إلى الخط المتقطع، يمكنك أن ترى أن متوسط استخدام الواجهة ليس عالياً جداً.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">To prevent global synchronization we can use <span class="term">RED (Random Early Detection)<span class="tip">تقنية كشف الازدحام المبكر العشوائي</span></span>. This is a feature that drops 'random' packets from TCP flows based on the number of packets in a queue and the TOS (Type of Service) marking of the packets. When packets are dropped before a queue is full, we can avoid the global synchronization.</div><div class="ar">لمنع المزامنة الشاملة، يمكننا استخدام تقنية <span class="term">RED<span class="tip">Random Early Detection</span></span>. هذه الميزة تقوم بإسقاط حزم 'عشوائية' من تدفقات TCP بناءً على عدد الحزم في طابور الانتظار وعلامات TOS. عندما يتم إسقاط الحزم قبل امتلاء الطابور، يمكننا تجنب المزامنة الشاملة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><figure class="img-card"><img src="https://www.researchgate.net/profile/Drghassan-Abed/publication/262068525/figure/fig1/AS:669418442985482@1536613202254/TCP-slow-start-and-congestion-avoidance.png" alt="RED Graph" loading="lazy" onerror="imgFail(this)"><div class="img-fallback"><div class="fb-desc">🖼️ Graph showing smoothed out TCP window sizes resulting in a much higher average interface utilization thanks to RED dropping random packets early.</div><div class="fb-diagram"><div style="height:150px; position:relative; border-left:2px solid var(--line); border-bottom:2px solid var(--line); padding:10px; margin:20px 0;">
+  <svg viewBox="0 0 100 50" style="width:100%; height:100%; overflow:visible;">
+    <polyline points="0,50 15,20 20,25 30,15 40,25 50,15 60,25" fill="none" stroke="var(--good)" stroke-width="2"/>
+    <polyline points="5,50 20,30 25,35 35,25 45,35 55,25 65,35" fill="none" stroke="var(--accent)" stroke-width="2"/>
+    <line x1="0" y1="20" x2="100" y2="20" stroke="var(--text)" stroke-dasharray="4"/>
+  </svg>
+  <div style="position:absolute; bottom:-25px; left:50%; font-size:0.8rem; color:var(--muted);">Time</div>
+  <div style="position:absolute; top:50%; left:-30px; transform:rotate(-90deg); font-size:0.8rem; color:var(--muted);">Bandwidth</div>
+</div></div></div><figcaption><span class="en">Average interface utilization with RED</span><span class="ar">متوسط استخدام الواجهة عند تفعيل RED</span></figcaption></figure><div class="para-block"><div class="en">When we use RED, our average interface utilization will improve.</div><div class="ar">عند استخدام RED، سيتحسن متوسط استخدامنا للواجهة بشكل كبير.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Tail Drop vs RED: Imagine a highway toll booth. 'Tail drop' is when the toll plaza is completely full, so they suddenly block the entire highway, causing a massive traffic jam for everyone at once (Global Sync). 'RED' is like a smart traffic cop who randomly pulls over a few cars early on before the plaza fills up. Those few cars slow down, but the highway keeps flowing smoothly.</div><div class="ar">Tail Drop مقابل RED: تخيل بوابة رسوم مرور على طريق سريع. 'Tail drop' يحدث عندما تمتزئ الساحة بالكامل، فيقومون فجأة بإغلاق الطريق السريع بأكمله، مما يتسبب في زحام مروري هائل للجميع في نفس الوقت (وهذا هو Global Sync). أما 'RED' فهو كشرطي مرور ذكي يقوم بإيقاف عدد قليل من السيارات عشوائياً في وقت مبكر قبل امتلاء الساحة. تلك السيارات القليلة تبطئ سرعتها، لكن الطريق السريع يستمر في التدفق بسلاسة. في الـ CCNA غالباً ستُسأل عن WRED وهو نفس الشيء ولكنه يختار الحزم التي سيسقطها بناءً على الأولوية (أولوية مرور أقل تسقط أولاً).</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="wireshark"><h2><span class="en">Wireshark Captures</span><span class="ar">تحليل باستخدام Wireshark</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">Now you have an idea what the TCP window size is about, let's take a look at a real example of how the window size is used. We can use Wireshark for this. To examine the TCP window size I will use two devices:</div><div class="ar">الآن أصبحت لديك فكرة عن حجم النافذة في TCP، دعنا نلقي نظرة على مثال حقيقي لكيفية استخدامه باستخدام برنامج Wireshark. لفحص ذلك، سأستخدم جهازين:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">The device on the left side is a modern computer with a gigabit interface. On the right side, we have a small raspberry pi which has a FastEthernet interface. The raspberry pi is a great little device but its cpu/memory/ethernet interface are limited. To get an interesting output, I will copy a large file through SSH from my computer to the raspberry pi which will be easily overburdened.</div><div class="ar">الجهاز على اليسار هو كمبيوتر حديث مزود بواجهة Gigabit. وعلى اليمين، لدينا جهاز Raspberry Pi صغير بواجهة FastEthernet وموارد محدودة. للحصول على نتيجة مثيرة للاهتمام، سأقوم بنسخ ملف كبير عبر SSH من الكمبيوتر إلى الـ Raspberry Pi، والذي سيتم إرهاقه بسهولة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><figure class="img-card"><img src="https://wiki.wireshark.org/images/thumb/5/5a/Tcptrace.png/400px-Tcptrace.png" alt="Wireshark IO Graphs" loading="lazy" onerror="imgFail(this)"><div class="img-fallback"><div class="fb-desc">🖼️ Wireshark IO graph showing a massive drop in window size around the 30-second mark during the file transfer.</div><div class="fb-diagram"><div class="cli" style="text-align:center;">Wireshark IO Graph [Window Size over Time]<br>|=====<br>| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /\/\<br>| &nbsp; /\/\/\/\/ &nbsp; &nbsp; \__<br>|__/ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; \__<br>+--------------------------</div></div></div><figcaption><span class="en">Wireshark IO Graph showing window collapse</span><span class="ar">رسم بياني من Wireshark يوضح انهيار النافذة</span></figcaption></figure><div class="para-block"><div class="en">In the graph above you can see the window size that was used during this connection. The file transfer started after about 6 seconds and you can see that the window size increased fast. It went up and down a bit but at around 30 seconds, it totally collapsed. After a few seconds it increased again and I was able to complete the file transfer.</div><div class="ar">في الرسم البياني، يمكنك رؤية حجم النافذة المستخدم. بدأ نقل الملف بعد 6 ثوانٍ وزاد حجم النافذة بسرعة. صعد ونزل قليلاً، ولكن عند الثانية 30 تقريباً، انهار تماماً. بعد بضع ثوانٍ زاد مرة أخرى واكتمل النقل.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">My fast computer uses 10.56.100.1 and the raspberry pi uses 10.56.100.164. In the SYN,ACK message that the raspberry pi wants to use a window size of 29200. My computer wants to use a window size of 8388480 (win=65535 * ws=128) which is irrelevant now since we are sending data to the raspberry pi.</div><div class="ar">الكمبيوتر السريع يستخدم 10.56.100.1 والـ Raspberry Pi يستخدم 10.56.100.164. في رسالة SYN,ACK، يطلب الـ Raspberry Pi حجم نافذة 29200. بينما طلب الكمبيوتر 8388480 (لأنه يستخدم مُعامل تكبير Scaling Factor)، وهذا غير مهم حالياً لأننا نرسل البيانات إلى الـ Pi.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">Originally the window size is a 16 bit value so the largest window size would be 65535. Nowadays we use a scaling factor so that we can use larger window sizes.</div><div class="ar">في الأصل، حجم النافذة هو قيمة مكونة من 16 بت، لذا فإن الحد الأقصى لحجم النافذة هو 65535. في الوقت الحاضر، نستخدم معامل تكبير (Scaling Factor) حتى نتمكن من استخدام أحجام نوافذ أكبر.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">At around the 10 second mark the window size decreased. The raspberry pi seems to have trouble keeping up and its receive buffer is probably full. It tells the computer to use a window size of 26752 from now on.</div><div class="ar">عند علامة الـ 10 ثوانٍ، انخفض حجم النافذة. يبدو أن جهاز Raspberry Pi يواجه صعوبة في المواكبة وربما امتلأت ذاكرة الاستقبال المؤقتة لديه. لذا يخبر الكمبيوتر باستخدام حجم نافذة 26752 من الآن فصاعداً.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">The computer sends 18 segments with 1460 bytes and one segment of 472 bytes (26752 bytes in total). The last packet shows us 'TCP Window Full' message. This is something that Wireshark reports to us, our computer has completely filled the receive buffer of the raspberry pi.</div><div class="ar">يرسل الكمبيوتر 18 جزءاً بحجم 1460 بايت وجزءاً واحداً بحجم 472 بايت (المجموع 26752 بايت). يظهر لنا الحزمة الأخيرة رسالة 'TCP Window Full' في Wireshark، مما يعني أن الكمبيوتر ملأ ذاكرة الاستقبال للـ Raspberry Pi بالكامل.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">Once the raspberry pi has caught up a bit and around the 30 second mark, something bad happens. The raspberry pi sends an ACK to the computer with a window size of 0.</div><div class="ar">بمجرد أن يواكب الـ Raspberry Pi العمل قليلاً، وحول علامة الـ 30 ثانية، يحدث شيء سيء. يرسل الـ Raspberry Pi إشارة ACK إلى الكمبيوتر بحجم نافذة يساوي صفر (0).</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">This means that the window size will remain at 0 for a specified amount of time, the raspberry pi is unable to receive any more data at this moment and the TCP transmission will be paused for awhile while the receive buffer is processed.</div><div class="ar">هذا يعني أن حجم النافذة سيبقى 0 لفترة محددة، فالـ Raspberry Pi غير قادر على استقبال أي بيانات إضافية حالياً، وسيتم إيقاف إرسال TCP مؤقتاً حتى يتم معالجة البيانات الموجودة في الذاكرة المؤقتة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">Once the receive buffer has been processed, the raspberry pi will send an ACK with a new window size (e.g. 25600). The window size is now only 25600 bytes but will grow again. The rest of the transmission went without any hiccups and the file transfer completed.</div><div class="ar">بمجرد معالجة الذاكرة المؤقتة، يرسل الـ Pi رسالة ACK بحجم نافذة جديد (مثلاً 25600). حجم النافذة الآن 25600 بايت فقط ولكنه سينمو مرة أخرى. مر باقي النقل بدون مشاكل واكتمل نقل الملف.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="conclusion"><h2><span class="en">Conclusion</span><span class="ar">الخاتمة</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">You have now seen how TCP uses the window size to tell the sender how much data to transmit before it will receive an acknowledgment. I also showed you an example of how the window size is used when the receiver is unable to process its receive buffer in time.</div><div class="ar">لقد رأيت الآن كيف يستخدم TCP حجم النافذة لإخبار المرسل بكمية البيانات التي يجب إرسالها قبل أن يتلقى تأكيداً. كما أظهرت لك مثالاً لكيفية استخدام حجم النافذة عندما يكون المستقبل غير قادر على معالجة الذاكرة المؤقتة في الوقت المناسب.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">UDP, unlike TCP is a connectionless protocol and will just keep sending traffic. There is no window size, for this reason you might want to limit your UDP traffic or you might see starvation of your TCP traffic when there is congestion.</div><div class="ar">بروتوكول UDP، على عكس TCP، هو بروتوكول غير موجه للاتصال (Connectionless) وسيستمر في إرسال البيانات دون توقف. لا يوجد حجم نافذة فيه، ولهذا السبب قد ترغب في تقييد بيانات UDP الخاصة بك أو قد تواجه حالة حرمان (Starvation) لبيانات TCP الخاصة بك عندما يكون هناك ازدحام.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Starvation happens because TCP is polite: when there's congestion, TCP slows down (window size drops). UDP is impolite: it never slows down. So if they share a congested link, UDP will take all the bandwidth while TCP keeps reducing its speed, effectively starving TCP.</div><div class="ar">تحدث حالة الحرمان (Starvation) لأن TCP مهذب: عند وجود ازدحام، يبطئ TCP سرعته (يقل حجم النافذة). أما UDP فهو غير مهذب: لا يبطئ أبداً. لذا إذا تشاركا في رابط مزدحم، سيأخذ UDP كل النطاق الترددي بينما يستمر TCP في تقليل سرعته، مما يؤدي إلى حرمان TCP من الشبكة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="quiz"><h2><span class="en">Lesson quiz</span><span class="ar">اختبار الدرس</span></h2><p class="quiz-intro"><span class="en">Select an answer and check. You can toggle language for each question individually.</span><span class="ar">اختر إجابة وتحقق. يمكنك تبديل اللغة لكل سؤال على حدة.</span></p><div id="quizArea"></div></section></main></div><div class="lesson-nav">
+<a class="prev" href="lesson-06-tcp-header.html"><span class="k"><span class="en">Previous Lesson</span><span class="ar">الدرس السابق</span></span><strong>TCP Header</strong></a>
+<a class="next" href="lesson-08-icmp.html"><span class="k"><span class="en">Next Lesson</span><span class="ar">الدرس التالي</span></span><strong>ICMP Protocol</strong></a>
+</div>
+<div class="source-footer">
+    <p><span class="en">Reference material:</span><span class="ar">المادة المرجعية:</span> <a href="pdfs/07-tcp window size scaling.pdf" target="_blank">07-tcp window size scaling.pdf</a> (CCNA 200-301, Unit 2)</p>
+    <p>Created using strictly verified CCNA guidelines.</p>
+</div>
+<script>
+const UI = {
+  en:{tr:'TRANSLATE', trBack:'SHOW ENGLISH', check:'Check answer', reveal:'Reveal answer', q:'Question', ok:'Correct', no:'Incorrect', qlang:'العربية'},
+  ar:{tr:'ترجمة', trBack:'عرض الإنجليزية', check:'تحقق', reveal:'إظهار الإجابة', q:'سؤال', ok:'صحيح', no:'غير صحيح', qlang:'English'}
+};
+const curLang = () => document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+function arShown(pb){ return (curLang()==='ar') !== pb.classList.contains('flip'); }
+function updBtn(pb){
+  const b = pb.querySelector(':scope > .tr-btn'); if(!b) return;
+  b.textContent = arShown(pb) ? UI.en.trBack : UI.en.tr;
+  if(curLang()==='ar'){ b.textContent = arShown(pb) ? UI.ar.trBack : UI.ar.tr; }
+}
+function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
+function setGlobalLang(l){
+  document.body.classList.remove('lang-en', 'lang-ar');
+  document.body.classList.add('lang-'+l);
+  document.documentElement.lang = l;
+  document.documentElement.classList.remove('lang-en', 'lang-ar');
+  document.documentElement.classList.add('lang-'+l);
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.getElementById('btnAr').classList.toggle('active', l==='ar');
+  document.querySelectorAll('.para-block').forEach(pb=>{ pb.classList.remove('flip'); updBtn(pb); });
+  document.querySelectorAll('.q-card').forEach(c=>applyQuizLang(c, l));
+  localStorage.setItem('ccna-lang', l);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  setGlobalLang(savedLang);
+});
+
+function imgFail(img){
+  if(img.dataset.alt && !img.dataset.tried){ img.dataset.tried='1'; img.src=img.dataset.alt; return; }
+  img.style.display='none';
+  const f=img.parentElement.querySelector('.img-fallback'); if(f) f.style.display='block';
+}
+document.querySelectorAll('.para-block').forEach(updBtn);
+document.querySelectorAll('.term').forEach(t=>t.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.term.tap').forEach(o=>{if(o!==t)o.classList.remove('tap')});t.classList.toggle('tap');}));
+document.addEventListener('click',()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+const tocLinks=[...document.querySelectorAll('.toc a')], secs=tocLinks.map(a=>document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll',()=>{let i=0;secs.forEach((s,k)=>{if(s&&s.getBoundingClientRect().top<150)i=k});tocLinks.forEach(a=>a.classList.remove('active'));tocLinks[i]&&tocLinks[i].classList.add('active');});
+
+function applyQuizLang(card, l){
+  const it=card._item, Tx=UI[l];
+  card.dataset.lang=l;
+  card.querySelector('.q-text').textContent=it.q[l];
+  card.querySelectorAll('.opt span').forEach((s,i)=>s.textContent=it.opts[i][l]);
+  card.querySelector('.explain').textContent=it.explain[l];
+  card.querySelector('.q-num').textContent=Tx.q+' '+card._n+' / '+card._total;
+  card.querySelector('.check').textContent=Tx.check;
+  card.querySelector('.reveal').textContent=Tx.reveal;
+  card.querySelector('.qlang').textContent=Tx.qlang;
+  const r=card.querySelector('.q-result'); if(card._state) r.textContent = card._state==='ok'?Tx.ok:Tx.no;
+}
+function buildQuiz(id, items){
+  const area=document.getElementById(id);
+  if(!area) return;
+  items.forEach((it,qi)=>{
+    const card=document.createElement('div'); card.className='q-card'; card._item=it; card._n=qi+1; card._total=items.length;
+    card.innerHTML=`<div class="q-top"><div class="q-num"></div><button class="btn secondary tiny qlang"></button></div>
+      <div class="q-text"></div><div class="opts"></div>
+      <div class="q-actions"><button class="btn check" disabled></button><button class="btn secondary reveal"></button></div>
+      <div class="q-result"></div><div class="explain"></div>`;
+    const ow=card.querySelector('.opts');
+    it.opts.forEach((o,oi)=>{const lb=document.createElement('label');lb.className='opt';lb.innerHTML=`<input type="radio" name="${id}-${qi}" value="${oi}"><span></span>`;ow.appendChild(lb);});
+    area.appendChild(card);
+    applyQuizLang(card, curLang());
+    card.querySelector('.qlang').onclick=()=>applyQuizLang(card, card.dataset.lang==='en'?'ar':'en');
+    const chk=card.querySelector('.check'), rev=card.querySelector('.reveal'), ex=card.querySelector('.explain'), labs=card.querySelectorAll('.opt'), res=card.querySelector('.q-result');
+    card.querySelectorAll('input').forEach(r=>r.onchange=()=>chk.disabled=false);
+    chk.onclick=()=>{const c=card.querySelector('input:checked'); if(!c) return; const ci=+c.value;
+      labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct'); else if(i===ci) l.classList.add('wrong');});
+      card._state = ci===it.correct?'ok':'no'; res.className='q-result '+card._state; res.textContent=UI[card.dataset.lang][card._state];
+      ex.classList.add('show'); chk.disabled=true;};
+    rev.onclick=()=>{labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct');}); ex.classList.add('show');};
+  });
+}
+</script>
+<script>\nbuildQuiz('recapArea',[{q:{en:'In the previous lesson, we saw the TCP Header. Which field in the TCP header is used to reassemble the data in the correct order?',ar:'في الدرس السابق، رأينا ترويسة TCP. أي حقل يستخدم لإعادة تجميع البيانات بالترتيب الصحيح؟'},opts:[{en:'Acknowledgment Number',ar:'رقم التأكيد'},{en:'Sequence Number',ar:'رقم التسلسل'},{en:'Source Port',ar:'منفذ المصدر'},{en:'Window Size',ar:'حجم النافذة'}],correct:1,explain:{en:'The Sequence Number is used to ensure data is reassembled in the exact original order.',ar:'رقم التسلسل (Sequence Number) يستخدم لضمان إعادة تجميع البيانات بالترتيب الأصلي الدقيق.'}}]);\nbuildQuiz('quizArea',[{q:{en:'What does the TCP Window Size indicate to the sender?',ar:'ماذا يشير حجم نافذة TCP (Window Size) للمرسل؟'},opts:[{en:"The size of the sender's hard drive",ar:'حجم القرص الصلب للمرسل'},{en:'How much data can be sent before an ACK is required',ar:'كمية البيانات التي يمكن إرسالها قبل طلب رسالة ACK'},{en:'The maximum bandwidth of the link',ar:'الحد الأقصى للنطاق الترددي للرابط'},{en:'The MTU of the ethernet frame',ar:'حجم MTU لإطار الإيثرنت'}],correct:1,explain:{en:"The window size tells the sender exactly how much data the receiver's buffer can handle right now before needing an acknowledgment.",ar:'حجم النافذة يخبر المرسل بالضبط بكمية البيانات التي يمكن لذاكرة الاستقبال معالجتها الآن قبل الحاجة إلى تأكيد.'}},{q:{en:'What happens during TCP Slow Start when a packet is dropped due to congestion?',ar:'ماذا يحدث أثناء TCP Slow Start عندما يتم إسقاط حزمة بسبب الازدحام؟'},opts:[{en:'The connection is immediately terminated',ar:'يتم إنهاء الاتصال فوراً'},{en:'The window size doubles',ar:'يتضاعف حجم النافذة'},{en:'The window size drops to one segment',ar:'ينخفض حجم النافذة إلى جزء واحد (Segment)'},{en:'TCP switches to UDP mode',ar:'يتحول TCP إلى وضع UDP'}],correct:2,explain:{en:'When a drop occurs, the slow start algorithm immediately reduces the window size to just 1 segment, then starts growing it back up.',ar:'عند حدوث إسقاط، تقوم خوارزمية البداية البطيئة على الفور بتقليل حجم النافذة إلى جزء واحد فقط، ثم تبدأ في زيادته مرة أخرى.'}},{q:{en:'Which of the following is the primary purpose of Random Early Detection (RED) in congestion management? (CCNA Concept)',ar:'ما هو الغرض الأساسي من تقنية RED في إدارة الازدحام؟ (مفهوم سؤال CCNA حقيقي)'},opts:[{en:'To drop packets based on their IP precedence only',ar:'إسقاط الحزم بناءً على أولوية IP الخاصة بها فقط'},{en:'To prevent TCP global synchronization by randomly dropping packets before the queue is completely full',ar:'لمنع المزامنة الشاملة لـ TCP عن طريق إسقاط الحزم عشوائياً قبل امتلاء الطابور بالكامل'},{en:'To guarantee bandwidth for UDP traffic',ar:'لضمان النطاق الترددي لبيانات UDP'},{en:'To increase the maximum TCP window size',ar:'لزيادة الحد الأقصى لحجم نافذة TCP'}],correct:1,explain:{en:"RED (and Cisco's WRED) drops packets early to prevent tail-drop, avoiding the scenario where all TCP sessions go into slow-start simultaneously.",ar:"تقنية RED (وكذلك WRED الخاصة بسيسكو) تسقط الحزم مبكراً لمنع ظاهرة 'Tail-drop'، لتجنب السيناريو الذي تدخل فيه جميع جلسات TCP في البداية البطيئة في نفس الوقت."}},{q:{en:'How does RED (Random Early Detection) solve the Global Synchronization problem?',ar:'كيف يحل RED (Random Early Detection) مشكلة المزامنة الشاملة؟'},opts:[{en:'By randomly disconnecting users',ar:'عن طريق فصل المستخدمين عشوائياً'},{en:'By dropping random packets early to force individual TCP flows to slow down before the queue is completely full',ar:'عن طريق إسقاط حزم عشوائية مبكراً لإجبار تدفقات TCP الفردية على التباطؤ قبل امتلاء الطابور بالكامل'},{en:'By increasing the bandwidth of the physical cable',ar:'عن طريق زيادة عرض النطاق الترددي للكابل الفعلي'},{en:'By blocking UDP traffic entirely',ar:'عن طريق حظر بيانات UDP بالكامل'}],correct:1,explain:{en:"By intentionally dropping a few random packets early, RED staggers the window size reductions of different flows so they don't all happen at once.",ar:'من خلال إسقاط بعض الحزم العشوائية عمداً في وقت مبكر، يوزع RED عمليات تقليل حجم النافذة للتدفقات المختلفة بحيث لا تحدث جميعها في وقت واحد.'}},{q:{en:'What does a TCP Window Size of 0 mean?',ar:'ماذا يعني حجم نافذة TCP يساوي 0؟'},opts:[{en:"The receiver's buffer is completely full and the sender must pause transmission",ar:'ذاكرة الاستقبال ممتلئة تماماً ويجب على المرسل إيقاف الإرسال مؤقتاً'},{en:'The file transfer has finished successfully',ar:'اكتمل نقل الملف بنجاح'},{en:'The sender has zero bytes left to send',ar:'لم يتبق للمرسل أي بايتات لإرسالها'},{en:'The network cable is unplugged',ar:'تم فصل كابل الشبكة'}],correct:0,explain:{en:"A window size of 0 is a explicit 'Stop' signal from the receiver indicating it cannot buffer any more data until it processes what it already has.",ar:"حجم نافذة 0 هو إشارة 'توقف' صريحة من المستقبل تشير إلى أنه لا يمكنه تخزين أي بيانات أخرى حتى يعالج ما لديه بالفعل."}}]);\n</script>\n</body>\n</html>\n

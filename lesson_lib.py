@@ -344,7 +344,7 @@ def Q(q, qa, opts, c, e, ea):
 
 def build(num, pct, title, sub, chip_en, chip_ar, toc_items, body_sections,
           prev_href, prev_label, next_href, next_label, source_pdf, extra_footnote, recap_items, quiz_items, out_path):
-    head = HEAD.format(NUM=num, PCT=pct, TITLE=title)
+    head = HEAD.replace('{NUM}', str(num)).replace('{PCT}', str(pct)).replace('{TITLE}', str(title))
     hero = f'''<div class="hero"><div class="chip">{bi(chip_en, chip_ar)}</div>
 <h1>{title}</h1><div class="sub">{bi(sub[0], sub[1])}</div></div>'''
     toc = ''.join(f'<a href="#{i}">{bi(e,a)}</a>' for i,e,a in toc_items)
