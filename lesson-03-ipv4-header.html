@@ -5,134 +5,144 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0a121d; --panel:#101b29; --panel2:#0d1622; --line:#1e2f43;
-  --text:#e9eef5; --muted:#8ea3bd; --accent:#3ee6d6; --accent2:#6d8dff;
-  --warn:#f5c451; --good:#38d17a; --bad:#ef5a72; --radius:14px; --maxw:960px;
-}
-*{box-sizing:border-box; min-width:0}
-html{scroll-behavior:smooth; scroll-padding-top:76px}
-body{margin:0; background:var(--bg); color:var(--text); font-family:'IBM Plex Sans','Tajawal',sans-serif; line-height:1.85; padding-bottom:80px; overflow-x:hidden}
-code,.mono{font-family:'IBM Plex Mono',monospace; overflow-wrap:anywhere}
-img{max-width:100%; height:auto; display:block}
-p,li,td,th,h1,h2,h3{overflow-wrap:break-word; word-break:break-word}
+:root{--bg:#0a121d;--panel:#101b29;--panel2:#0d1622;--line:#1e2f43;--text:#e9eef5;--muted:#8ea3bd;--accent:#3ee6d6;--accent2:#6d8dff;--warn:#f5c451;--good:#38d17a;--bad:#ef5a72;--radius:14px;--maxw:960px}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans','Tajawal',sans-serif;line-height:1.85;padding-bottom:80px;overflow-x:hidden}
+code,.mono{font-family:'IBM Plex Mono',monospace;overflow-wrap:anywhere}
+img{max-width:100%;height:auto;display:block;margin:0 auto}
+p,li,td,th,h1,h2,h3{overflow-wrap:break-word;word-break:break-word}
 
-.p-en,.li-en{display:block} .p-ar,.li-ar{display:none}
-body.lang-ar .p-en,body.lang-ar .li-en{display:none}
-body.lang-ar .p-ar,body.lang-ar .li-ar{display:block}
-.p-ar{font-family:'Tajawal',sans-serif; direction:rtl; text-align:right}
+body.lang-en .ar{display:none!important}
+body.lang-ar .en{display:none!important}
+body.lang-en .flip .en{display:none!important}
+body.lang-en .flip .ar{display:block!important}
+body.lang-ar .flip .ar{display:none!important}
+body.lang-ar .flip .en{display:block!important}
+.ar{font-family:'Tajawal',sans-serif;direction:rtl;text-align:right}
+span.ar{direction:rtl;unicode-bidi:isolate}
+ul.ar,ol.ar{padding-inline-start:0;padding-inline-end:22px}
 
-.topbar{position:sticky; top:0; z-index:50; background:rgba(10,18,29,.94); backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--line); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
-.topbar .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-family:'Tajawal',sans-serif; white-space:nowrap}
-.topbar .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 10px var(--accent)}
-.topbar .lesson-tag{color:var(--muted); font-size:.85rem; font-family:'Tajawal',sans-serif}
-.progress-wrap{flex:1; min-width:120px; max-width:280px; height:6px; background:var(--panel2); border-radius:99px; overflow:hidden; border:1px solid var(--line)}
-.progress-bar{height:100%; width:27%; background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.langswitch{display:flex; align-items:center; background:var(--panel2); border:1px solid var(--line); border-radius:99px; padding:3px; gap:2px}
-.langswitch button{border:none; background:transparent; color:var(--muted); font-family:'Tajawal',sans-serif; font-weight:700; padding:6px 14px; border-radius:99px; cursor:pointer; font-size:.82rem}
-.langswitch button.active{background:var(--accent); color:#04141a}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,18,29,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.lesson-tag{color:var(--muted);font-size:.85rem}
+.progress-wrap{flex:1;min-width:120px;max-width:280px;height:6px;background:var(--panel2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.progress-bar{height:100%;width:27%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.langswitch{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:3px;gap:2px}
+.langswitch button{border:none;background:transparent;color:var(--muted);font-weight:700;padding:6px 14px;border-radius:99px;cursor:pointer;font-size:.82rem}
+.langswitch button.active{background:var(--accent);color:#04141a}
 
-.shell{max-width:1180px; margin:0 auto; padding:0 20px; display:grid; grid-template-columns:1fr; gap:0}
-@media(min-width:1020px){ .shell{grid-template-columns:200px minmax(0,var(--maxw))} .toc{display:block !important} }
-.toc{display:none; position:sticky; top:78px; align-self:start; padding:28px 0; font-size:.85rem}
-.toc a{display:block; color:var(--muted); text-decoration:none; padding:7px 0; border-inline-start:2px solid var(--line); padding-inline-start:12px; margin-bottom:2px}
-.toc a:hover,.toc a.active{color:var(--accent); border-inline-start-color:var(--accent)}
-.toc-title{font-family:'Tajawal',sans-serif; color:var(--text); font-weight:700; font-size:.8rem; margin-bottom:10px; padding-inline-start:12px}
+.shell{max-width:1180px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:1fr}
+@media(min-width:1020px){.shell{grid-template-columns:210px minmax(0,var(--maxw))}.toc{display:block!important}}
+.toc{display:none;position:sticky;top:78px;align-self:start;padding:28px 0;font-size:.85rem}
+.toc a{display:block;color:var(--muted);text-decoration:none;padding:7px 0;border-inline-start:2px solid var(--line);padding-inline-start:12px;margin-bottom:2px}
+.toc a:hover,.toc a.active{color:var(--accent);border-inline-start-color:var(--accent)}
+.toc-title{color:var(--text);font-weight:700;font-size:.8rem;margin-bottom:10px;padding-inline-start:12px}
 
 .hero{padding:34px 0 10px}
-.hero h1{font-size:clamp(1.5rem,3vw,2.2rem); margin:0 0 4px; font-weight:700}
-.hero .sub{color:var(--muted); font-size:1rem; margin-bottom:22px; font-family:'Tajawal',sans-serif}
-.osi-chip{display:inline-flex; align-items:center; gap:8px; background:var(--panel); border:1px solid var(--line); padding:8px 14px; border-radius:99px; font-size:.85rem; color:var(--muted); margin-bottom:20px; font-family:'Tajawal',sans-serif}
-.osi-chip b{color:var(--accent)}
-
+.hero h1{font-size:clamp(1.5rem,3vw,2.2rem);margin:0 0 4px;font-weight:700}
+.hero .sub{color:var(--muted);margin-bottom:22px}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);padding:8px 14px;border-radius:99px;font-size:.85rem;color:var(--muted);margin-bottom:20px}
+.chip b{color:var(--accent)}
 main{min-width:0}
-section{margin:44px 0; scroll-margin-top:76px}
-h2{font-size:1.3rem; border-inline-start:4px solid var(--accent); padding-inline-start:12px; margin-bottom:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-h2 .h-ar{color:var(--muted); font-family:'Tajawal',sans-serif; font-size:.85rem; font-weight:400}
-h3{font-size:1.05rem; color:var(--accent2); margin:22px 0 10px}
-p{margin:0 0 14px; color:#dbe4f0}
-ul,ol{padding-inline-start:22px; margin:0 0 14px}
-li{margin-bottom:8px; color:#dbe4f0}
+section{margin:44px 0;scroll-margin-top:76px}
+h2{font-size:1.3rem;border-inline-start:4px solid var(--accent);padding-inline-start:12px;margin-bottom:14px}
+h3{font-size:1.05rem;color:var(--accent2);margin:22px 0 10px}
+p{margin:0 0 14px;color:#dbe4f0}
+ul,ol{padding-inline-start:22px;margin:0 0 14px}
+li{margin-bottom:8px;color:#dbe4f0}
+.badge{display:inline-block;background:var(--panel2);color:var(--accent);font-size:.75rem;padding:3px 10px;border-radius:99px;margin-bottom:10px}
 
-.para-block{position:relative; margin-bottom:18px}
-.tr-btn{display:inline-flex; align-items:center; gap:6px; margin-top:2px; font-size:.78rem; color:var(--accent2); background:transparent; border:1px solid var(--line); padding:4px 10px; border-radius:99px; cursor:pointer; font-family:'Tajawal',sans-serif}
+.para-block{margin-bottom:18px}
+.tr-btn{display:inline-flex;margin-top:2px;font-size:.78rem;color:var(--accent2);background:transparent;border:1px solid var(--line);padding:4px 12px;border-radius:99px;cursor:pointer}
 .tr-btn:hover{border-color:var(--accent2)}
 
-.term{border-bottom:1.5px dotted var(--accent); cursor:help; position:relative; color:#fff; font-weight:600}
-.term .tip{visibility:hidden; opacity:0; position:absolute; bottom:135%; left:0; background:#04141a; color:var(--accent); border:1px solid var(--accent);
-  padding:8px 12px; border-radius:8px; font-size:.85rem; z-index:20; transition:opacity .15s; font-family:'Tajawal',sans-serif; direction:rtl;
-  box-shadow:0 6px 20px rgba(0,0,0,.5); width:max-content; max-width:min(260px,70vw)}
-.term:hover .tip,.term.tap .tip{visibility:visible; opacity:1}
+.term{border-bottom:1.5px dotted var(--accent);cursor:help;position:relative;color:#fff;font-weight:600}
+.term .tip{visibility:hidden;opacity:0;position:absolute;bottom:135%;left:0;background:#04141a;color:var(--accent);border:1px solid var(--accent);padding:8px 12px;border-radius:8px;font-size:.85rem;z-index:20;transition:opacity .15s;font-family:'Tajawal',sans-serif;direction:rtl;text-align:right;box-shadow:0 6px 20px rgba(0,0,0,.5);width:max-content;max-width:min(270px,70vw);font-weight:400}
+.term:hover .tip,.term.tap .tip{visibility:visible;opacity:1}
 
-.src{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px 24px; margin:18px 0; overflow:hidden}
-.src .src-label{font-size:.75rem; color:var(--muted); margin-bottom:10px; display:flex; align-items:center; gap:6px; font-family:'Tajawal',sans-serif}
-.src .src-label::before{content:"📘"}
-
-.extra{background:linear-gradient(180deg,rgba(245,196,81,.08),rgba(245,196,81,.03)); border:1px solid rgba(245,196,81,.4); border-radius:var(--radius); padding:18px 20px; margin:18px 0}
-.extra .lab{color:var(--warn); font-weight:700; font-size:.85rem; margin-bottom:8px; display:flex; align-items:center; gap:6px; font-family:'Tajawal',sans-serif}
-.extra .lab::before{content:"⚡"}
+.src{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:18px 0;overflow:hidden}
+.src-label{font-size:.75rem;color:var(--muted);margin-bottom:10px}
+.src-label::before{content:"📘 "}
+.extra{background:linear-gradient(180deg,rgba(245,196,81,.08),rgba(245,196,81,.03));border:1px solid rgba(245,196,81,.4);border-radius:var(--radius);padding:18px 20px;margin:18px 0}
+.extra .lab{color:var(--warn);font-weight:700;font-size:.85rem;margin-bottom:8px}
+.extra .lab::before{content:"⚡ "}
 .extra p,.extra li{color:#f0e3c0}
 
-.cli{background:#050b12; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow-x:auto; margin:14px 0; direction:ltr; text-align:left; white-space:pre}
+.cli{background:#050b12;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:14px 0;direction:ltr;text-align:left;white-space:pre;font-family:'IBM Plex Mono',monospace;font-size:.82rem;line-height:1.6}
+.cli b{color:var(--accent)}
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:460px}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:start}
+th{background:var(--panel2);color:var(--accent)}
+.mono-cell{font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:left}
 
-.table-wrap{overflow-x:auto; margin:14px 0; -webkit-overflow-scrolling:touch}
-table{width:100%; border-collapse:collapse; font-size:.9rem; min-width:460px}
-th,td{border:1px solid var(--line); padding:9px 12px; text-align:start}
-th{background:var(--panel2); color:var(--accent)}
-.mono-cell{font-family:'IBM Plex Mono',monospace; direction:ltr; text-align:left}
+.img-card{background:#050b12;border:1px solid var(--line);border-radius:12px;padding:14px;margin:16px 0}
+.img-card figcaption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:10px}
+.img-fallback{display:none;text-align:center;padding:26px 14px;background:var(--panel2);border:1px dashed var(--line);border-radius:10px;color:#dbe4f0;font-size:.9rem}
 
-/* ===== real image with graceful fallback ===== */
-.img-card{background:#050b12; border:1px solid var(--line); border-radius:12px; padding:14px; margin:16px 0}
-.img-card figcaption{font-size:.78rem; color:var(--muted); text-align:center; margin-top:10px; font-family:'Tajawal',sans-serif}
-.img-fallback{display:none; flex-direction:column; align-items:center; gap:8px; padding:30px 16px; text-align:center; background:var(--panel2); border-radius:10px; border:1px dashed var(--line)}
-.img-fallback .ic{font-size:2rem}
-.img-fallback .desc-en{color:#dbe4f0; font-size:.9rem; max-width:520px}
-.img-fallback .desc-ar{color:var(--muted); font-size:.85rem; max-width:520px; font-family:'Tajawal',sans-serif; direction:rtl}
-.img-fallback .hint{font-size:.72rem; color:var(--warn); font-family:'Tajawal',sans-serif; margin-top:4px}
-
-/* header field diagram (custom-built grid) */
-.hdr-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:3px; direction:ltr; margin:16px 0}
-.hdr-grid .f{background:var(--panel2); border:1px solid var(--line); padding:10px 6px; text-align:center; font-size:.72rem; border-radius:5px; color:#cfe3f7}
-.hdr-grid .f b{display:block; font-size:.8rem; color:var(--accent); margin-bottom:2px; font-family:'IBM Plex Mono',monospace}
-.hdr-grid .span2{grid-column:span 2}
-.hdr-grid .span4{grid-column:span 4}
-
-.quiz-intro{color:var(--muted); font-size:.9rem; margin-bottom:18px; font-family:'Tajawal',sans-serif}
-.q-card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px; margin-bottom:16px}
-.q-card .q-top{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px}
-.q-card .q-num{color:var(--accent); font-size:.8rem; font-weight:700; font-family:'Tajawal',sans-serif}
-.q-card .q-text{font-weight:600; margin-bottom:14px; font-size:1.02rem}
-.opt{display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--line); border-radius:8px; margin-bottom:8px; cursor:pointer; transition:.15s}
+.quiz-intro{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+.q-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:16px}
+.q-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.q-num{color:var(--accent);font-size:.8rem;font-weight:700}
+.q-text{font-weight:600;margin-bottom:14px;font-size:1.02rem}
+.q-card[data-lang=ar] .q-text,.q-card[data-lang=ar] .explain,.q-card[data-lang=ar] .opt span{font-family:'Tajawal',sans-serif;direction:rtl;text-align:right}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:.15s}
 .opt:hover{border-color:var(--accent2)}
 .opt input{accent-color:var(--accent)}
-.opt.correct{border-color:var(--good); background:rgba(56,209,122,.1)}
-.opt.wrong{border-color:var(--bad); background:rgba(239,90,114,.1)}
-.opt.disabled{pointer-events:none; opacity:.85}
-.q-actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
-.btn{background:var(--accent2); color:#04141a; border:none; padding:9px 18px; border-radius:8px; font-weight:700; cursor:pointer; font-family:'Tajawal',sans-serif; font-size:.9rem}
-.btn.secondary{background:transparent; border:1px solid var(--line); color:var(--muted)}
-.btn.tiny{padding:5px 12px; font-size:.75rem}
-.btn:disabled{opacity:.4; cursor:not-allowed}
-.explain{display:none; margin-top:12px; padding:12px 14px; background:var(--panel2); border-radius:8px; border-inline-start:3px solid var(--accent); font-size:.9rem; color:#c7d4e6; font-family:'Tajawal',sans-serif}
+.opt.correct{border-color:var(--good);background:rgba(56,209,122,.1)}
+.opt.wrong{border-color:var(--bad);background:rgba(239,90,114,.1)}
+.opt.disabled{pointer-events:none;opacity:.9}
+.q-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn{background:var(--accent2);color:#04141a;border:none;padding:9px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem}
+.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn.tiny{padding:5px 12px;font-size:.75rem}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.explain{display:none;margin-top:12px;padding:12px 14px;background:var(--panel2);border-radius:8px;border-inline-start:3px solid var(--accent);font-size:.9rem;color:#c7d4e6}
 .explain.show{display:block}
-.q-result{font-size:.85rem; font-weight:700; margin-top:8px; font-family:'Tajawal',sans-serif}
-.q-result.ok{color:var(--good)} .q-result.no{color:var(--bad)}
-.recap-badge{display:inline-block; background:var(--panel2); color:var(--accent); font-size:.72rem; padding:3px 10px; border-radius:99px; margin-bottom:10px; font-family:'Tajawal',sans-serif}
+.q-result{font-size:.85rem;font-weight:700;margin-top:8px}
+.q-result.ok{color:var(--good)}.q-result.no{color:var(--bad)}
 
-.lesson-nav{max-width:1180px; margin:50px auto 0; padding:20px 20px; display:flex; justify-content:space-between; border-top:1px solid var(--line); gap:12px}
-.lesson-nav a{color:var(--text); text-decoration:none; background:var(--panel); border:1px solid var(--line); padding:12px 18px; border-radius:10px; font-size:.9rem; display:flex; flex-direction:column; gap:2px; flex:1; font-family:'Tajawal',sans-serif}
-.lesson-nav a .k{color:var(--muted); font-size:.75rem}
-.lesson-nav a strong{color:var(--accent); font-family:'IBM Plex Sans',sans-serif}
-.source-footer{max-width:1180px; margin:20px auto; padding:0 20px; color:var(--muted); font-size:.78rem; text-align:center; font-family:'Tajawal',sans-serif}
+.lesson-nav{max-width:1180px;margin:50px auto 0;padding:20px;display:flex;justify-content:space-between;border-top:1px solid var(--line);gap:12px}
+.lesson-nav a{color:var(--text);text-decoration:none;background:var(--panel);border:1px solid var(--line);padding:12px 18px;border-radius:10px;font-size:.9rem;display:flex;flex-direction:column;gap:2px;flex:1}
+.lesson-nav a .k{color:var(--muted);font-size:.75rem}
+.lesson-nav a strong{color:var(--accent)}
+.lesson-nav a.next{text-align:right;align-items:flex-end}
+.source-footer{max-width:1180px;margin:20px auto;padding:0 20px;color:var(--muted);font-size:.78rem;text-align:center}
+
+/* ===== reusable self-drawn diagrams (cheap CSS, always renders, no image download needed) ===== */
+.diagram{background:#050b12;border:1px solid var(--line);border-radius:12px;padding:20px;margin:16px 0}
+.diagram .cap{text-align:center;color:var(--muted);font-size:.78rem;margin-top:10px}
+.osi-stack{display:flex;flex-direction:column;gap:4px}
+.osi-stack .layer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-radius:8px;font-weight:600;color:#04141a}
+.osi-stack .layer span.num{opacity:.65;font-size:.8rem;margin-inline-end:8px}
+.L7{background:#3ee6d6}.L6{background:#5fd1e6}.L5{background:#6dbaf0}.L4{background:#6d8dff}.L3{background:#8f7dfc}.L2{background:#b57bf0}.L1{background:#e07be0}
+.stack-h{display:flex;gap:4px;direction:ltr;flex-wrap:wrap}
+.stack-h .seg{flex:1;min-width:90px;text-align:center;padding:14px 8px;border-radius:8px;color:#04141a;font-family:'IBM Plex Mono',monospace;font-size:.82rem}
+.ip32{display:flex;gap:4px;direction:ltr}
+.ip32 .oct{flex:1;text-align:center;padding:14px 6px;border-radius:8px;font-family:'IBM Plex Mono',monospace}
+.ip32 .net{background:#6d8dff;color:#04141a}.ip32 .host{background:#e07be0;color:#04141a}
+.ip32 .lbl{font-size:.7rem;opacity:.85;display:block;margin-top:4px}
+.bits-row{display:flex;direction:ltr;gap:2px;margin:8px 0;font-family:'IBM Plex Mono',monospace;font-size:.82rem}
+.bits-row .bit{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);padding:6px 2px;border-radius:4px}
+.class-bar{display:flex;direction:ltr;border-radius:8px;overflow:hidden;margin:6px 0;font-family:'IBM Plex Mono',monospace;font-size:.78rem}
+.class-bar div{padding:10px 4px;text-align:center;color:#04141a}
+.cb-net{background:#6d8dff}.cb-host{background:#e07be0}
+.hdr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;direction:ltr}
+.hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:10px 6px;text-align:center;font-size:.72rem;border-radius:5px;color:#cfe3f7}
+.hdr-grid .f b{display:block;font-size:.8rem;color:var(--accent);margin-bottom:2px;font-family:'IBM Plex Mono',monospace}
+.hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
 </style>
 </head>
 <body class="lang-en">
 
 <div class="topbar">
-  <div class="brand"><span class="dot"></span> مذاكرة CCNA 200-301 <span class="lesson-tag">— Network Fundamentals</span></div>
+  <div class="brand"><span class="dot"></span>
+    <span class="en">CCNA 200-301 Study</span><span class="ar">مذاكرة CCNA 200-301</span>
+    <span class="lesson-tag">— Network Fundamentals</span></div>
   <div class="progress-wrap"><div class="progress-bar"></div></div>
   <div class="langswitch">
     <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
@@ -140,362 +150,129 @@ th{background:var(--panel2); color:var(--accent)}
   </div>
   <div class="lesson-tag">3 / 11</div>
 </div>
-
-<div class="shell">
-  <nav class="toc">
-    <div class="toc-title">On this page</div>
-    <a href="#intro">Overview</a>
-    <a href="#fields">Header fields</a>
-    <a href="#flags">IP Flags</a>
-    <a href="#example">Real packet</a>
-    <a href="#quiz">Quiz</a>
-  </nav>
-
-  <main>
-    <div class="hero">
-      <div class="osi-chip">📍 Position in <b>OSI Model</b> — Layer 3 (Network), the payload of Ethernet frames</div>
-      <h1>IPv4 Packet Header</h1>
-      <div class="sub">الدرس الثالث — هيدر حزمة IPv4 بالتفصيل</div>
-    </div>
-
-    <section id="recap">
-      <div class="recap-badge">🔁 Quick recap — previous lesson (IPv4 addressing)</div>
-      <h2>Recap quiz <span class="h-ar">امتحان سريع على الدرس اللي فات</span></h2>
-      <div id="recapArea"></div>
-    </section>
-
-    <section id="intro">
-      <h2>Overview <span class="h-ar">نظرة عامة</span></h2>
-      <div class="src">
-        <div class="para-block">
-          <p class="p-en">The IPv4 header has quite some fields. Let's take a look at them and explain what everything is used for.</p>
-          <p class="p-ar">هيدر IPv4 فيه شوية حقول (fields). هنشرح كل واحد منهم لوحده ونوضح هو بيتعمل لإيه.</p>
-          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 Translate / ترجم</button>
-        </div>
-
-        <figure class="img-card">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/IPv4%20Header.svg"
-               alt="IPv4 header field layout"
-               onerror="imgFail(this)">
-          <div class="img-fallback">
-            <div class="ic">🖼️</div>
-            <div class="desc-en">Diagram not available: a 20-byte grid showing the IPv4 header fields — Version | IHL | Type of Service | Total Length, then Identification | Flags | Fragment Offset, then TTL | Protocol | Header Checksum, then 32-bit Source Address, then 32-bit Destination Address, then Options/Padding, then Data.</div>
-            <div class="desc-ar">الصورة مش متاحة: جدول 20 بايت بيوضح حقول هيدر IPv4 — Version | IHL | Type of Service | Total Length، بعدين Identification | Flags | Fragment Offset، بعدين TTL | Protocol | Header Checksum، بعدين Source Address (32 بت)، بعدين Destination Address (32 بت)، بعدين Options/Padding، وأخيرًا Data.</div>
-            <div class="hint">🔍 ابحث في جوجل صور عن: "IPv4 header format diagram"</div>
-          </div>
-          <figcaption>The custom field-by-field diagram built below covers the exact same information, no image needed to follow along.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section id="fields">
-      <h2>The fields, one by one <span class="h-ar">الحقول واحد واحد</span></h2>
-      <div class="src">
-        <div class="hdr-grid">
-          <div class="f span2"><b>Version (4 bit)</b>IPv4 → always 4</div>
-          <div class="f span2"><b>IHL — Header Length (4 bit)</b>header length in 32-bit units</div>
-          <div class="f span4"><b>Type of Service (8 bit)</b>used for QoS</div>
-          <div class="f span2"><b>Total Length (16 bit)</b>header + data, in bytes</div>
-          <div class="f span2"><b>Identification (16 bit)</b>same ID on every fragment of one packet</div>
-          <div class="f"><b>IP Flags (3 bit)</b>0 / DF / MF</div>
-          <div class="f span2"><b>Fragment Offset (13 bit)</b>position of this fragment</div>
-          <div class="f"><b>TTL (8 bit)</b>-1 per hop</div>
-          <div class="f"><b>Protocol (8 bit)</b>TCP=6 / UDP=17</div>
-          <div class="f span2"><b>Header Checksum (16 bit)</b>error check on header</div>
-          <div class="f span4"><b>Source Address (32 bit)</b></div>
-          <div class="f span4"><b>Destination Address (32 bit)</b></div>
-          <div class="f span4"><b>IP Option (variable)</b>rarely used, optional</div>
-          <div class="f span4"><b>Data</b>the actual payload</div>
-        </div>
-
-        <div class="para-block">
-          <ul class="li-en">
-            <li><b>Version:</b> tells us which IP version we're using — only IPv4 uses this header, so you will always find decimal value <span class="mono">4</span> here.</li>
-            <li><b><span class="term">Header Length<span class="tip">طول الهيدر</span></span> (IHL):</b> a 4-bit field, the length of the IP header in 32-bit increments. The minimum header length is 20 bytes, so with 32-bit increments you would see value <span class="mono">5</span>. The maximum 4-bit value is 15, so the maximum header length is 60 bytes. Also called the Internet Header Length.</li>
-            <li><b>Type of Service:</b> used for <span class="term">QoS<span class="tip">جودة الخدمة — Quality of Service</span></span>. There are 8 bits we can use to mark the packet, giving it certain treatment.</li>
-            <li><b>Total Length:</b> a 16-bit field indicating the entire size of the IP packet (header and data) in bytes. Minimum size is 20 bytes (no data), maximum is 65,535 bytes — the highest value you can create with 16 bits.</li>
-            <li><b>Identification:</b> if the IP packet is fragmented, each fragmented packet uses the same 16-bit identification number to identify which IP packet they belong to.</li>
-            <li><b>Fragment Offset:</b> a 13-bit field that specifies the position of the fragment in the original fragmented IP packet.</li>
-            <li><b>Time to Live (TTL):</b> every time an IP packet passes through a router, the TTL field is decremented by 1. Once it hits 0, the router drops the packet and sends an <span class="term">ICMP<span class="tip">بروتوكول رسائل التحكم بالإنترنت — هندرسه في درس لاحق</span></span> time-exceeded message to the sender. 8 bits, used to prevent packets from looping around forever (routing loops).</li>
-            <li><b>Protocol:</b> an 8-bit field telling us which protocol is encapsulated in the IP packet — for example TCP has value 6, UDP has value 17.</li>
-            <li><b>Header Checksum:</b> a 16-bit field storing a checksum of the header; the receiver can use it to check for errors in the header.</li>
-            <li><b>Source Address / Destination Address:</b> the 32-bit source and destination IP addresses.</li>
-            <li><b>IP Option:</b> not used often, optional, variable length. Using this field increases the value in the header length field. Example: "source route", where the sender requests a certain routing path.</li>
-          </ul>
-          <ul class="li-ar">
-            <li><b>Version:</b> بيقول إحنا مستخدمين إصدار IP رقم كام — IPv4 بس هو اللي بيستخدم الهيدر ده، فهتلاقي دايمًا رقم <span class="mono">4</span> هنا.</li>
-            <li><b>Header Length (IHL):</b> حقل 4 بت بيحدد طول الهيدر بوحدات كل وحدة = 32 بت. أقل طول للهيدر هو 20 بايت، يعني القيمة هتبقى <span class="mono">5</span>. أكبر قيمة ممكنة بـ4 بت هي 15، يعني أكبر طول ممكن للهيدر 60 بايت. اسمه كمان Internet Header Length.</li>
-            <li><b>Type of Service:</b> بيُستخدم لـ QoS (جودة الخدمة). في 8 بت نقدر نستخدمهم نعلّم الحزمة ونديها معاملة معينة.</li>
-            <li><b>Total Length:</b> حقل 16 بت بيوضح الحجم الكلي للحزمة (هيدر + بيانات) بالبايت. أقل حجم 20 بايت (من غير بيانات)، وأكبر حجم 65,535 بايت — أكبر رقم ممكن بـ16 بت.</li>
-            <li><b>Identification:</b> لو الحزمة اتقسّمت (fragmented)، كل جزء بياخد نفس رقم الـ 16 بت ده عشان نعرف إنهم كلهم من نفس الحزمة الأصلية.</li>
-            <li><b>Fragment Offset:</b> حقل 13 بت بيحدد مكان الجزء ده في الحزمة الأصلية اللي اتقسمت.</li>
-            <li><b>Time to Live (TTL):</b> كل مرة الحزمة بتعدي على راوتر، قيمة TTL بتقل واحد. لما توصل صفر، الراوتر بيرمي الحزمة ويبعت رسالة ICMP "time exceeded" للمرسل. 8 بت، الهدف إنها تمنع الحزمة من الدوران للأبد لو في routing loop.</li>
-            <li><b>Protocol:</b> حقل 8 بت بيقول أي بروتوكول متغلّف جوه IP — مثلاً TCP قيمته 6، UDP قيمته 17.</li>
-            <li><b>Header Checksum:</b> حقل 16 بت بيخزن checksum للهيدر؛ المستقبل بيستخدمه يتأكد مفيش أخطاء في الهيدر.</li>
-            <li><b>Source / Destination Address:</b> عنوان IP المصدر والوجهة، كل واحد 32 بت.</li>
-            <li><b>IP Option:</b> نادرًا ما بيُستخدم، اختياري، وطوله متغير. استخدامه بيزوّد قيمة حقل طول الهيدر. مثال: "source route" حيث المرسل بيطلب مسار معين للتوجيه.</li>
-          </ul>
-          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 Translate / ترجم</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="flags">
-      <h2>IP Flags in detail <span class="h-ar">تفاصيل حقل الأعلام</span></h2>
-      <div class="src">
-        <div class="para-block">
-          <ul class="li-en">
-            <li>The first bit is always set to <span class="mono">0</span>.</li>
-            <li>The second bit is called the <b>DF (Don't Fragment)</b> bit and indicates that this packet should not be fragmented.</li>
-            <li>The third bit is called the <b>MF (More Fragments)</b> bit and is set on all fragmented packets except the last one.</li>
-          </ul>
-          <ul class="li-ar">
-            <li>البت الأول دايمًا بيبقى <span class="mono">0</span>.</li>
-            <li>البت التاني اسمه <b>DF (Don't Fragment)</b> ومعناه إن الحزمة دي ماينفعش تتقسّم.</li>
-            <li>البت التالت اسمه <b>MF (More Fragments)</b> وبيتحط على كل أجزاء الحزمة المقسّمة إلا آخر جزء.</li>
-          </ul>
-          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 Translate / ترجم</button>
-        </div>
-        <div class="extra">
-          <div class="lab">Note (outside the source)</div>
-          <p>DF flag ده مهم جدًا في الشبكات الحقيقية — بيُستخدم في اكتشاف الـ MTU (Path MTU Discovery). لو راوتر محتاج يقسّم الحزمة بس DF متحط، الراوتر هيرميها ويبعت ICMP يبلغ إن الحزمة كبيرة قوي.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="example">
-      <h2>A real packet in Wireshark <span class="h-ar">حزمة حقيقية في Wireshark</span></h2>
-      <div class="src">
-        <div class="para-block">
-          <p class="p-en">Here's a real-life example of how these fields look in an actual captured packet:</p>
-          <p class="p-ar">ده مثال حقيقي لشكل الحقول دي في حزمة اتلقطت فعليًا:</p>
-          <button class="tr-btn" onclick="toggleParaLang(this)">🌐 Translate / ترجم</button>
-        </div>
-        <div class="table-wrap">
-        <table>
-          <tr><th>Field</th><th>Value</th></tr>
-          <tr><td>Version</td><td class="mono-cell">4</td></tr>
-          <tr><td>Header Length</td><td class="mono-cell">20 bytes</td></tr>
-          <tr><td>Total Length</td><td class="mono-cell">1155</td></tr>
-          <tr><td>Identification</td><td class="mono-cell">0x69de (27102)</td></tr>
-          <tr><td>Flags</td><td class="mono-cell">0x02 (Don't Fragment)</td></tr>
-          <tr><td>Fragment offset</td><td class="mono-cell">0</td></tr>
-          <tr><td>Time to live</td><td class="mono-cell">128</td></tr>
-          <tr><td>Protocol</td><td class="mono-cell">TCP (6)</td></tr>
-          <tr><td>Header checksum</td><td class="mono-cell">0xd064 [validation disabled]</td></tr>
-          <tr><td>Source</td><td class="mono-cell">192.168.82.147</td></tr>
-          <tr><td>Destination</td><td class="mono-cell">192.243.232.2</td></tr>
-        </table>
-        </div>
-      </div>
-    </section>
-
-    <section id="summary">
-      <h2>Summary <span class="h-ar">ملخص الدرس</span></h2>
-      <div class="src">
-        <ul class="li-en">
-          <li>The IPv4 header is 20 bytes minimum, up to 60 bytes with Options.</li>
-          <li>Protocol, Source Address, Destination Address and Data are the fields you'll use the most day to day.</li>
-          <li>TTL protects the network from routing loops; Flags & Fragment Offset handle fragmentation.</li>
-        </ul>
-        <ul class="li-ar">
-          <li>هيدر IPv4 أقله 20 بايت، وممكن يوصل 60 بايت لو في Options.</li>
-          <li>Protocol و Source Address و Destination Address و Data هما أكتر حقول هتستخدمها في الشغل اليومي.</li>
-          <li>TTL بيحمي الشبكة من الـ routing loops؛ Flags و Fragment Offset بيتعاملوا مع التقسيم (fragmentation).</li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="quiz">
-      <h2>🧠 Lesson quiz <span class="h-ar">اختبار الدرس</span></h2>
-      <p class="quiz-intro">Wrong = red, correct = green. You can reveal the correct answer any time, and translate any question with the 🌐 button.</p>
-      <div id="quizArea"></div>
-    </section>
-  </main>
+<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#intro"><span class="en">Overview</span><span class="ar">نظرة عامة</span></a><a href="#fields"><span class="en">Header fields</span><span class="ar">حقول الهيدر</span></a><a href="#flags"><span class="en">IP Flags</span><span class="ar">أعلام IP</span></a><a href="#example"><span class="en">Real packet</span><span class="ar">حزمة حقيقية</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">Position in OSI: Layer 3 (Network), the payload of Ethernet frames</span><span class="ar">مكانه في OSI: الطبقة 3 (Network)، جوه Ethernet frames</span></div>
+<h1>IPv4 Packet Header</h1><div class="sub"><span class="en">Lesson 3 — every field in the IPv4 header, explained</span><span class="ar">الدرس الثالث — هيدر حزمة IPv4 بالتفصيل</span></div></div><section id="recap"><span class="badge"><span class="en">🔁 Recap — previous lesson</span><span class="ar">🔁 مراجعة — الدرس السابق</span></span><h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2><div id="recapArea"></div></section><section id="intro"><h2><span class="en">Overview</span><span class="ar">نظرة عامة</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>The IPv4 header has quite some fields. Let's take a look at them and explain what everything is used for.</p></div><div class="ar"><p>هيدر IPv4 فيه شوية حقول (fields). هنشرح كل واحد منهم لوحده ونوضح هو بيتعمل لإيه.</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="diagram"><div class="hdr-grid">
+<div class="f span2"><b>Version (4 bit)</b>IPv4 → always 4</div>
+<div class="f span2"><b>IHL — Header Length (4 bit)</b>header length in 32-bit units</div>
+<div class="f span4"><b>Type of Service (8 bit)</b>used for QoS</div>
+<div class="f span2"><b>Total Length (16 bit)</b>header + data, in bytes</div>
+<div class="f span2"><b>Identification (16 bit)</b>same ID on every fragment of one packet</div>
+<div class="f"><b>IP Flags (3 bit)</b>0 / DF / MF</div>
+<div class="f span2"><b>Fragment Offset (13 bit)</b>position of this fragment</div>
+<div class="f"><b>TTL (8 bit)</b>-1 per hop</div>
+<div class="f"><b>Protocol (8 bit)</b>TCP=6 / UDP=17</div>
+<div class="f span2"><b>Header Checksum (16 bit)</b>error check on header</div>
+<div class="f span4"><b>Source Address (32 bit)</b></div>
+<div class="f span4"><b>Destination Address (32 bit)</b></div>
+<div class="f span4"><b>IP Option (variable)</b>rarely used, optional</div>
+<div class="f span4"><b>Data</b>the actual payload</div>
+</div><div class="cap"><span class="en">The 20-byte minimum IPv4 header, field by field (self-drawn, matches the PDF layout)</span><span class="ar">هيدر IPv4 الأدنى 20 بايت، حقل حقل (رسم بسيط بنفس ترتيب المرجع)</span></div></div></div></section><section id="fields"><h2><span class="en">The fields, one by one</span><span class="ar">الحقول واحد واحد</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><ul>
+<li><b>Version:</b> tells us which IP version we're using &mdash; only IPv4 uses this header, so you will always find decimal value <span class="mono">4</span> here.</li>
+<li><b><span class="term">Header Length<span class="tip">طول الهيدر</span></span> (IHL):</b> a 4-bit field, the length of the IP header in 32-bit increments. The minimum header length is 20 bytes, so with 32-bit increments you would see value <span class="mono">5</span>. The maximum 4-bit value is 15, so the maximum header length is 60 bytes. Also called the Internet Header Length.</li>
+<li><b>Type of Service:</b> used for <span class="term">QoS<span class="tip">جودة الخدمة — Quality of Service</span></span>. There are 8 bits we can use to mark the packet, giving it certain treatment.</li>
+<li><b>Total Length:</b> a 16-bit field indicating the entire size of the IP packet (header and data) in bytes. Minimum size is 20 bytes (no data), maximum is 65,535 bytes &mdash; the highest value you can create with 16 bits.</li>
+<li><b>Identification:</b> if the IP packet is fragmented, each fragmented packet uses the same 16-bit identification number to identify which IP packet they belong to.</li>
+<li><b>Fragment Offset:</b> a 13-bit field that specifies the position of the fragment in the original fragmented IP packet.</li>
+<li><b>Time to Live (TTL):</b> every time an IP packet passes through a router, the TTL field is decremented by 1. Once it hits 0, the router drops the packet and sends an <span class="term">ICMP<span class="tip">بروتوكول رسائل التحكم بالإنترنت — هندرسه في درس لاحق</span></span> time-exceeded message to the sender. 8 bits, used to prevent packets from looping around forever (routing loops).</li>
+<li><b>Protocol:</b> an 8-bit field telling us which protocol is encapsulated in the IP packet &mdash; for example TCP has value 6, UDP has value 17.</li>
+<li><b>Header Checksum:</b> a 16-bit field storing a checksum of the header; the receiver can use it to check for errors in the header.</li>
+<li><b>Source Address / Destination Address:</b> the 32-bit source and destination IP addresses.</li>
+<li><b>IP Option:</b> not used often, optional, variable length. Using this field increases the value in the header length field. Example: "source route", where the sender requests a certain routing path.</li>
+</ul></div><div class="ar"><ul>
+<li><b>Version:</b> بيقول إحنا مستخدمين إصدار IP رقم كام &mdash; IPv4 بس هو اللي بيستخدم الهيدر ده، فهتلاقي دايمًا رقم <span class="mono">4</span> هنا.</li>
+<li><b>Header Length (IHL):</b> حقل 4 بت بيحدد طول الهيدر بوحدات كل وحدة = 32 بت. أقل طول للهيدر هو 20 بايت، يعني القيمة هتبقى <span class="mono">5</span>. أكبر قيمة ممكنة بـ4 بت هي 15، يعني أكبر طول ممكن للهيدر 60 بايت. اسمه كمان Internet Header Length.</li>
+<li><b>Type of Service:</b> بيُستخدم لـ QoS (جودة الخدمة). في 8 بت نقدر نستخدمهم نعلّم الحزمة ونديها معاملة معينة.</li>
+<li><b>Total Length:</b> حقل 16 بت بيوضح الحجم الكلي للحزمة (هيدر + بيانات) بالبايت. أقل حجم 20 بايت (من غير بيانات)، وأكبر حجم 65,535 بايت &mdash; أكبر رقم ممكن بـ16 بت.</li>
+<li><b>Identification:</b> لو الحزمة اتقسّمت (fragmented)، كل جزء بياخد نفس رقم الـ 16 بت ده عشان نعرف إنهم كلهم من نفس الحزمة الأصلية.</li>
+<li><b>Fragment Offset:</b> حقل 13 بت بيحدد مكان الجزء ده في الحزمة الأصلية اللي اتقسمت.</li>
+<li><b>Time to Live (TTL):</b> كل مرة الحزمة بتعدي على راوتر، قيمة TTL بتقل واحد. لما توصل صفر، الراوتر بيرمي الحزمة ويبعت رسالة ICMP "time exceeded" للمرسل. 8 بت، الهدف إنها تمنع الحزمة من الدوران للأبد لو في routing loop.</li>
+<li><b>Protocol:</b> حقل 8 بت بيقول أي بروتوكول متغلّف جوه IP &mdash; مثلاً TCP قيمته 6، UDP قيمته 17.</li>
+<li><b>Header Checksum:</b> حقل 16 بت بيخزن checksum للهيدر؛ المستقبل بيستخدمه يتأكد مفيش أخطاء في الهيدر.</li>
+<li><b>Source / Destination Address:</b> عنوان IP المصدر والوجهة، كل واحد 32 بت.</li>
+<li><b>IP Option:</b> نادرًا ما بيُستخدم، اختياري، وطوله متغير. استخدامه بيزوّد قيمة حقل طول الهيدر. مثال: "source route" حيث المرسل بيطلب مسار معين للتوجيه.</li>
+</ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="extra"><div class="lab"><span class="en">Extra explanation (not from the PDF — a different way to picture it)</span><span class="ar">شرح إضافي (مش من المرجع — طريقة تانية تتخيل بيها الفكرة)</span></div><div class="para-block"><div class="en">Three quick everyday analogies: <b>TTL</b> is like the number of transfers printed on a bus ticket &mdash; each transfer stamps it once, and once the stamps run out the ticket (packet) is thrown away instead of riding forever. <b>Header Checksum</b> is like a padlock seal on a shipped box: if the seal looks tampered with on arrival, you know not to trust what's inside without even opening it. <b>Fragmentation (Flags + Fragment Offset)</b> is like mailing a large poster that doesn't fit one envelope: you cut it into numbered strips (Identification says "these strips belong together", Fragment Offset says "this strip goes here"), and the last strip is marked so the receiver knows when to stop taping pieces together.</div><div class="ar">3 تشبيهات يومية سريعة: <b>TTL</b> زي عدد مرات التحويل المطبوعة على تذكرة أتوبيس &mdash; كل تحويل بيخُتم مرة، ولما الأختام تخلص التذكرة (الحزمة) بترمى بدل ما تفضل ماشية للأبد. <b>Header Checksum</b> زي ختم قفل على طرد اتشحن: لو الختم شكله متلعب فيه لما يوصل، تعرف متثقش اللي جواه من غير ما تفتحه أصلاً. <b>التقسيم (Flags + Fragment Offset)</b> زي إنك تبعت بوستر كبير مش داخل في ظرف واحد: بتقطعه شرايح مرقّمة (Identification بيقول "الشرايح دي مع بعض"، وFragment Offset بيقول "الشريحة دي مكانها هنا")، وآخر شريحة بتتعلّم عشان المستقبل يعرف يوقف يلزّق.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></div></section><section id="flags"><h2><span class="en">IP Flags in detail</span><span class="ar">تفاصيل حقل الأعلام</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><ul>
+<li>The first bit is always set to <span class="mono">0</span>.</li>
+<li>The second bit is called the <b>DF (Don't Fragment)</b> bit and indicates that this packet should not be fragmented.</li>
+<li>The third bit is called the <b>MF (More Fragments)</b> bit and is set on all fragmented packets except the last one.</li>
+</ul></div><div class="ar"><ul>
+<li>البت الأول دايمًا بيبقى <span class="mono">0</span>.</li>
+<li>البت التاني اسمه <b>DF (Don't Fragment)</b> ومعناه إن الحزمة دي ماينفعش تتقسّم.</li>
+<li>البت التالت اسمه <b>MF (More Fragments)</b> وبيتحط على كل أجزاء الحزمة المقسّمة إلا آخر جزء.</li>
+</ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="extra"><div class="lab"><span class="en">Extra explanation (not from the PDF — a different way to picture it)</span><span class="ar">شرح إضافي (مش من المرجع — طريقة تانية تتخيل بيها الفكرة)</span></div><div class="para-block"><div class="en">DF matters a lot in real networks &mdash; it is exactly how Path MTU Discovery works. If a router needs to fragment a packet that has DF set, it drops it instead and sends back an ICMP message saying "too big"; the sender then shrinks its packet size and tries again.</div><div class="ar">DF ده مهم جدًا في الشبكات الحقيقية &mdash; بيُستخدم بالظبط في اكتشاف الـ MTU (Path MTU Discovery). لو راوتر محتاج يقسّم حزمة عليها DF، هيرميها بدل ما يقسّمها ويبعت ICMP يقول "كبيرة قوي"؛ المرسل وقتها بيصغّر حجم حزمته ويحاول تاني.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></div></section><section id="example"><h2><span class="en">A real packet in Wireshark</span><span class="ar">حزمة حقيقية في Wireshark</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>Here's a real-life example of how these fields look in an actual captured packet:</p></div><div class="ar"><p>ده مثال حقيقي لشكل الحقول دي في حزمة اتلقطت فعليًا:</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="table-wrap"><table><tr><th>Field</th><th>Value</th></tr><tr><td>Version</td><td class="mono-cell">4</td></tr><tr><td>Header Length</td><td class="mono-cell">20 bytes</td></tr><tr><td>Total Length</td><td class="mono-cell">1155</td></tr><tr><td>Identification</td><td class="mono-cell">0x69de (27102)</td></tr><tr><td>Flags</td><td class="mono-cell">0x02 (Don't Fragment)</td></tr><tr><td>Fragment offset</td><td class="mono-cell">0</td></tr><tr><td>Time to live</td><td class="mono-cell">128</td></tr><tr><td>Protocol</td><td class="mono-cell">TCP (6)</td></tr><tr><td>Header checksum</td><td class="mono-cell">0xd064 [validation disabled]</td></tr><tr><td>Source</td><td class="mono-cell">192.168.82.147</td></tr><tr><td>Destination</td><td class="mono-cell">192.243.232.2</td></tr></table></div></div></section><section id="summary"><h2><span class="en">Summary</span><span class="ar">ملخص الدرس</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><ul><li>The IPv4 header is 20 bytes minimum, up to 60 bytes with Options.</li><li>Protocol, Source Address, Destination Address and Data are the fields you'll use the most day to day.</li><li>TTL protects the network from routing loops; Flags and Fragment Offset handle fragmentation.</li></ul></div><div class="ar"><ul><li>هيدر IPv4 أقله 20 بايت، وممكن يوصل 60 بايت لو في Options.</li><li>Protocol و Source Address و Destination Address و Data هما أكتر حقول هتستخدمها في الشغل اليومي.</li><li>TTL بيحمي الشبكة من الـ routing loops؛ Flags و Fragment Offset بيتعاملوا مع التقسيم.</li></ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></section><section id="quiz"><h2><span class="en">🧠 Lesson quiz</span><span class="ar">🧠 اختبار الدرس</span></h2><p class="quiz-intro"><span class="en">Wrong = red, correct = green. Reveal the answer any time and translate any question with the 🌐 button.</span><span class="ar">غلط = أحمر، صح = أخضر. تقدر تشوف الإجابة في أي وقت وتترجم أي سؤال بزرار 🌐.</span></p><div id="quizArea"></div></section></main></div><div class="lesson-nav">
+<a class="prev" href="lesson-02-ipv4.html"><span class="k"><span class="en">Previous</span><span class="ar">السابق</span></span><strong>IPv4 Addressing</strong></a>
+<a class="next" href="lesson-04-arp.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>ARP</strong></a>
 </div>
-
-<div class="lesson-nav">
-  <a class="prev" href="lesson-02-ipv4.html"><span class="k">Previous</span><strong>IPv4 Addressing</strong></a>
-  <a class="next" href="lesson-04-arp.html"><span class="k">Next</span><strong>ARP</strong></a>
-</div>
-
-<div class="source-footer">Primary source: 03-ipv4_packet_header.pdf — NetworkLessons.com (CCNA 200-301, Unit 2) · Yellow boxes = extra notes outside the source · Field diagram is custom-built, not reproduced from the PDF</div>
-
+<div class="source-footer">Source: 03-ipv4_packet_header.pdf — NetworkLessons.com (CCNA 200-301, Unit 2) · Yellow boxes = extra explanations outside the source, alternate ways to picture the idea, not for memorization as exam-source facts · Diagrams are lightweight self-drawn boxes, not reproductions of the PDF's images.</div>
 <script>
-function setGlobalLang(lang){
-  document.body.classList.toggle('lang-ar', lang==='ar');
-  document.body.classList.toggle('lang-en', lang==='en');
-  document.getElementById('btnEn').classList.toggle('active', lang==='en');
-  document.getElementById('btnAr').classList.toggle('active', lang==='ar');
-  document.querySelectorAll('.para-block').forEach(pb=>{
-    const en = pb.querySelector('.p-en, .li-en');
-    const ar = pb.querySelector('.p-ar, .li-ar');
-    if(en) en.style.display=''; if(ar) ar.style.display='';
-    const btn = pb.querySelector('.tr-btn');
-    if(btn) btn.textContent = '🌐 ' + (lang==='en' ? 'Translate / ترجم' : 'English / انجليزي');
-  });
-  document.querySelectorAll('.q-card').forEach(c=>applyQuizLang(c, lang));
+const UI = {
+  en:{tr:'🌐 Translate to Arabic', trBack:'🌐 Show English', check:'Check answer', reveal:'Reveal correct answer', q:'Question', ok:'✔ Correct', no:'✘ Not quite — the correct answer is green', qlang:'🌐 العربية'},
+  ar:{tr:'🌐 Translate to Arabic', trBack:'🌐 عرض بالإنجليزية', check:'تحقق من الإجابة', reveal:'إظهار الإجابة الصحيحة', q:'سؤال', ok:'✔ إجابة صحيحة', no:'✘ غير صحيحة — الصح باللون الأخضر', qlang:'🌐 English'}
+};
+const curLang = () => document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+function arShown(pb){ return (curLang()==='ar') !== pb.classList.contains('flip'); }
+function updBtn(pb){
+  const b = pb.querySelector(':scope > .tr-btn'); if(!b) return;
+  b.textContent = arShown(pb) ? '🌐 Show English' : UI.en.tr;
+  if(curLang()==='ar'){ b.textContent = arShown(pb) ? UI.ar.trBack : '🌐 Translate to Arabic'; }
 }
-function toggleParaLang(btn){
-  const pb = btn.closest('.para-block');
-  const en = pb.querySelector('.p-en, .li-en');
-  const ar = pb.querySelector('.p-ar, .li-ar');
-  const showingEn = getComputedStyle(en).display !== 'none';
-  en.style.display = showingEn ? 'none' : '';
-  ar.style.display = showingEn ? '' : 'none';
+function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
+function setGlobalLang(l){
+  document.body.classList.toggle('lang-ar', l==='ar');
+  document.body.classList.toggle('lang-en', l==='en');
+  document.documentElement.lang = l;
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.getElementById('btnAr').classList.toggle('active', l==='ar');
+  document.querySelectorAll('.para-block').forEach(pb=>{ pb.classList.remove('flip'); updBtn(pb); });
+  document.querySelectorAll('.q-card').forEach(c=>applyQuizLang(c, l));
 }
 function imgFail(img){
+  if(img.dataset.alt && !img.dataset.tried){ img.dataset.tried='1'; img.src=img.dataset.alt; return; }
   img.style.display='none';
-  const fb = img.parentElement.querySelector('.img-fallback');
-  if(fb) fb.style.display='flex';
+  const f=img.parentElement.querySelector('.img-fallback'); if(f) f.style.display='block';
 }
-document.querySelectorAll('.term').forEach(t=>{
-  t.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    document.querySelectorAll('.term.tap').forEach(o=>{ if(o!==t) o.classList.remove('tap'); });
-    t.classList.toggle('tap');
-  });
-});
-document.addEventListener('click', ()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+document.querySelectorAll('.para-block').forEach(updBtn);
+document.querySelectorAll('.term').forEach(t=>t.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.term.tap').forEach(o=>{if(o!==t)o.classList.remove('tap')});t.classList.toggle('tap');}));
+document.addEventListener('click',()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+const tocLinks=[...document.querySelectorAll('.toc a')], secs=tocLinks.map(a=>document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll',()=>{let i=0;secs.forEach((s,k)=>{if(s&&s.getBoundingClientRect().top<120)i=k});tocLinks.forEach(a=>a.classList.remove('active'));tocLinks[i]&&tocLinks[i].classList.add('active');});
 
-const tocLinks = document.querySelectorAll('.toc a');
-const sections = [...tocLinks].map(a=>document.querySelector(a.getAttribute('href')));
-window.addEventListener('scroll', ()=>{
-  let idx = 0;
-  sections.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top < 120) idx = i; });
-  tocLinks.forEach(a=>a.classList.remove('active'));
-  if(tocLinks[idx]) tocLinks[idx].classList.add('active');
-});
-
-// ===== quiz (bilingual per item, defaults to English / follows global toggle) =====
-function applyQuizLang(card, lang){
-  const item = card._item;
-  card.querySelector('.q-text').textContent = lang==='en' ? item.q.en : item.q.ar;
-  card.querySelectorAll('.opt span').forEach((s,i)=>{ s.textContent = lang==='en' ? item.opts[i].en : item.opts[i].ar; });
-  card.querySelector('.explain').textContent = lang==='en' ? item.explain.en : item.explain.ar;
-  card.dataset.lang = lang;
+function applyQuizLang(card, l){
+  const it=card._item, Tx=UI[l];
+  card.dataset.lang=l;
+  card.querySelector('.q-text').textContent=it.q[l];
+  card.querySelectorAll('.opt span').forEach((s,i)=>s.textContent=it.opts[i][l]);
+  card.querySelector('.explain').textContent=it.explain[l];
+  card.querySelector('.q-num').textContent=Tx.q+' '+card._n+' / '+card._total;
+  card.querySelector('.check').textContent=Tx.check;
+  card.querySelector('.reveal').textContent=Tx.reveal;
+  card.querySelector('.qlang').textContent=Tx.qlang;
+  const r=card.querySelector('.q-result'); if(card._state) r.textContent = card._state==='ok'?Tx.ok:Tx.no;
 }
-function buildQuiz(containerId, items){
-  const area = document.getElementById(containerId);
-  items.forEach((item, qi)=>{
-    const card = document.createElement('div');
-    card.className = 'q-card';
-    card._item = item;
-    card.innerHTML = `
-      <div class="q-top">
-        <div class="q-num">Question ${qi+1} / ${items.length}</div>
-        <button class="btn secondary tiny qlang">🌐 AR / EN</button>
-      </div>
-      <div class="q-text"></div>
-      <div class="opts"></div>
-      <div class="q-actions">
-        <button class="btn check" disabled>Check answer</button>
-        <button class="btn secondary reveal">Reveal correct answer</button>
-      </div>
-      <div class="q-result"></div>
-      <div class="explain"></div>
-    `;
-    const optsWrap = card.querySelector('.opts');
-    item.opts.forEach((opt, oi)=>{
-      const label = document.createElement('label');
-      label.className = 'opt';
-      label.innerHTML = `<input type="radio" name="${containerId}-q${qi}" value="${oi}"> <span></span>`;
-      optsWrap.appendChild(label);
-    });
+function buildQuiz(id, items){
+  const area=document.getElementById(id);
+  items.forEach((it,qi)=>{
+    const card=document.createElement('div'); card.className='q-card'; card._item=it; card._n=qi+1; card._total=items.length;
+    card.innerHTML=`<div class="q-top"><div class="q-num"></div><button class="btn secondary tiny qlang"></button></div>
+      <div class="q-text"></div><div class="opts"></div>
+      <div class="q-actions"><button class="btn check" disabled></button><button class="btn secondary reveal"></button></div>
+      <div class="q-result"></div><div class="explain"></div>`;
+    const ow=card.querySelector('.opts');
+    it.opts.forEach((o,oi)=>{const lb=document.createElement('label');lb.className='opt';lb.innerHTML=`<input type="radio" name="${id}-${qi}" value="${oi}"><span></span>`;ow.appendChild(lb);});
     area.appendChild(card);
-    applyQuizLang(card, document.body.classList.contains('lang-ar') ? 'ar' : 'en');
-
-    card.querySelector('.qlang').addEventListener('click', ()=>{
-      applyQuizLang(card, card.dataset.lang === 'en' ? 'ar' : 'en');
-    });
-
-    const checkBtn = card.querySelector('.check');
-    const revealBtn = card.querySelector('.reveal');
-    const result = card.querySelector('.q-result');
-    const explainBox = card.querySelector('.explain');
-    const optLabels = card.querySelectorAll('.opt');
-    card.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener('change', ()=>{ checkBtn.disabled=false; }));
-
-    checkBtn.addEventListener('click', ()=>{
-      const chosen = card.querySelector('input[type=radio]:checked');
-      if(!chosen) return;
-      const chosenIdx = parseInt(chosen.value);
-      optLabels.forEach((l,i)=>{
-        l.classList.add('disabled');
-        if(i === item.correct) l.classList.add('correct');
-        else if(i === chosenIdx) l.classList.add('wrong');
-      });
-      result.textContent = chosenIdx === item.correct ? '✔ Correct' : '✘ Not quite — correct one is green';
-      result.className = 'q-result ' + (chosenIdx === item.correct ? 'ok' : 'no');
-      explainBox.classList.add('show');
-      checkBtn.disabled = true;
-    });
-    revealBtn.addEventListener('click', ()=>{
-      optLabels.forEach((l,i)=>{ l.classList.add('disabled'); if(i === item.correct) l.classList.add('correct'); });
-      explainBox.classList.add('show');
-    });
+    applyQuizLang(card, curLang());
+    card.querySelector('.qlang').onclick=()=>applyQuizLang(card, card.dataset.lang==='en'?'ar':'en');
+    const chk=card.querySelector('.check'), rev=card.querySelector('.reveal'), ex=card.querySelector('.explain'), labs=card.querySelectorAll('.opt'), res=card.querySelector('.q-result');
+    card.querySelectorAll('input').forEach(r=>r.onchange=()=>chk.disabled=false);
+    chk.onclick=()=>{const c=card.querySelector('input:checked'); if(!c) return; const ci=+c.value;
+      labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct'); else if(i===ci) l.classList.add('wrong');});
+      card._state = ci===it.correct?'ok':'no'; res.className='q-result '+card._state; res.textContent=UI[card.dataset.lang][card._state];
+      ex.classList.add('show'); chk.disabled=true;};
+    rev.onclick=()=>{labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct');}); ex.classList.add('show');};
   });
 }
 
-buildQuiz('recapArea', [
-  {
-    q:{en:"An IPv4 address is split into which two parts?", ar:"عنوان IPv4 بيتقسم لأي جزئين؟"},
-    opts:[{en:"Version + Checksum",ar:"Version + Checksum"},{en:"Network + Host",ar:"Network + Host"},{en:"Source + Options",ar:"Source + Options"},{en:"TTL + Protocol",ar:"TTL + Protocol"}],
-    correct:1,
-    explain:{en:"Every IPv4 address has a network part and a host part — the subnet mask decides where one ends and the other begins.", ar:"كل عنوان IPv4 فيه جزء network وجزء host — الـ subnet mask هو اللي بيحدد فين يخلص الأول ويبدأ التاني."}
-  },
-  {
-    q:{en:"What is 127.0.0.1 used for?", ar:"عنوان 127.0.0.1 بيُستخدم لإيه؟"},
-    opts:[{en:"Broadcast",ar:"Broadcast"},{en:"Multicast",ar:"Multicast"},{en:"Loopback (testing your own machine)",ar:"Loopback (اختبار جهازك بنفسك)"},{en:"Default gateway",ar:"Default gateway"}],
-    correct:2,
-    explain:{en:"127.0.0.0/8 is reserved for loopback — used to check your local IP stack is working.", ar:"مدى 127.0.0.0/8 محجوز لـ loopback — بتستخدمه تتأكد إن الـ IP stack بتاع جهازك شغال."}
-  },
-  {
-    q:{en:"192.168.1.255 in the 192.168.1.X network is the...", ar:"192.168.1.255 في شبكة 192.168.1.X هو..."},
-    opts:[{en:"Network address",ar:"عنوان الشبكة"},{en:"Broadcast address",ar:"عنوان البث"},{en:"Default gateway",ar:"البوابة الافتراضية"},{en:"A normal usable host address",ar:"عنوان جهاز عادي قابل للاستخدام"}],
-    correct:1,
-    explain:{en:"Setting all host bits to 1 gives the broadcast address — it can never be assigned to a device.", ar:"لما تحط كل بتات الـ host = 1 بتطلع بعنوان البث — ودا مينفعش يتحط على جهاز أبدًا."}
-  }
-]);
-
-buildQuiz('quizArea', [
-  {
-    q:{en:"What decimal value does the Version field always show for IPv4?", ar:"حقل Version بيوري قيمة عشرية كام دايمًا في IPv4؟"},
-    opts:[{en:"6",ar:"6"},{en:"4",ar:"4"},{en:"20",ar:"20"},{en:"1",ar:"1"}],
-    correct:1,
-    explain:{en:"Only IPv4 uses this header, so the Version field is always decimal 4.", ar:"الهيدر ده بيستخدمه IPv4 بس، فحقل Version دايمًا بيبقى 4."}
-  },
-  {
-    q:{en:"What is the minimum length of the IPv4 header?", ar:"إيه أقل طول ممكن لهيدر IPv4؟"},
-    opts:[{en:"60 bytes",ar:"60 بايت"},{en:"32 bytes",ar:"32 بايت"},{en:"20 bytes",ar:"20 بايت"},{en:"4 bytes",ar:"4 بايت"}],
-    correct:2,
-    explain:{en:"Minimum header length is 20 bytes (IHL value of 5); it can grow up to 60 bytes with Options.", ar:"أقل طول للهيدر 20 بايت (قيمة IHL = 5)؛ وممكن يوصل لـ 60 بايت لو في Options."}
-  },
-  {
-    q:{en:"Which field tells you whether the payload is TCP or UDP?", ar:"أي حقل بيقولك البيانات جواها TCP ولا UDP؟"},
-    opts:[{en:"Protocol",ar:"Protocol"},{en:"Flags",ar:"Flags"},{en:"Identification",ar:"Identification"},{en:"Header Checksum",ar:"Header Checksum"}],
-    correct:0,
-    explain:{en:"The Protocol field carries the transport-layer protocol number — TCP = 6, UDP = 17.", ar:"حقل Protocol بيحمل رقم بروتوكول طبقة النقل — TCP = 6، UDP = 17."}
-  },
-  {
-    q:{en:"A router decrements TTL to 0. What happens?", ar:"لو راوتر نقّص TTL ووصل صفر، هيحصل إيه؟"},
-    opts:[{en:"The packet is forwarded anyway",ar:"الحزمة بتتفوّر عادي"},{en:"The router drops the packet and sends an ICMP time-exceeded message",ar:"الراوتر بيرمي الحزمة ويبعت رسالة ICMP time-exceeded"},{en:"The packet is fragmented",ar:"الحزمة بتتقسّم"},{en:"The router reboots",ar:"الراوتر بيعمل reboot"}],
-    correct:1,
-    explain:{en:"TTL exists to prevent routing loops. Once it hits 0, the packet is dropped and the sender is notified via ICMP.", ar:"TTL موجود عشان يمنع الـ routing loops. لما توصل صفر، الحزمة بترمى والمرسل بياخد إشعار بـ ICMP."}
-  },
-  {
-    q:{en:"What does the DF flag mean when set?", ar:"علم DF لما يكون متحط، معناه إيه؟"},
-    opts:[{en:"Deliver Fast",ar:"Deliver Fast"},{en:"This packet must not be fragmented",ar:"الحزمة دي ماينفعش تتقسّم"},{en:"Discard Frame",ar:"Discard Frame"},{en:"Default Forwarding",ar:"Default Forwarding"}],
-    correct:1,
-    explain:{en:"DF = Don't Fragment. If a router needs to fragment a packet that has DF set, it drops it instead and reports back via ICMP.", ar:"DF = Don't Fragment. لو راوتر محتاج يقسّم حزمة عليها DF، هيرميها بدل ما يقسّمها ويبلّغ بـ ICMP."}
-  },
-  {
-    q:{en:"What is the maximum possible Total Length value with a 16-bit field?", ar:"إيه أكبر قيمة ممكنة لحقل Total Length وهو 16 بت؟"},
-    opts:[{en:"1500",ar:"1500"},{en:"4096",ar:"4096"},{en:"65,535",ar:"65,535"},{en:"255",ar:"255"}],
-    correct:2,
-    explain:{en:"16 bits can represent values up to 65,535 — the theoretical max size of an IPv4 packet (header + data).", ar:"الـ16 بت ممكن تمثل قيم لحد 65,535 — أقصى حجم نظري لحزمة IPv4 (هيدر + بيانات)."}
-  }
-]);
+buildQuiz('recapArea',[{q:{en:'An IPv4 address is split into which two parts?',ar:'عنوان IPv4 بيتقسم لأي جزئين؟'},opts:[{en:'Version + Checksum',ar:'Version + Checksum'},{en:'Network + Host',ar:'Network + Host'},{en:'Source + Options',ar:'Source + Options'},{en:'TTL + Protocol',ar:'TTL + Protocol'}],correct:1,explain:{en:'Every IPv4 address has a network part and a host part — the subnet mask decides where one ends and the other begins.',ar:'كل عنوان IPv4 فيه جزء network وجزء host — الـ subnet mask هو اللي بيحدد فين يخلص الأول ويبدأ التاني.'}},{q:{en:'What is 127.0.0.1 used for?',ar:'عنوان 127.0.0.1 بيُستخدم لإيه؟'},opts:[{en:'Broadcast',ar:'Broadcast'},{en:'Multicast',ar:'Multicast'},{en:'Loopback — testing your own machine',ar:'Loopback — اختبار جهازك بنفسك'},{en:'Default gateway',ar:'Default gateway'}],correct:2,explain:{en:'127.0.0.0/8 is reserved for loopback, used to check your local IP stack is working.',ar:'مدى 127.0.0.0/8 محجوز لـ loopback — بتستخدمه تتأكد إن الـ IP stack بتاع جهازك شغال.'}},{q:{en:'192.168.1.255 in the 192.168.1.X network is the...',ar:'192.168.1.255 في شبكة 192.168.1.X هو...'},opts:[{en:'Network address',ar:'عنوان الشبكة'},{en:'Broadcast address',ar:'عنوان البث'},{en:'Default gateway',ar:'البوابة الافتراضية'},{en:'A normal usable host address',ar:'عنوان جهاز عادي قابل للاستخدام'}],correct:1,explain:{en:'Setting all host bits to 1 gives the broadcast address — it can never be assigned to a device.',ar:'لما تحط كل بتات الـ host = 1 بتطلع بعنوان البث — ودا مينفعش يتحط على جهاز أبدًا.'}}]);
+buildQuiz('quizArea',[{q:{en:'What decimal value does the Version field always show for IPv4?',ar:'حقل Version بيوري قيمة عشرية كام دايمًا في IPv4؟'},opts:[{en:'6',ar:'6'},{en:'4',ar:'4'},{en:'20',ar:'20'},{en:'1',ar:'1'}],correct:1,explain:{en:'Only IPv4 uses this header, so the Version field is always decimal 4.',ar:'الهيدر ده بيستخدمه IPv4 بس، فحقل Version دايمًا بيبقى 4.'}},{q:{en:'What is the minimum length of the IPv4 header?',ar:'إيه أقل طول ممكن لهيدر IPv4؟'},opts:[{en:'60 bytes',ar:'60 بايت'},{en:'32 bytes',ar:'32 بايت'},{en:'20 bytes',ar:'20 بايت'},{en:'4 bytes',ar:'4 بايت'}],correct:2,explain:{en:'Minimum header length is 20 bytes (IHL value of 5); it can grow up to 60 bytes with Options.',ar:'أقل طول للهيدر 20 بايت (قيمة IHL = 5)؛ وممكن يوصل لـ 60 بايت لو في Options.'}},{q:{en:'Which field tells you whether the payload is TCP or UDP?',ar:'أي حقل بيقولك البيانات جواها TCP ولا UDP؟'},opts:[{en:'Protocol',ar:'Protocol'},{en:'Flags',ar:'Flags'},{en:'Identification',ar:'Identification'},{en:'Header Checksum',ar:'Header Checksum'}],correct:0,explain:{en:'The Protocol field carries the transport-layer protocol number — TCP = 6, UDP = 17.',ar:'حقل Protocol بيحمل رقم بروتوكول طبقة النقل — TCP = 6، UDP = 17.'}},{q:{en:'A router decrements TTL to 0. What happens?',ar:'لو راوتر نقّص TTL ووصل صفر، هيحصل إيه؟'},opts:[{en:'The packet is forwarded anyway',ar:'الحزمة بتتفوّر عادي'},{en:'The router drops the packet and sends an ICMP time-exceeded message',ar:'الراوتر بيرمي الحزمة ويبعت رسالة ICMP time-exceeded'},{en:'The packet is fragmented',ar:'الحزمة بتتقسّم'},{en:'The router reboots',ar:'الراوتر بيعمل reboot'}],correct:1,explain:{en:'TTL exists to prevent routing loops. Once it hits 0, the packet is dropped and the sender is notified via ICMP.',ar:'TTL موجود عشان يمنع الـ routing loops. لما توصل صفر، الحزمة بترمى والمرسل بياخد إشعار بـ ICMP.'}},{q:{en:'What does the DF flag mean when set?',ar:'علم DF لما يكون متحط، معناه إيه؟'},opts:[{en:'Deliver Fast',ar:'Deliver Fast'},{en:'This packet must not be fragmented',ar:'الحزمة دي ماينفعش تتقسّم'},{en:'Discard Frame',ar:'Discard Frame'},{en:'Default Forwarding',ar:'Default Forwarding'}],correct:1,explain:{en:"DF = Don't Fragment. If a router needs to fragment a packet that has DF set, it drops it instead and reports back via ICMP.",ar:"DF = Don't Fragment. لو راوتر محتاج يقسّم حزمة عليها DF، هيرميها بدل ما يقسّمها ويبلّغ بـ ICMP."}},{q:{en:'What is the maximum possible Total Length value with a 16-bit field?',ar:'إيه أكبر قيمة ممكنة لحقل Total Length وهو 16 بت؟'},opts:[{en:'1500',ar:'1500'},{en:'4096',ar:'4096'},{en:'65,535',ar:'65,535'},{en:'255',ar:'255'}],correct:2,explain:{en:'16 bits can represent values up to 65,535 — the theoretical max size of an IPv4 packet (header + data).',ar:'الـ16 بت ممكن تمثل قيم لحد 65,535 — أقصى حجم نظري لحزمة IPv4 (هيدر + بيانات).'}}]);
 </script>
 </body>
 </html>
