@@ -14,7 +14,7 @@ for file in html_files:
         # The easiest robust way is to just replace 'function setGlobalLang(l){' and then add it inside somewhere
         # But maybe it's better to just regex replace
         pattern = r'(function setGlobalLang\(l\)\{)'
-        replacement = r'\1\n  localStorage.setItem(\'ccna-lang\', l);'
+        replacement = r"\1\n  localStorage.setItem('ccna-lang', l);"
         
         content = re.sub(pattern, replacement, content)
         

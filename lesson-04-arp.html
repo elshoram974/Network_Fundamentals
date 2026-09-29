@@ -517,7 +517,7 @@ function updBtn(pb){
 }
 function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
 function setGlobalLang(l){
-  localStorage.setItem(\'ccna-lang\', l);
+  localStorage.setItem('ccna-lang', l);
   document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';
   document.body.classList.toggle('lang-ar', l==='ar');
   document.body.classList.toggle('lang-en', l==='en');
