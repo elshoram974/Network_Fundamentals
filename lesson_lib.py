@@ -364,6 +364,16 @@ function buildQuiz(id, items){
     rev.onclick=()=>{labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct');}); ex.classList.add('show');};
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  const btnEn = document.getElementById('btnEn');
+  const btnAr = document.getElementById('btnAr');
+  if(btnEn && btnAr) {
+    btnEn.classList.toggle('active', savedLang==='en');
+    btnAr.classList.toggle('active', savedLang==='ar');
+  }
+});
 </script>
 '''
 
