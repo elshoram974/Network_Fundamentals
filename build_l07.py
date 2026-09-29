@@ -138,7 +138,21 @@ recap = [
       [("Acknowledgment Number", "رقم التأكيد"), ("Sequence Number", "رقم التسلسل"), ("Source Port", "منفذ المصدر"), ("Window Size", "حجم النافذة")],
       1,
       "The Sequence Number is used to ensure data is reassembled in the exact original order.",
-      "رقم التسلسل (Sequence Number) يستخدم لضمان إعادة تجميع البيانات بالترتيب الأصلي الدقيق.")
+      "رقم التسلسل (Sequence Number) يستخدم لضمان إعادة تجميع البيانات بالترتيب الأصلي الدقيق."),
+    
+    Q("You are troubleshooting a connection issue at a telecom company. The client initiates a TCP connection but never receives a response. Which TCP flag was sent by the client in the first packet?",
+      "أنت تقوم باستكشاف مشكلة اتصال في شركة اتصالات. يبدأ العميل اتصال TCP ولكنه لا يتلقى رداً أبدًا. ما هو الـ TCP flag الذي تم إرساله بواسطة العميل في الحزمة الأولى؟",
+      [("FIN", "FIN"), ("ACK", "ACK"), ("SYN", "SYN"), ("RST", "RST")],
+      2,
+      "The first step of the TCP 3-way handshake is the client sending a SYN (Synchronize) packet.",
+      "الخطوة الأولى في مصافحة TCP الثلاثية هي قيام العميل بإرسال حزمة SYN."),
+    
+    Q("During a network assessment, you notice a large number of packets with both SYN and ACK flags set. What does this represent in the TCP 3-way handshake?",
+      "أثناء تقييم الشبكة، لاحظت عددًا كبيرًا من الحزم التي تحتوي على كل من SYN و ACK. ماذا يمثل هذا في مصافحة TCP؟",
+      [("The client terminating the connection", "إنهاء العميل للاتصال"), ("The server's response to the client's initial request", "رد الخادم على الطلب الأولي للعميل"), ("The final acknowledgment from the client", "التأكيد النهائي من العميل"), ("A reset signal due to an error", "إشارة إعادة تعيين بسبب خطأ")],
+      1,
+      "The SYN-ACK packet is the second step of the handshake, sent by the server back to the client.",
+      "حزمة SYN-ACK هي الخطوة الثانية في المصافحة، ويتم إرسالها من الخادم إلى العميل.")
 ]
 
 quiz = [
@@ -200,7 +214,19 @@ quiz = [
       ],
       0,
       "A window size of 0 is a explicit 'Stop' signal from the receiver indicating it cannot buffer any more data until it processes what it already has.",
-      "حجم نافذة 0 هو إشارة 'توقف' صريحة من المستقبل تشير إلى أنه لا يمكنه تخزين أي بيانات أخرى حتى يعالج ما لديه بالفعل.")
+      "حجم نافذة 0 هو إشارة 'توقف' صريحة من المستقبل تشير إلى أنه لا يمكنه تخزين أي بيانات أخرى حتى يعالج ما لديه بالفعل."),
+    
+    Q("You are monitoring a heavily utilized microwave link at WE. Users complain about slow downloads. Wireshark shows continuous TCP Window Size value of 0. What is the most likely cause?",
+      "أنت تراقب وصلة ميكروويف مستخدمة بكثافة في شركة WE. يشتكي المستخدمون من بطء التنزيل. يظهر Wireshark أن قيمة TCP Window Size تساوي 0 بشكل مستمر. ما هو السبب الأكثر ترجيحاً؟",
+      [
+          ("The microwave link is physically degraded", "تدهور حالة وصلة الميكروويف مادياً"),
+          ("The sender is out of data to transmit", "لم يعد لدى المرسل بيانات لإرسالها"),
+          ("The receiving device is overwhelmed and its receive buffer is full", "جهاز الاستقبال مثقل وذاكرة التخزين المؤقت للاستقبال ممتلئة"),
+          ("The DNS server is unreachable", "لا يمكن الوصول إلى خادم DNS")
+      ],
+      2,
+      "A window size of 0 always indicates that the receiver's buffer is full and it cannot process incoming data fast enough.",
+      "يشير حجم النافذة 0 دائماً إلى أن ذاكرة المستقبل ممتلئة ولا يمكنه معالجة البيانات الواردة بالسرعة الكافية.")
 ]
 
 build(

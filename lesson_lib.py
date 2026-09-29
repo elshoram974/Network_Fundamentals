@@ -244,7 +244,7 @@ function toggleTheme() {
 
 <div class="topbar">
   <div class="brand">
-    <a href="index.html">Index</a>
+    <a href="index.html">الفهرس</a>
     <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
   </div>
   <div class="controls">
@@ -357,10 +357,9 @@ def build(num, pct, title, sub, chip_en, chip_ar, toc_items, body_sections,
 <a class="next" href="{next_href}"><span class="k">{bi('Next Lesson','الدرس التالي')}</span><strong>{next_label}</strong></a>
 </div>
 <div class="source-footer">
-    <p>{bi("Reference material:","المادة المرجعية:")} <a href="pdfs/{source_pdf}" target="_blank">{source_pdf}</a> (CCNA 200-301, Unit 2)</p>
-    <p>{extra_footnote}</p>
+    Source: <a href="pdfs/{source_pdf}" target="_blank">{source_pdf}</a> — Cisco.com (CCNA 200-301, Unit 2) · Yellow boxes = extra explanations outside the source, alternate ways to picture the idea, not for memorization as exam-source facts · Diagrams are lightweight self-drawn boxes, not reproductions of the PDF's images.
 </div>'''
-    tail = SCRIPT + "<script>\\nbuildQuiz('recapArea',[" + ','.join(recap_items) + "]);\\nbuildQuiz('quizArea',[" + ','.join(quiz_items) + "]);\\n</script>\\n</body>\\n</html>\\n"
+    tail = SCRIPT + "<script>\nbuildQuiz('recapArea',[" + ','.join(recap_items) + "]);\nbuildQuiz('quizArea',[" + ','.join(quiz_items) + "]);\n</script>\n</body>\n</html>\n"
     out = head + shell + foot + tail
     with open(out_path, 'w', encoding='utf8') as f:
         f.write(out)

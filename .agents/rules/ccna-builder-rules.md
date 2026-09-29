@@ -17,7 +17,8 @@ These rules apply whenever you are instructed to generate, update, or build CCNA
 
 ## 3. Navigation & PDF Linking
 - The topbar MUST include an "Index" link pointing back to `index.html` (the central table of contents).
-- The footer MUST include a clear, clickable link to the original PDF file (e.g., `pdfs/01-introduction_to_the_osi_model.pdf`).
+- The footer MUST include a clear, clickable link to the original PDF file formatted exactly like this:
+  `Source: <a href="pdfs/01-introduction_to_the_osi_model.pdf" target="_blank">01-introduction_to_the_osi_model.pdf</a> — NetworkLessons.com (CCNA 200-301, Unit 2) · Yellow boxes = extra explanations outside the source, alternate ways to picture the idea, not for memorization as exam-source facts · Diagrams are lightweight self-drawn boxes, not reproductions of the PDF's images.`
 - The PDF link MUST use `target="_blank"` so it opens in a new tab for reference without closing the lesson.
 
 ## 4. Language Behavior (Bilingual)
@@ -29,3 +30,9 @@ These rules apply whenever you are instructed to generate, update, or build CCNA
 ## 5. Development Workflow
 - NEVER hand-roll HTML templates from scratch. Always use the provided `lesson_lib.py` functions (`build()`, `src()`, `bi()`, `extra()`, `img()`, `diagram()`, etc.) to guarantee that all lessons stay visually and behaviorally identical.
 - Check and verify your Python scripts before execution to ensure there are no syntax errors.
+
+## 6. Question Generation (CCNA & Telecom Interviews)
+- **Pre-lesson (Recap) Quiz**: You must generate questions testing the *previous* lesson's concepts before introducing the new content.
+- **Post-lesson Quiz**: You must generate distinct questions testing the *current* lesson's concepts at the end.
+- **Question Style**: Questions must mimic real Cisco CCNA exam questions and telecom company technical interviews (e.g., Vodafone, Orange, Etisalat, WE in Egypt). Focus on troubleshooting, practical application, protocols, and architecture rather than just rote definitions.
+- Questions between the pre-lesson and post-lesson quizzes must NOT be similar.
