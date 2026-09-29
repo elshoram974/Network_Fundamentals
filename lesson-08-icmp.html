@@ -59,12 +59,12 @@ code,.mono{font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:var(
 img{max-width:100%;height:auto;display:block;margin:0 auto}
 p,li,td,th{overflow-wrap:break-word;word-break:break-word;color:var(--text)}
 
-body.lang-en .ar{display:none!important}
-body.lang-ar .en{display:none!important}
-body.lang-en .flip .en{display:none!important}
-body.lang-en .flip .ar{display:block!important}
-body.lang-ar .flip .ar{display:none!important}
-body.lang-ar .flip .en{display:block!important}
+html.lang-en .ar{display:none!important}
+html.lang-ar .en{display:none!important}
+html.lang-en .flip .en{display:none!important}
+html.lang-en .flip .ar{display:block!important}
+html.lang-ar .flip .ar{display:none!important}
+html.lang-ar .flip .en{display:block!important}
 .ar{direction:rtl;text-align:start}
 span.ar{direction:rtl;unicode-bidi:isolate}
 ul.ar,ol.ar{padding-inline-start:0;padding-inline-end:22px}
@@ -259,7 +259,7 @@ const UI = {
   en:{tr:'🌐 Translate to Arabic', trBack:'🌐 Show English', check:'Check answer', reveal:'Reveal answer', q:'Question', ok:'Correct', no:'Incorrect', qlang:'🌐 العربية'},
   ar:{tr:'🌐 ترجمة للعربية', trBack:'🌐 عرض الإنجليزية', check:'تحقق من الإجابة', reveal:'إظهار الإجابة', q:'سؤال', ok:'إجابة صحيحة', no:'إجابة خاطئة', qlang:'🌐 English'}
 };
-const curLang = () => document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+const curLang = () => document.documentElement.classList.contains('lang-ar') ? 'ar' : 'en';
 function arShown(pb){ return (curLang()==='ar') !== pb.classList.contains('flip'); }
 function updBtn(pb){
   const b = pb.querySelector(':scope > .tr-btn'); if(!b) return;
@@ -272,8 +272,8 @@ function updBtn(pb){
 function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
 function setGlobalLang(l){
   document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';
-  document.body.classList.remove('lang-en', 'lang-ar');
-  document.body.classList.add('lang-'+l);
+  document.documentElement.classList.remove('lang-en', 'lang-ar');
+  document.documentElement.classList.add('lang-'+l);
   document.documentElement.lang = l;
   document.documentElement.classList.remove('lang-en', 'lang-ar');
   document.documentElement.classList.add('lang-'+l);

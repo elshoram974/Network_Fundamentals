@@ -19,8 +19,8 @@ def process_file(filepath):
 
     # 2. Add document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr'; to setGlobalLang
     if "document.documentElement.dir =" not in html:
-        html = html.replace("document.body.classList.remove('lang-en', 'lang-ar');", 
-                            "document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';\n  document.body.classList.remove('lang-en', 'lang-ar');")
+        html = html.replace("document.documentElement.classList.remove('lang-en', 'lang-ar');", 
+                            "document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';\n  document.documentElement.classList.remove('lang-en', 'lang-ar');")
 
     # 3. Add Recap and Quiz to the TOC
     # The TOC looks like: <nav class="toc"><div class="toc-title"><span class="en">Contents</span><span class="ar">المحتويات</span></div><a href="#...

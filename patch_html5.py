@@ -15,8 +15,8 @@ def process_file(filepath):
     # 2. Update document.documentElement.dir in setGlobalLang
     if "document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';" not in html:
         html = html.replace(
-            "document.body.classList.remove('lang-en', 'lang-ar');",
-            "document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';\n  document.body.classList.remove('lang-en', 'lang-ar');"
+            "document.documentElement.classList.remove('lang-en', 'lang-ar');",
+            "document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';\n  document.documentElement.classList.remove('lang-en', 'lang-ar');"
         )
         
     # In case previous patch didn't add it perfectly because the string was slightly different in lesson-01:

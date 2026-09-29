@@ -46,8 +46,8 @@
 }
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.8;padding-bottom:100px;transition:background-color 0.2s, color 0.2s}
-body.lang-en .ar{display:none!important}
-body.lang-ar .en{display:none!important}
+html.lang-en .ar{display:none!important}
+html.lang-ar .en{display:none!important}
 .ar{direction:rtl;text-align:start}
 
 .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;transition:background 0.2s}
@@ -100,8 +100,8 @@ function toggleTheme() {
   localStorage.setItem('ccna-theme', current);
 }
 function setGlobalLang(l){
-  document.body.classList.remove('lang-en', 'lang-ar');
-  document.body.classList.add('lang-'+l);
+  document.documentElement.classList.remove('lang-en', 'lang-ar');
+  document.documentElement.classList.add('lang-'+l);
   document.documentElement.lang = l;
   document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
   document.getElementById('btnEn').classList.toggle('active', l==='en');

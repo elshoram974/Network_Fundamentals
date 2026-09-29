@@ -1333,7 +1333,7 @@ function renderExamMcqs() {{
     const card = document.createElement('div');
     card.className = 'q-card';
     card.id = 'mcq_card_' + idx;
-    card.dataset.lang = document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+    card.dataset.lang = document.documentElement.classList.contains('lang-ar') ? 'ar' : 'en';
 
     const topBar = document.createElement('div');
     topBar.className = 'q-top';
