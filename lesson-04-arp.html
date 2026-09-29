@@ -613,6 +613,16 @@ buildQuiz('quizArea',[
   opts:[{en:"Request = 2, Reply = 1",ar:"Request = 2، Reply = 1"},{en:"Request = 1, Reply = 2",ar:"Request = 1، Reply = 2"},{en:"Both = 1",ar:"الاتنين = 1"},{en:"Request = 0, Reply = 1",ar:"Request = 0، Reply = 1"}],correct:1,
   explain:{en:"The capture shows Opcode: request (1) and Opcode: reply (2).",ar:"الـ capture بيوري Opcode: request (1) وOpcode: reply (2)."}}
 ]);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  const btnEn = document.getElementById('btnEn');
+  const btnAr = document.getElementById('btnAr');
+  if(btnEn && btnAr) {
+    btnEn.classList.toggle('active', savedLang==='en');
+    btnAr.classList.toggle('active', savedLang==='ar');
+  }
+});
 </script>
 
 <footer style="text-align: center; padding: 20px; margin-top: 40px; font-weight: bold; border-top: 1px solid var(--line);">

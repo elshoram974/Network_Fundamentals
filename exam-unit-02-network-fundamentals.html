@@ -1004,6 +1004,16 @@ document.addEventListener("DOMContentLoaded", () => {
   renderExamMcqs();
   updateDashboard();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  const btnEn = document.getElementById('btnEn');
+  const btnAr = document.getElementById('btnAr');
+  if(btnEn && btnAr) {
+    btnEn.classList.toggle('active', savedLang==='en');
+    btnAr.classList.toggle('active', savedLang==='ar');
+  }
+});
 </script>
 
 <footer style="text-align: center; padding: 20px; margin-top: 40px; font-weight: bold; border-top: 1px solid var(--line);">
