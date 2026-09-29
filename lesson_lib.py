@@ -173,8 +173,8 @@ th,td{border-bottom:1px solid var(--line);padding:14px 16px;text-align:start}
 th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;letter-spacing:0.05em}
 .mono-cell{font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:start}
 
-.img-card{margin:40px 0}
-.img-card img{border:1px solid var(--line);border-radius:4px}
+.img-card{margin:40px 0;text-align:center}
+.img-card img{border:1px solid var(--line);border-radius:6px;max-width:100%;height:auto;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);background:#fff;display:inline-block}
 .img-card figcaption{font-size:0.9rem;color:var(--muted);text-align:center;margin-top:16px;font-style:italic}
 .img-fallback{display:none;padding:32px 24px;background:var(--panel2);border:1px solid var(--line);text-align:center}
 .img-fallback .fb-desc{color:var(--muted);margin-bottom:16px}
@@ -383,6 +383,7 @@ def build(num, pct, title, sub, chip_en, chip_ar, toc_items, body_sections,
         "08-icmp (internet control message protocol).pdf": "https://networklessons.com/ip-routing/icmp-internet-control-message-protocol",
         "09-introduction to dns.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-dns",
         "010-introduction to cisco ios cli (command-line interface).pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-the-cisco-ios-command-line-interface-cli",
+        "011-user mode and privileged mode security.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/user-mode-and-privileged-mode-security",
     }
     real_url = url_map.get(source_pdf, "https://networklessons.com/cisco/ccna-200-301")
     

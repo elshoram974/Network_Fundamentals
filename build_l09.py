@@ -60,6 +60,12 @@ sec_hierarchy = h2("hierarchy", "The DNS Hierarchy", "الهيكل الهرمي 
         '</div>',
         "The Inverted Tree Structure of DNS Hierarchy", "الهيكل الهرمي المقلوب لنظام أسماء النطاقات"
     ) +
+    img("images/lesson09/img_1.jpg", "DNS Hierarchy Inverted Tree Structure",
+        "The Hierarchical Inverted Tree of DNS (Root, TLDs, Domains, Hostnames)", "الهيكل الهرمي المقلوب لنظام أسماء النطاقات (الجذر، النطاقات العليا، النطاقات الفرعية)",
+        "DNS Hierarchy Diagram") +
+    img("images/web/dns_domain_names.svg", "Global Domain Name System Tree Structure Vector",
+        "Global DNS Domain Name Space and Tree Organization (RFC 1034)", "المخطط الشجري القياسي لمساحة أسماء نطاقات الإنترنت العالمية (RFC 1034)",
+        "DNS Domain Namespace Vector") +
     bl("<b>1. Root Name Servers:</b> At the very top are 13 logical root server authorities (named from a.root-servers.net to m.root-servers.net). These contain pointer information for all Top-Level Domain (TLD) extensions.",
        "<b>1. سيرفرات الجذر (Root Name Servers):</b> في قمة الهرم يوجد 13 عنوان منطقي لسيرفرات الجذر (من a.root-servers.net إلى m.root-servers.net). دي بتعرف أماكن السيرفرات المسؤولة عن كل امتدادات النطاقات العليا.") +
     bl("<b>2. Top-Level Domains (TLDs):</b> Divided into generic TLDs (gTLD) like .com, .org, .net, .biz, .edu, and country-code TLDs (ccTLD) like .eg (Egypt), .uk (United Kingdom), .de (Germany), and .ca (Canada).",
@@ -99,6 +105,9 @@ sec_resolution = h2("resolution", "How DNS Resolution Works", "كيف تعمل �
     cli("C:\\Users\\Vmware> <b>ipconfig /all | more</b>\n\nWindows IP Configuration\n   Host Name . . . . . . . . . . . . : vmware\n   DNS Suffix Search List. . . . . . : networklessons.local\n   IPv4 Address. . . . . . . . . . . : 10.56.100.1\n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : 10.56.100.254\n   <b>DNS Servers . . . . . . . . . . . : 10.56.100.253</b>") +
     bl("The host is configured to use <b>10.56.100.253</b> as its local DNS server. When the user opens a browser to visit <code>networklessons.com</code>, the host sends a DNS query to this server.",
        "الجهاز مضبوط إنه يستخدم <b>10.56.100.253</b> كسيرفر DNS محلي. لما المستخدم يفتح المتصفح ويدخل <code>networklessons.com</code>، الجهاز بيبعت طلب استعلام (DNS Query) للسيرفر ده.") +
+    img("images/lesson09/img_2.jpg", "DNS Request and Reply Process",
+        "Host Sending DNS Request and Receiving Resolved Reply from Local Server", "إرسال طلب استعلام DNS من الجهاز واستلام الرد بالعنوان من السيرفر المحلي",
+        "DNS Resolution Flow") +
     diagram(
         '<div style="font-family:monospace;display:flex;flex-direction:column;gap:12px;">'
         '<div style="display:flex;justify-content:space-between;align-items:center;background:var(--panel2);padding:12px;border:1px solid var(--line);border-radius:6px;">'
@@ -135,6 +144,9 @@ sec_transport = h2("transport", "Transport Layer: UDP vs TCP Port 53", "بروت
 sec_wireshark = h2("wireshark", "Wireshark Packet Analysis", "تحليل حزم DNS في برنامج Wireshark") + src(
     bl("Let's look at the actual packet capture when the host opens a web browser to visit <code>networklessons.com</code>:",
        "تعالوا نشوف حزم البيانات الحقيقية من برنامج Wireshark لما الجهاز بيفتح المتصفح ويزور <code>networklessons.com</code>:") +
+    img("images/lesson09/img_3.jpg", "Wireshark DNS Query capture on UDP port 53",
+        "Wireshark Capture: Standard DNS Query for networklessons.com over UDP Port 53", "التقاط حزمة استعلام DNS في برنامج Wireshark عبر منفذ UDP 53",
+        "Wireshark DNS Query Capture") +
     diagram(
         '<div style="font-family:monospace;background:var(--panel2);border:1px solid var(--line);padding:16px;border-radius:6px;font-size:0.85rem;line-height:1.6;">'
         '<span style="color:var(--muted)">Frame 1: 76 bytes on wire</span><br>'
@@ -146,10 +158,13 @@ sec_wireshark = h2("wireshark", "Wireshark Packet Analysis", "تحليل حزم 
         '&nbsp;&nbsp;Flags: 0x0100 Standard query<br>'
         '&nbsp;&nbsp;<b>Queries: networklessons.com: type A, class IN</b>'
         '</div>',
-        "Wireshark Capture: DNS Query over UDP port 53", "لقطة Wireshark: طلب استعلام DNS عبر UDP بورت 53"
+        "Wireshark Capture Details: DNS Query", "تفاصيل التقاط Wireshark: حزمة استعلام DNS"
     ) +
     bl("The host sends a UDP packet to destination port 53 on the DNS server (10.56.100.253). The query specifically asks for an <b>A record</b> (IPv4 address) for <code>networklessons.com</code>.",
        "الجهاز بيبعت حزمة UDP للبورت 53 على سيرفر الـ DNS (10.56.100.253). الطلب بيسأل تحديداً عن سجل من النوع <b>A record</b> (عنوان IPv4) لموقع <code>networklessons.com</code>.") +
+    img("images/lesson09/img_4.jpg", "Wireshark DNS Answer packet with resolved IP",
+        "Wireshark Capture: DNS Response with Resolved IP Address 95.85.36.216", "التقاط حزمة رد DNS في Wireshark متضمنة عنوان IP المحلول",
+        "Wireshark DNS Answer Capture") +
     diagram(
         '<div style="font-family:monospace;background:var(--panel2);border:1px solid var(--good);padding:16px;border-radius:6px;font-size:0.85rem;line-height:1.6;">'
         '<span style="color:var(--muted)">Frame 2: 92 bytes on wire</span><br>'
@@ -162,7 +177,7 @@ sec_wireshark = h2("wireshark", "Wireshark Packet Analysis", "تحليل حزم 
         '&nbsp;&nbsp;<b>Answers:</b><br>'
         '&nbsp;&nbsp;&nbsp;&nbsp;<b>networklessons.com: type A, class IN, addr 95.85.36.216</b>'
         '</div>',
-        "Wireshark Capture: DNS Response with Resolved IP Address", "لقطة Wireshark: رد سيرفر DNS بعنوان الـ IP المحلول"
+        "Wireshark Capture Details: DNS Response", "تفاصيل التقاط Wireshark: حزمة رد DNS"
     ) +
     bl("The DNS server responds with IP address <b>95.85.36.216</b>. Once the client receives this response, it can immediately begin the TCP 3-way handshake to establish a web session on port 80/443.",
        "سيرفر الـ DNS بيرد بعنوان الـ IP وهو <b>95.85.36.216</b>. بمجرد ما الجهاز يستلم الرد، يقدر فوراً يبدأ مصافحة TCP الثلاثية (3-way handshake) لفتح جلسة الويب على بورت 80 أو 443.")

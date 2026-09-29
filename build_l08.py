@@ -34,6 +34,9 @@ sec_what = h2("what", "What is ICMP?", "ما هو ICMP؟") + src(
 sec_header = h2("header", "ICMP Header", "ترويسة ICMP") + src(
     bl("The ICMP header is relatively simple compared to the TCP header we studied earlier. It consists of the following fields:",
        "ترويسة ICMP بسيطة نسبياً مقارنة بترويسة TCP اللي درسناها قبل كده. وتتكون من الحقول التالية:") +
+    img("images/lesson08/img_1.jpg", "ICMP Header Format and Fields",
+        "Structure of the ICMP Header (Type, Code, Checksum)", "هيكل ترويسة بروتوكول ICMP (النوع، الكود، فحص الأخطاء)",
+        "ICMP Header") +
     diagram(
         '<div class="hdr-grid" style="grid-template-columns:repeat(4,1fr)">'
         '<div class="f span1"><b>Type</b>8 bits</div>'
@@ -41,7 +44,7 @@ sec_header = h2("header", "ICMP Header", "ترويسة ICMP") + src(
         '<div class="f span2"><b>Checksum</b>16 bits</div>'
         '<div class="f span4"><b>Rest of Header / Data</b>variable (depends on Type and Code)</div>'
         '</div>',
-        "ICMP Header Structure", "هيكل ترويسة ICMP"
+        "ICMP Header Field Layout", "مخطط حقول ترويسة ICMP"
     ) +
     bl("<b>Type:</b> This 8-bit field identifies the type of ICMP message. For example, Type 8 is an Echo Request (ping), and Type 0 is an Echo Reply.",
        "<b>Type:</b> حقل 8 بت يحدد نوع رسالة ICMP. مثلاً، النوع 8 هو طلب Echo (ping)، والنوع 0 هو رد Echo.") +
@@ -78,14 +81,20 @@ sec_types = h2("types", "ICMP Types & Codes", "أنواع وأكواد ICMP") + 
 sec_ping = h2("ping", "Ping (Echo Request / Echo Reply)", "أداة Ping (طلب ورد الـ Echo)") + src(
     bl("The ping command is probably the most well-known use of ICMP. When you ping a device, your computer sends an ICMP Echo Request (Type 8) to the target. If the target is reachable and alive, it responds with an ICMP Echo Reply (Type 0).",
        f"أمر {T('ping', 'أداة تشخيص شبكة تختبر إمكانية الوصول لجهاز معين')} هو أشهر استخدام لـ ICMP. لما بتعمل ping لجهاز، الكمبيوتر بتاعك بيبعت ICMP Echo Request (النوع 8) للهدف. لو الهدف موجود وشغال، بيرد بـ ICMP Echo Reply (النوع 0).") +
+    img("images/lesson08/img_2.jpg", "Ping Echo Request and Echo Reply Flow",
+        "Ping Diagnostics: Echo Request (Type 8) and Echo Reply (Type 0)", "تشخيص الشبكة بـ Ping: طلب الـ Echo (النوع 8) ورد الـ Echo (النوع 0)",
+        "Ping Diagram") +
     diagram(
         '<div style="display:flex; justify-content:space-around; align-items:center; font-family:monospace; margin-bottom:12px;">'
         '<div style="padding:16px; border:2px solid var(--text); border-radius:8px;">PC (10.0.0.1)</div>'
         '<div style="text-align:center; color:var(--accent); font-weight:bold;">Echo Request (Type 8) &rarr;<br>&larr; Echo Reply (Type 0)</div>'
         '<div style="padding:16px; border:2px solid var(--text); border-radius:8px;">Server (10.0.0.2)</div>'
         '</div>',
-        "Ping uses ICMP Type 8 (Request) and Type 0 (Reply)", "أداة Ping تستخدم ICMP النوع 8 (طلب) والنوع 0 (رد)"
+        "Ping Flow Schematic", "مخطط تدفق رسائل Ping"
     ) +
+    img("images/lesson08/img_3.jpg", "Wireshark Capture of ICMP Echo Request and Reply",
+        "Wireshark Packet Capture of Ping Exchange", "التقاط حزم تبادل الـ Ping في برنامج Wireshark",
+        "Wireshark Ping Capture") +
     bl("Here is an example of a ping on a Cisco IOS device:",
        "ده مثال على ping من جهاز سيسكو:") +
     cli("Router# <b>ping 10.0.0.2</b>\n\nType escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 10.0.0.2, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms") +
@@ -101,6 +110,9 @@ sec_traceroute = h2("traceroute", "Traceroute", "أداة Traceroute") + src(
        f"Traceroute أداة مفيدة جداً تعتمد على ICMP. بتتبع المسار اللي الحزم بتاخده من جهازك للوجهة، وبتوريك كل {T('hop', 'كل راوتر الحزمة بتعدي عليه')} (راوتر) في الطريق.") +
     bl("Traceroute works by sending packets with an increasing TTL (Time To Live) value. The first packet has TTL=1, so the first router decrements it to 0 and sends back an ICMP Time Exceeded (Type 11) message. The second packet has TTL=2, so it passes the first router but expires at the second. This continues until the packet reaches the final destination.",
        f"Traceroute بتشتغل عن طريق إرسال حزم بقيمة {T('TTL', 'Time To Live — عدد الراوترات اللي الحزمة تقدر تعديها')} متزايدة. أول حزمة TTL=1، فأول راوتر بينقّصه لـ 0 ويبعت رسالة ICMP Time Exceeded (النوع 11). تاني حزمة TTL=2، فبتعدي أول راوتر لكن بتنتهي عند التاني. وهكذا لحد ما الحزمة توصل الوجهة النهائية.") +
+    img("images/lesson08/img_5.jpg", "Traceroute TTL Exceeded Process across Routers",
+        "How Traceroute Discovers Hops by Incrementing TTL", "كيف تكتشف أداة Traceroute الراوترات بزيادة قيمة TTL",
+        "Traceroute Process") +
     diagram(
         '<div style="display:flex; justify-content:space-around; align-items:center; font-family:monospace; flex-wrap:wrap; gap:8px;">'
         '<div style="padding:12px; border:2px solid var(--text); border-radius:8px;">PC</div>'
@@ -124,6 +136,9 @@ sec_traceroute = h2("traceroute", "Traceroute", "أداة Traceroute") + src(
 sec_redirect = h2("redirect", "ICMP Redirect", "إعادة التوجيه ICMP Redirect") + src(
     bl(f"An {T('ICMP Redirect', 'رسالة بيبعتها الراوتر لجهاز عشان يقوله استخدم مسار أفضل')} (Type 5) message is sent by a router to tell a host that there is a better first-hop router available for a particular destination.",
        f"رسالة {T('ICMP Redirect', 'رسالة يبعتها الراوتر للجهاز ليستخدم مسار أحسن')} (النوع 5) بيبعتها الراوتر لجهاز عشان يقوله إن في راوتر أول-hop أفضل متاح لوجهة معينة.") +
+    img("images/lesson08/img_10.jpg", "ICMP Redirect Message Scenario",
+        "Router notifying Host of a more optimal first-hop router via ICMP Redirect (Type 5)", "الراوتر يوجه الجهاز لاستخدام مسار أفضل عبر ICMP Redirect (النوع 5)",
+        "ICMP Redirect Topology") +
     bl("For example, imagine a host sends a packet to Router A, but Router A knows that Router B (which is on the same subnet as the host) has a better route to the destination. Router A will forward the packet to Router B, but also send an ICMP Redirect to the host telling it: 'Next time you want to reach this destination, send your packets directly to Router B instead of me.'",
        "مثلاً، تخيل جهاز بيبعت حزمة لـ Router A، لكن Router A يعرف إن Router B (اللي على نفس الشبكة الفرعية للجهاز) عنده مسار أفضل للوجهة. Router A هيوجّه الحزمة لـ Router B، لكن كمان هيبعت ICMP Redirect للجهاز يقوله: 'المرة الجاية لما عايز توصل للوجهة دي، ابعت حزمك مباشرة لـ Router B بدل مني.'")
 ) + extra(

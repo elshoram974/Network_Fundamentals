@@ -36,8 +36,17 @@ sec_connecting = h2("connecting", "Connecting via Console & Terminal Emulator", 
         '</div>',
         "Out-of-Band Management via Console Cable", "الاتصال المباشر لإدارة الأجهزة عبر كابل الكونسول"
     ) +
+    img("images/lesson10/img_1.jpg", "Cisco Catalyst 2960 switch console ports RJ-45 and micro-USB",
+        "Physical Console Connectors on Cisco Catalyst Switch (RJ-45 and micro-USB)", "منافذ الكونسول الفيزيائية على سويتش سيسكو كاتاليست (RJ-45 و micro-USB)",
+        "Cisco Switch Console Connectors") +
+    img("images/lesson10/img_2.png", "Cisco light blue console rollover cable",
+        "Official Cisco Rollover Console Cable", "كابل الكونسول الأزرق (Rollover Cable) من سيسكو",
+        "Cisco Rollover Cable") +
     bl("<b>Terminal Emulator Settings:</b> To connect via serial port using tools like <b>PuTTY</b>, <b>Tera Term</b>, or <b>SecureCRT</b>, you must configure the exact serial parameters required by Cisco IOS:",
        "<b>إعدادات برامج المحاكاة (Terminal Emulator):</b> عشان تفتح شاشة الكونسول ببرامج زي <b>PuTTY</b> أو <b>SecureCRT</b>، لازم تضبط إعدادات الاتصال التسلسلي (Serial) القياسية لأجهزة سيسكو:") +
+    img("images/lesson10/img_5.jpg", "PuTTY Serial configuration for Cisco console",
+        "Configuring PuTTY for Serial Connection (9600-8-N-1)", "إعداد برنامج PuTTY للاتصال بالكونسول (9600-8-N-1)",
+        "PuTTY Serial Settings") +
     '<div class="table-wrap"><table><tr><th>' + bi("Serial Parameter", "خاصية الاتصال") + '</th><th>' + bi("Standard Cisco Value", "القيمة القياسية في سيسكو") + '</th><th>' + bi("Description", "الوصف والوظيفة") + '</th></tr>' +
     '<tr><td class="mono-cell"><b>Baud Rate (Speed)</b></td><td class="mono-cell">9600 bps</td><td>' + bi("Speed of data transmission over serial line", "سرعة نقل البيانات عبر الكابل التسلسلي") + '</td></tr>' +
     '<tr><td class="mono-cell"><b>Data Bits</b></td><td class="mono-cell">8</td><td>' + bi("Number of data bits in each character", "عدد بتات البيانات لكل حرف") + '</td></tr>' +
@@ -100,6 +109,9 @@ sec_config = h2("config", "Running-Config vs Startup-Config & Memory Types", "م
     '</table></div>' +
     bl("<b>Saving Configurations:</b> Any command you type in configuration mode takes effect <b>immediately</b> in RAM (running-config). However, if the power drops or the switch reboots, all unsaved changes are lost! To save changes permanently to NVRAM:",
        "<b>حفظ الإعدادات:</b> أي أمر بتكتبه بيتطبق <b>في نفس اللحظة</b> في ذاكرة الـ RAM (الـ running-config). لكن لو الكهرباء قطعت أو الجهاز اتعمله ريستارت، كل اللي كتبته هيروح! عشان تحفظ الإعدادات بشكل دائم في الـ NVRAM:") +
+    img("images/lesson10/img_9.jpg", "RAM running-config vs NVRAM startup-config memory diagram",
+        "Visualizing Memory: Volatile RAM (running-config) vs Persistent NVRAM (startup-config)", "مخطط توضيحي للذاكرة: ذاكرة RAM المؤقتة (running-config) مقابل NVRAM الدائمة (startup-config)",
+        "RAM vs NVRAM Diagram") +
     cli("Switch# <b>copy running-config startup-config</b>\nDestination filename [startup-config]? \nBuilding configuration...\n[OK]\n\n! Shorthand legacy command (widely used in real life):\nSwitch# <b>write memory</b>  ! or simply: <b>wr</b>") +
     bl("<b>Erasing and Resetting to Factory Defaults:</b> To completely wipe a switch or router configuration back to clean factory state:",
        "<b>مسح الإعدادات والعودة لضبط المصنع:</b> عشان تمسح كل الإعدادات القديمة وترجع الجهاز جديد تماماً:") +
