@@ -1086,18 +1086,10 @@ exam_styles = """
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .scenario-box {
-  border-left: 4px solid var(--accent);
+  border-inline-start: 4px solid var(--accent);
 }
 .essay-box {
-  border-left: 4px solid #f59e0b;
-}
-html[dir="rtl"] .scenario-box {
-  border-left: 1px solid var(--line);
-  border-right: 4px solid var(--accent);
-}
-html[dir="rtl"] .essay-box {
-  border-left: 1px solid var(--line);
-  border-right: 4px solid #f59e0b;
+  border-inline-start: 4px solid #f59e0b;
 }
 .model-answer-drawer {
   display: none;
