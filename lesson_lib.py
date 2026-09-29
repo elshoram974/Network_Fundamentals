@@ -260,13 +260,15 @@ function toggleTheme() {
     <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
     <span class="lesson-title">{TITLE}</span>
   </div>
+  <div class="progress-wrap"><div class="progress-bar"></div></div>
   <div class="controls">
-    <button id="btnTheme" onclick="toggleTheme()" class="theme-btn" title="Toggle Light/Dark Mode">Theme</button>
+    <button id="btnTheme" onclick="toggleTheme()" class="theme-btn" title="Toggle Light/Dark Mode">🌓</button>
     <div class="langswitch">
       <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
       <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
     </div>
   </div>
+  <div class="lesson-tag">{NUM} / 11</div>
 </div>
 '''
 
@@ -379,6 +381,7 @@ def build(num, pct, title, sub, chip_en, chip_ar, toc_items, body_sections,
         "06-tcp-header.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/tcp-header",
         "07-tcp window size scaling.pdf": "https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling",
         "08-icmp (internet control message protocol).pdf": "https://networklessons.com/ip-routing/icmp-internet-control-message-protocol",
+        "09-introduction to dns.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-dns",
     }
     real_url = url_map.get(source_pdf, "https://networklessons.com/cisco/ccna-200-301")
     
