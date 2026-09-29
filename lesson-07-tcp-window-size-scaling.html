@@ -243,23 +243,26 @@ function toggleTheme() {
 </div>
 <div class="source-footer">
     <div class="en">
-      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling" target="_blank">NetworkLessons.com</a>. We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling" target="_blank">NetworkLessons.com</a> (PDF: <a href="pdfs/07-tcp window size scaling.pdf" target="_blank">07-tcp window size scaling.pdf</a>). We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
     </div>
     <div class="ar">
-      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling" target="_blank">NetworkLessons.com</a> (ملف الـ PDF: <a href="pdfs/07-tcp window size scaling.pdf" target="_blank">07-tcp window size scaling.pdf</a>). لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
     </div>
 </div>
 <script>
 const UI = {
-  en:{tr:'TRANSLATE', trBack:'SHOW ENGLISH', check:'Check answer', reveal:'Reveal answer', q:'Question', ok:'Correct', no:'Incorrect', qlang:'العربية'},
-  ar:{tr:'ترجمة', trBack:'عرض الإنجليزية', check:'تحقق', reveal:'إظهار الإجابة', q:'سؤال', ok:'صحيح', no:'غير صحيح', qlang:'English'}
+  en:{tr:'🌐 Translate to Arabic', trBack:'🌐 Show English', check:'Check answer', reveal:'Reveal answer', q:'Question', ok:'Correct', no:'Incorrect', qlang:'🌐 العربية'},
+  ar:{tr:'🌐 ترجمة للعربية', trBack:'🌐 عرض الإنجليزية', check:'تحقق من الإجابة', reveal:'إظهار الإجابة', q:'سؤال', ok:'إجابة صحيحة', no:'إجابة خاطئة', qlang:'🌐 English'}
 };
 const curLang = () => document.body.classList.contains('lang-ar') ? 'ar' : 'en';
 function arShown(pb){ return (curLang()==='ar') !== pb.classList.contains('flip'); }
 function updBtn(pb){
   const b = pb.querySelector(':scope > .tr-btn'); if(!b) return;
-  b.textContent = arShown(pb) ? UI.en.trBack : UI.en.tr;
-  if(curLang()==='ar'){ b.textContent = arShown(pb) ? UI.ar.trBack : UI.ar.tr; }
+  if(curLang()==='en') {
+    b.textContent = arShown(pb) ? UI.en.trBack : UI.en.tr;
+  } else {
+    b.textContent = arShown(pb) ? UI.ar.trBack : UI.ar.tr;
+  }
 }
 function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
 function setGlobalLang(l){

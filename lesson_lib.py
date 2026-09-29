@@ -378,6 +378,7 @@ def build(num, pct, title, sub, chip_en, chip_ar, toc_items, body_sections,
         "05-tcp-udp.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-tcp-and-udp",
         "06-tcp-header.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/tcp-header",
         "07-tcp window size scaling.pdf": "https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling",
+        "08-icmp (internet control message protocol).pdf": "https://networklessons.com/ip-routing/icmp-internet-control-message-protocol",
     }
     real_url = url_map.get(source_pdf, "https://networklessons.com/cisco/ccna-200-301")
     
