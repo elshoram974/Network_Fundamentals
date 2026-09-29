@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study</title>
 <meta property="og:title" content="Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study">
-<meta property="og:description" content="شرح تفصيلي لـ Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study - كورس CCNA 200-301 م. محمد الشورى">
+<meta property="og:description" content="شرح تفصيلي لـ Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study - كورس CCNA 200-301 م. محمد الشوره">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study">
-<meta name="twitter:description" content="شرح تفصيلي لـ Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study - كورس CCNA 200-301 م. محمد الشورى">
+<meta name="twitter:description" content="شرح تفصيلي لـ Lesson 3 — IPv4 Packet Header | CCNA 200-301 Study - كورس CCNA 200-301 م. محمد الشوره">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -389,9 +389,11 @@ buildQuiz('recapArea',[{q:{en:'An IPv4 address is split into which two parts?',a
 buildQuiz('quizArea',[{q:{en:'What decimal value does the Version field always show for IPv4?',ar:'حقل Version بيوري قيمة عشرية كام دايمًا في IPv4؟'},opts:[{en:'6',ar:'6'},{en:'4',ar:'4'},{en:'20',ar:'20'},{en:'1',ar:'1'}],correct:1,explain:{en:'Only IPv4 uses this header, so the Version field is always decimal 4.',ar:'الهيدر ده بيستخدمه IPv4 بس، فحقل Version دايمًا بيبقى 4.'}},{q:{en:'What is the minimum length of the IPv4 header?',ar:'إيه أقل طول ممكن لهيدر IPv4؟'},opts:[{en:'60 bytes',ar:'60 بايت'},{en:'32 bytes',ar:'32 بايت'},{en:'20 bytes',ar:'20 بايت'},{en:'4 bytes',ar:'4 بايت'}],correct:2,explain:{en:'Minimum header length is 20 bytes (IHL value of 5); it can grow up to 60 bytes with Options.',ar:'أقل طول للهيدر 20 بايت (قيمة IHL = 5)؛ وممكن يوصل لـ 60 بايت لو في Options.'}},{q:{en:'Which field tells you whether the payload is TCP or UDP?',ar:'أي حقل بيقولك البيانات جواها TCP ولا UDP؟'},opts:[{en:'Protocol',ar:'Protocol'},{en:'Flags',ar:'Flags'},{en:'Identification',ar:'Identification'},{en:'Header Checksum',ar:'Header Checksum'}],correct:0,explain:{en:'The Protocol field carries the transport-layer protocol number — TCP = 6, UDP = 17.',ar:'حقل Protocol بيحمل رقم بروتوكول طبقة النقل — TCP = 6، UDP = 17.'}},{q:{en:'A router decrements TTL to 0. What happens?',ar:'لو راوتر نقّص TTL ووصل صفر، هيحصل إيه؟'},opts:[{en:'The packet is forwarded anyway',ar:'الحزمة بتتفوّر عادي'},{en:'The router drops the packet and sends an ICMP time-exceeded message',ar:'الراوتر بيرمي الحزمة ويبعت رسالة ICMP time-exceeded'},{en:'The packet is fragmented',ar:'الحزمة بتتقسّم'},{en:'The router reboots',ar:'الراوتر بيعمل reboot'}],correct:1,explain:{en:'TTL exists to prevent routing loops. Once it hits 0, the packet is dropped and the sender is notified via ICMP.',ar:'TTL موجود عشان يمنع الـ routing loops. لما توصل صفر، الحزمة بترمى والمرسل بياخد إشعار بـ ICMP.'}},{q:{en:'What does the DF flag mean when set?',ar:'علم DF لما يكون متحط، معناه إيه؟'},opts:[{en:'Deliver Fast',ar:'Deliver Fast'},{en:'This packet must not be fragmented',ar:'الحزمة دي ماينفعش تتقسّم'},{en:'Discard Frame',ar:'Discard Frame'},{en:'Default Forwarding',ar:'Default Forwarding'}],correct:1,explain:{en:"DF = Don't Fragment. If a router needs to fragment a packet that has DF set, it drops it instead and reports back via ICMP.",ar:"DF = Don't Fragment. لو راوتر محتاج يقسّم حزمة عليها DF، هيرميها بدل ما يقسّمها ويبلّغ بـ ICMP."}},{q:{en:'What is the maximum possible Total Length value with a 16-bit field?',ar:'إيه أكبر قيمة ممكنة لحقل Total Length وهو 16 بت؟'},opts:[{en:'1500',ar:'1500'},{en:'4096',ar:'4096'},{en:'65,535',ar:'65,535'},{en:'255',ar:'255'}],correct:2,explain:{en:'16 bits can represent values up to 65,535 — the theoretical max size of an IPv4 packet (header + data).',ar:'الـ16 بت ممكن تمثل قيم لحد 65,535 — أقصى حجم نظري لحزمة IPv4 (هيدر + بيانات).'}}]);
 </script>
 
-<footer style="text-align: center; padding: 20px; margin-top: 40px; font-weight: bold; border-top: 1px solid var(--line); direction: ltr;">
-  <a href="https://wa.me/201553668845" target="_blank" style="text-decoration: none; color: var(--accent); font-family: 'IBM Plex Sans', sans-serif;">
-    By Mohammed El Shora - +201553668845
+<footer style="text-align: center; padding: 20px; margin-top: 40px; font-weight: bold; border-top: 1px solid var(--line);">
+  <a href="https://wa.me/201553668845" target="_blank" style="text-decoration: none; color: var(--accent); font-family: 'IBM Plex Sans', sans-serif; display: inline-flex; align-items: center; gap: 8px; justify-content: center;" dir="ltr">
+    <span class="en">By Mohammed El Shora</span>
+    <span class="ar" style="direction:rtl">بواسطة محمد الشوره</span>
+    <span dir="ltr">- 📞 +201553668845</span>
   </a>
 </footer>
 

@@ -26,7 +26,7 @@ for file in html_files:
 
     # 2. Inject Meta tags right after <title> if not exists
     if '<meta property="og:title"' not in content:
-        desc = f"شرح تفصيلي لـ {title} - كورس CCNA 200-301 م. محمد الشورى"
+        desc = f"شرح تفصيلي لـ {title} - كورس CCNA 200-301 م. محمد الشوره"
         meta_tags = f"""<meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
