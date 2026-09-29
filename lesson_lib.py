@@ -157,7 +157,7 @@ li{margin-bottom:10px}
 .term:hover .tip,.term.tap .tip{visibility:visible;opacity:1}
 
 /* Editorial styling for source materials */
-.src{margin:32px 0;padding:0 0 0 24px;border-inline-start:3px solid var(--accent);background:transparent}
+.src{margin:32px 0;padding-inline-start:24px;border-inline-start:3px solid var(--accent);background:transparent}
 .src-label{font-size:0.75rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px}
 
 /* Distinct styling for extra notes */
