@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Course Index | CCNA 200-301 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Academic / Editorial Theme - Avoiding the "AI" bubbly look */
+:root {
+  --bg: #faf9f7;
+  --panel: #ffffff;
+  --panel2: #f4f4f5;
+  --line: #e4e4e7;
+  --text: #27272a;
+  --muted: #71717a;
+  --accent: #0f766e; /* Deep Teal */
+  --accent2: #b45309; /* Amber */
+  --warn: #ca8a04;
+  --good: #059669;
+  --bad: #dc2626;
+  --radius: 4px; /* Crisp corners, not overly rounded */
+  --maxw: 740px; /* Optimal reading width */
+  --font-head: 'Lora', 'Tajawal', serif;
+  --font-body: 'IBM Plex Sans', 'Tajawal', sans-serif;
+}
+:root[data-theme="dark"] {
+  --bg: #121214;
+  --panel: #18181b;
+  --panel2: #27272a;
+  --line: #3f3f46;
+  --text: #e4e4e7;
+  --muted: #a1a1aa;
+  --accent: #2dd4bf;
+  --accent2: #fbbf24;
+  --warn: #eab308;
+  --good: #34d399;
+  --bad: #f87171;
+}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.8;padding-bottom:100px;transition:background-color 0.2s, color 0.2s}
+body.lang-en .ar{display:none!important}
+body.lang-ar .en{display:none!important}
+.ar{direction:rtl;text-align:right}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:600;font-size:1.1rem;letter-spacing:-0.01em}
+.controls{display:flex;align-items:center;gap:16px}
+.theme-btn{background:transparent;border:1px solid var(--line);border-radius:4px;padding:6px 12px;cursor:pointer;font-size:1rem;color:var(--text)}
+.theme-btn:hover{background:var(--panel2)}
+.langswitch{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.langswitch button{border:none;background:transparent;color:var(--muted);font-weight:600;padding:6px 16px;cursor:pointer;font-size:0.85rem;font-family:var(--font-body)}
+.langswitch button.active{background:var(--panel2);color:var(--text)}
+
+.shell{max-width:800px;margin:60px auto;padding:0 24px;}
+.hero{border-bottom:1px solid var(--line);padding-bottom:40px;margin-bottom:40px;}
+.hero h1{font-family:var(--font-head);font-size:3rem;margin:0 0 16px;color:var(--text);letter-spacing:-0.02em;line-height:1.2}
+.hero p{color:var(--muted);font-size:1.15rem;margin:0;font-family:var(--font-body);}
+
+.lesson-list{display:flex;flex-direction:column;gap:16px;}
+.lesson-card{display:flex;align-items:flex-start;padding:24px;background:var(--panel);border:1px solid var(--line);text-decoration:none;color:var(--text);transition:0.1s;}
+.lesson-card:hover{border-color:var(--accent);background:var(--panel2);}
+.lesson-card .num{font-family:var(--font-head);font-size:1.8rem;font-weight:400;color:var(--muted);margin-inline-end:24px;width:40px;text-align:center;}
+.lesson-card .info{flex:1;}
+.lesson-card h3{margin:0 0 8px;font-size:1.3rem;font-family:var(--font-head);color:var(--accent);}
+.lesson-card p{margin:0;color:var(--text);font-size:0.95rem;opacity:0.85;}
+</style>
+<script>
+(function(){
+  const savedTheme = localStorage.getItem('ccna-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  document.documentElement.lang = savedLang;
+  document.documentElement.classList.add('lang-'+savedLang);
+})();
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', current);
+  localStorage.setItem('ccna-theme', current);
+}
+function setGlobalLang(l){
+  document.body.classList.remove('lang-en', 'lang-ar');
+  document.body.classList.add('lang-'+l);
+  document.documentElement.lang = l;
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.getElementById('btnAr').classList.toggle('active', l==='ar');
+  localStorage.setItem('ccna-lang', l);
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  setGlobalLang(savedLang);
+});
+</script>
+</head>
+<body class="lang-en">
+<div class="topbar">
+  <div class="brand">
+    <span class="en">CCNA Study Hub</span><span class="ar">مركز مذاكرة CCNA</span>
+  </div>
+  <div class="controls">
+    <button id="btnTheme" onclick="toggleTheme()" class="theme-btn">Theme</button>
+    <div class="langswitch">
+      <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
+      <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
+    </div>
+  </div>
+</div>
+<div class="shell">
+  <div class="hero">
+    <h1><span class="en">Network Fundamentals</span><span class="ar">أساسيات الشبكات</span></h1>
+    <p><span class="en">Comprehensive study guides for CCNA 200-301. Select a chapter to read.</span><span class="ar">دليل المذاكرة الشامل لشهادة CCNA 200-301. اختر الفصل للقراءة.</span></p>
+  </div>
+  <div class="lesson-list">
+    <a href="lesson-01-osi-model.html" class="lesson-card">
+      <div class="num">01</div>
+      <div class="info">
+        <h3><span class="en">Introduction to the OSI Model</span><span class="ar">مقدمة عن نموذج OSI</span></h3>
+        <p><span class="en">The structural foundation of networking</span><span class="ar">الأساس الهيكلي الذي تُبنى عليه الشبكات</span></p>
+      </div>
+    </a>
+    <a href="lesson-02-ipv4.html" class="lesson-card">
+      <div class="num">02</div>
+      <div class="info">
+        <h3><span class="en">IPv4 (Internet Protocol)</span><span class="ar">بروتوكول الإنترنت الإصدار 4 (IPv4)</span></h3>
+        <p><span class="en">Understanding addresses, classes, and basic subnetting</span><span class="ar">فهم العناوين، الفئات، وأساسيات تقسيم الشبكات</span></p>
+      </div>
+    </a>
+    <a href="lesson-03-ipv4-header.html" class="lesson-card">
+      <div class="num">03</div>
+      <div class="info">
+        <h3><span class="en">IPv4 Header</span><span class="ar">ترويسة IPv4</span></h3>
+        <p><span class="en">A deep dive into the fields of an IP packet</span><span class="ar">نظرة متعمقة داخل حقول حزمة بيانات الـ IP</span></p>
+      </div>
+    </a>
+    <a href="lesson-04-arp.html" class="lesson-card">
+      <div class="num">04</div>
+      <div class="info">
+        <h3><span class="en">ARP (Address Resolution Protocol)</span><span class="ar">بروتوكول تحليل العناوين ARP</span></h3>
+        <p><span class="en">Mapping IP addresses to physical MAC addresses</span><span class="ar">كيفية ربط عناوين IP بالعناوين الفيزيائية MAC</span></p>
+      </div>
+    </a>
+    <a href="lesson-05-tcp-udp.html" class="lesson-card">
+      <div class="num">05</div>
+      <div class="info">
+        <h3><span class="en">TCP & UDP</span><span class="ar">بروتوكولات TCP و UDP</span></h3>
+        <p><span class="en">Transport layer protocols: reliable versus unreliable</span><span class="ar">بروتوكولات طبقة النقل: الموثوق مقابل غير الموثوق</span></p>
+      </div>
+    </a>
+    <a href="lesson-06-tcp-header.html" class="lesson-card">
+      <div class="num">06</div>
+      <div class="info">
+        <h3><span class="en">TCP Header</span><span class="ar">ترويسة TCP</span></h3>
+        <p><span class="en">Understanding the mechanics of TCP reliability</span><span class="ar">فهم آليات عمل الموثوقية في بروتوكول TCP</span></p>
+      </div>
+    </a>
+  </div>
+</div>
+</body>
+</html>
