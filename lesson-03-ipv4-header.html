@@ -180,6 +180,21 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 
 .img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: left; direction: ltr; }
 </style>
+<script>
+(function(){
+  const savedTheme = localStorage.getItem('ccna-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  document.documentElement.lang = savedLang;
+  document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.classList.add('lang-'+savedLang);
+})();
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', current);
+  localStorage.setItem('ccna-theme', current);
+}
+</script>
 </head>
 <body class="lang-en">
 
