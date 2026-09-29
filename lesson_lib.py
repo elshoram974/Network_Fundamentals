@@ -169,6 +169,7 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 .img-card figcaption{font-size:0.9rem;color:var(--muted);text-align:center;margin-top:16px;font-style:italic}
 .img-fallback{display:none;padding:32px 24px;background:var(--panel2);border:1px solid var(--line);text-align:center}
 .img-fallback .fb-desc{color:var(--muted);margin-bottom:16px}
+.img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: left; direction: ltr; }
 
 .quiz-intro{color:var(--muted);font-size:0.95rem;margin-bottom:24px}
 .q-card{border:1px solid var(--line);padding:32px;margin-bottom:24px;border-radius:var(--radius)}
@@ -244,7 +245,7 @@ function toggleTheme() {
 
 <div class="topbar">
   <div class="brand">
-    <a href="index.html">الفهرس</a>
+    <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
     <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
   </div>
   <div class="controls">
@@ -272,6 +273,7 @@ function updBtn(pb){
 }
 function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
 function setGlobalLang(l){
+  document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';
   document.body.classList.remove('lang-en', 'lang-ar');
   document.body.classList.add('lang-'+l);
   document.documentElement.lang = l;
@@ -347,17 +349,34 @@ def build(num, pct, title, sub, chip_en, chip_ar, toc_items, body_sections,
     head = HEAD.replace('{NUM}', str(num)).replace('{PCT}', str(pct)).replace('{TITLE}', str(title))
     hero = f'''<div class="hero"><div class="chip">{bi(chip_en, chip_ar)}</div>
 <h1>{title}</h1><div class="sub">{bi(sub[0], sub[1])}</div></div>'''
-    toc = ''.join(f'<a href="#{i}">{bi(e,a)}</a>' for i,e,a in toc_items)
+    my_toc = [('recap', 'Recap Quiz', 'اختبار المراجعة')] + list(toc_items) + [('quiz', 'Lesson Quiz', 'اختبار الدرس')]
+    toc = ''.join(f'<a href="#{i}">{bi(e,a)}</a>' for i,e,a in my_toc)
     recap_sec = f'<section id="recap"><span class="badge">{bi(f"Recap", "مراجعة سريعة")}</span><h2>{bi("Quick recap quiz","اختبار مراجعة سريع")}</h2><div id="recapArea"></div></section>'
     quiz_sec = f'<section id="quiz"><h2>{bi("Lesson quiz","اختبار الدرس")}</h2><p class="quiz-intro">{bi("Select an answer and check. You can toggle language for each question individually.","اختر إجابة وتحقق. يمكنك تبديل اللغة لكل سؤال على حدة.")}</p><div id="quizArea"></div></section>'
     shell = f'<div class="shell"><nav class="toc"><div class="toc-title">{bi("Contents","المحتويات")}</div>{toc}</nav><main>{hero}{recap_sec}{"".join(body_sections)}{quiz_sec}</main></div>'
+    
+    url_map = {
+        "01-introduction_to_the_osi_model.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-the-osi-model",
+        "02-ipv4.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/ipv4", 
+        "03-ipv4-header.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/ipv4-packet-header",
+        "04-arp.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/arp-address-resolution-protocol",
+        "05-tcp-udp.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-tcp-and-udp",
+        "06-tcp-header.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/tcp-header",
+        "07-tcp window size scaling.pdf": "https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling",
+    }
+    real_url = url_map.get(source_pdf, "https://networklessons.com/cisco/ccna-200-301")
     
     foot = f'''<div class="lesson-nav">
 <a class="prev" href="{prev_href}"><span class="k">{bi('Previous Lesson','الدرس السابق')}</span><strong>{prev_label}</strong></a>
 <a class="next" href="{next_href}"><span class="k">{bi('Next Lesson','الدرس التالي')}</span><strong>{next_label}</strong></a>
 </div>
 <div class="source-footer">
-    Source: <a href="pdfs/{source_pdf}" target="_blank">{source_pdf}</a> — Cisco.com (CCNA 200-301, Unit 2) · Yellow boxes = extra explanations outside the source, alternate ways to picture the idea, not for memorization as exam-source facts · Diagrams are lightweight self-drawn boxes, not reproductions of the PDF's images.
+    <div class="en">
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="{real_url}" target="_blank">NetworkLessons.com</a>. We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="{real_url}" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
 </div>'''
     tail = SCRIPT + "<script>\nbuildQuiz('recapArea',[" + ','.join(recap_items) + "]);\nbuildQuiz('quizArea',[" + ','.join(quiz_items) + "]);\n</script>\n</body>\n</html>\n"
     out = head + shell + foot + tail

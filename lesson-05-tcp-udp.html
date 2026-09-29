@@ -177,13 +177,15 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 .hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:12px 8px;text-align:center;font-size:0.8rem;color:var(--text)}
 .hdr-grid .f b{display:block;font-size:0.85rem;color:var(--text);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
 .hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
+
+.img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: left; direction: ltr; }
 </style>
 </head>
 <body class="lang-en">
 
 <div class="topbar">
   <div class="brand">
-    <a href="index.html">الفهرس</a>
+    <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
     <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
   </div>
   <div class="progress-wrap"><div class="progress-bar"></div></div>
@@ -275,7 +277,12 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 <li><b>Comment:</b> <span class="term">tcpdump<span class="tip">أداة سطر أوامر لالتقاط الترافيك على لينكس</span></span> is like Wireshark but less clunky. <b>Instructor:</b> it's a great Linux tool that needs no GUI — very useful when you SSH into a remote box. For analysis he prefers Wireshark: capture with tcpdump, then open the file in Wireshark.</li></ul></div><div class="ar"><ul><li><b>سؤال:</b> معنديش خلفية كمبيوتر — أبدأ بـ Wireshark إزاي؟ <b>المدرّب:</b> ابدأ بنموذج OSI الأول؛ بعدين نزّل Wireshark واعمل captures وأنت بتفتح صفحة ويب أو بتنزّل حاجة، وشوف لو تقدر تتعرف على TCP 3-way handshake وطبقات OSI.</li>
 <li><b>تعليق:</b> tcpdump زي Wireshark بس أخف. <b>المدرّب:</b> أداة لينكس ممتازة مش محتاجة GUI — مفيدة جدًا لما تعمل SSH لجهاز بعيد. للتحليل بيفضّل Wireshark: التقط بـ tcpdump وبعدين افتح الملف في Wireshark.</li></ul></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div></section><section id="quiz"><h2><span class="en">🧠 Lesson quiz</span><span class="ar">🧠 اختبار الدرس</span></h2><p class="quiz-intro"><span class="en">Wrong = red, correct = green. Reveal the answer any time and translate any question with the 🌐 button.</span><span class="ar">غلط = أحمر، صح = أخضر. تقدر تشوف الإجابة في أي وقت وتترجم أي سؤال بزرار 🌐.</span></p><div id="quizArea"></div></section></main></div><div class="lesson-nav"><a class="prev" href="lesson-04-arp.html"><span class="k"><span class="en">Previous</span><span class="ar">السابق</span></span><strong>ARP</strong></a><a class="next" href="lesson-06-tcp-header.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>TCP Header</strong></a></div>
 <div class="source-footer">
-    Source: <a href="pdfs/05-introduction_to_tcp_and_udp.pdf" target="_blank">05-introduction_to_tcp_and_udp.pdf</a> — Cisco.com (CCNA 200-301, Unit 2) · Yellow boxes = extra notes outside the source · Images hot-linked from Wikimedia Commons / GeeksforGeeks (description shown if they fail to load)
+    <div class="en">
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-tcp-and-udp" target="_blank">NetworkLessons.com</a>. We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-tcp-and-udp" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
 </div><script>
 const UI = {
   en:{tr:'🌐 Translate to Arabic', trBack:'🌐 Show English', check:'Check answer', reveal:'Reveal correct answer', q:'Question', ok:'✔ Correct', no:'✘ Not quite — the correct answer is green', qlang:'🌐 العربية'},

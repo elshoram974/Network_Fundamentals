@@ -177,13 +177,15 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 .hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:12px 8px;text-align:center;font-size:0.8rem;color:var(--text)}
 .hdr-grid .f b{display:block;font-size:0.85rem;color:var(--text);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
 .hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
+
+.img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: left; direction: ltr; }
 </style>
 </head>
 <body class="lang-en">
 
 <div class="topbar">
   <div class="brand">
-    <a href="index.html">الفهرس</a>
+    <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
     <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
   </div>
   <div class="progress-wrap"><div class="progress-bar"></div></div>
@@ -456,7 +458,12 @@ Interface: 192.168.1.1 --- 0xb
   <a class="next" href="lesson-05-tcp-udp.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>Introduction to TCP and UDP</strong></a>
 </div>
 <div class="source-footer">
-    Source: <a href="pdfs/04-arp__address_resolution_protocol__explained.pdf" target="_blank">04-arp__address_resolution_protocol__explained.pdf</a> — Cisco.com (CCNA 200-301, Unit 2) · Yellow boxes = extra notes outside the source · Diagrams are self-drawn SVG images embedded in this file
+    <div class="en">
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/arp-address-resolution-protocol" target="_blank">NetworkLessons.com</a>. We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/arp-address-resolution-protocol" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
 </div>
 
 <script>

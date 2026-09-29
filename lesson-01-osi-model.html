@@ -177,13 +177,15 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 .hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:12px 8px;text-align:center;font-size:0.8rem;color:var(--text)}
 .hdr-grid .f b{display:block;font-size:0.85rem;color:var(--text);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
 .hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
+
+.img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: left; direction: ltr; }
 </style>
 </head>
 <body class="lang-en">
 
 <div class="topbar">
   <div class="brand">
-    <a href="index.html">الفهرس</a>
+    <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
     <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
   </div>
   <div class="progress-wrap"><div class="progress-bar"></div></div>
@@ -196,7 +198,7 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
   </div>
   <div class="lesson-tag">1 / 11</div>
 </div>
-<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#why"><span class="en">Why OSI?</span><span class="ar">ليه OSI؟</span></a><a href="#layers"><span class="en">The 7 layers</span><span class="ar">الطبقات السبعة</span></a><a href="#mnemonics"><span class="en">Mnemonics</span><span class="ar">طرق الحفظ</span></a><a href="#realworld"><span class="en">Real example</span><span class="ar">مثال حقيقي</span></a><a href="#pdu"><span class="en">PDU names</span><span class="ar">أسماء PDU</span></a><a href="#wireshark"><span class="en">Wireshark</span><span class="ar">Wireshark</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">The starting point of the whole CCNA course</span><span class="ar">نقطة البداية لكل كورس CCNA</span></div>
+<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#recap"><span class="en">Recap Quiz</span><span class="ar">اختبار المراجعة</span></a><a href="#why"><span class="en">Why OSI?</span><span class="ar">ليه OSI؟</span></a><a href="#layers"><span class="en">The 7 layers</span><span class="ar">الطبقات السبعة</span></a><a href="#mnemonics"><span class="en">Mnemonics</span><span class="ar">طرق الحفظ</span></a><a href="#realworld"><span class="en">Real example</span><span class="ar">مثال حقيقي</span></a><a href="#pdu"><span class="en">PDU names</span><span class="ar">أسماء PDU</span></a><a href="#wireshark"><span class="en">Wireshark</span><span class="ar">Wireshark</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">The starting point of the whole CCNA course</span><span class="ar">نقطة البداية لكل كورس CCNA</span></div>
 <h1>Introduction to the OSI Model</h1><div class="sub"><span class="en">Lesson 1 — the foundation everything else in networking builds on</span><span class="ar">الدرس الأول — الأساس اللي مبني عليه كل حاجة تانية في الشبكات</span></div></div><section id="recap"><span class="badge"><span class="en">🔁 Recap — previous lesson</span><span class="ar">🔁 مراجعة — الدرس السابق</span></span><h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2><div id="recapArea"></div></section><section id="why"><h2><span class="en">Why does the OSI Model exist?</span><span class="ar">ليه أصلاً موجود نموذج OSI؟</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>In the beginning, the development of networks was chaotic. Each vendor had its own proprietary solution, and one vendor's solution was not compatible with another vendor's solution. This is where the idea for the OSI model was born: a layered approach where hardware vendors design hardware for the network, and others develop software for the application layer. Using an open model everyone agrees on means we can build networks that are compatible with each other.</p>
 <p>To fix this problem the International Organization for Standardization (ISO) researched different network models, and the result is the OSI model, released in 1984. Nowadays most vendors build networks based on the OSI model, and hardware from different vendors is compatible.</p>
 <p>The OSI model is not just a model to make networks compatible &mdash; it is also one of the <b>best</b> ways to teach people about networks, so you will see people refer to it a lot.</p></div><div class="ar"><p>في الأول، تطوير الشبكات كان فوضى. كل شركة (vendor) كانت بتعمل حل خاص بيها، وحل شركة ما كانش بيشتغل مع حل شركة تانية. من هنا جت فكرة نموذج OSI: نقسّم الشبكة لطبقات، بحيث شركات الهاردوير تصمم للطبقة الفيزيائية، وشركات تانية تطوّر سوفت وير لطبقة التطبيقات. وبما إن الكل متفق على نفس النموذج المفتوح، أي جهاز من أي شركة يقدر يشتغل مع التاني.</p>
@@ -260,7 +262,12 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 <a class="next" href="lesson-02-ipv4.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>IPv4 (Internet Protocol)</strong></a>
 </div>
 <div class="source-footer">
-    Source: <a href="pdfs/01-introduction_to_the_osi_model.pdf" target="_blank">01-introduction_to_the_osi_model.pdf</a> — Cisco.com (CCNA 200-301, Unit 2) · Yellow boxes = extra explanations outside the source, alternate ways to picture the idea, not for memorization as exam-source facts · Diagrams are lightweight self-drawn boxes, not reproductions of the PDF's images.
+    <div class="en">
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-200-301" target="_blank">NetworkLessons.com</a>. We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-200-301" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
 </div>
 <script>
 const UI = {

@@ -177,13 +177,15 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 .hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:12px 8px;text-align:center;font-size:0.8rem;color:var(--text)}
 .hdr-grid .f b{display:block;font-size:0.85rem;color:var(--text);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
 .hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
+
+.img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: left; direction: ltr; }
 </style>
 </head>
 <body class="lang-en">
 
 <div class="topbar">
   <div class="brand">
-    <a href="index.html">الفهرس</a>
+    <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
     <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
   </div>
   <div class="progress-wrap"><div class="progress-bar"></div></div>
@@ -196,7 +198,7 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
   </div>
   <div class="lesson-tag">6 / 11</div>
 </div>
-<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#overview"><span class="en">Overview</span><span class="ar">نظرة عامة</span></a><a href="#fields"><span class="en">Header fields</span><span class="ar">حقول الهيدر</span></a><a href="#capture"><span class="en">Wireshark capture</span><span class="ar">التقاط Wireshark</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">Position in OSI: Layer 4 (Transport)</span><span class="ar">مكانه في OSI: الطبقة 4 (Transport)</span></div>
+<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#recap"><span class="en">Recap Quiz</span><span class="ar">اختبار المراجعة</span></a><a href="#overview"><span class="en">Overview</span><span class="ar">نظرة عامة</span></a><a href="#fields"><span class="en">Header fields</span><span class="ar">حقول الهيدر</span></a><a href="#capture"><span class="en">Wireshark capture</span><span class="ar">التقاط Wireshark</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">Position in OSI: Layer 4 (Transport)</span><span class="ar">مكانه في OSI: الطبقة 4 (Transport)</span></div>
 <h1>TCP Header</h1><div class="sub"><span class="en">Lesson 6 — every field in the TCP header, explained</span><span class="ar">الدرس السادس — هيدر TCP بالتفصيل، حقل حقل</span></div></div><section id="recap"><span class="badge"><span class="en">🔁 Recap — previous lesson</span><span class="ar">🔁 مراجعة — الدرس السابق</span></span><h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2><div id="recapArea"></div></section><section id="overview"><h2><span class="en">Overview</span><span class="ar">نظرة عامة</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>TCP (Transmission Control Protocol) is a reliable transport protocol as it establishes a connection before sending any data, and everything that it sends is acknowledged by the receiver. In this lesson we take a closer look at the TCP header and its different fields.</p></div><div class="ar"><p>TCP (Transmission Control Protocol) بروتوكول نقل موثوق لأنه بينشئ اتصال قبل ما يبعت أي بيانات، وكل حاجة بيبعتها بتتأكد من الطرف المستقبل. في الدرس ده هنقرب أكتر لهيدر TCP وحقوله المختلفة.</p></div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><figure class="img-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/TCP_header.png/700px-TCP_header.png" alt="TCP header field layout" loading="lazy" onerror="imgFail(this)"><div class="img-fallback"><div class="fb-desc">🖼️ Real photo could not be confirmed to load &mdash; the labeled field grid below shows the exact same 10 fields.</div><div class="fb-diagram"><div class="hdr-grid">
 <div class="f span2"><b>Source Port (16 bit)</b></div>
 <div class="f span2"><b>Destination Port (16 bit)</b></div>
@@ -257,7 +259,12 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 <a class="next" href="lesson-07-tcp-window-scaling.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>TCP Window Size Scaling</strong></a>
 </div>
 <div class="source-footer">
-    Source: <a href="pdfs/06-tcp_header.pdf" target="_blank">06-tcp_header.pdf</a> — Cisco.com (CCNA 200-301, Unit 2) · Yellow boxes = extra explanations outside the source, alternate ways to picture the idea, not for memorization as exam-source facts · Header diagram is a real hot-linked image with a self-drawn CSS grid as a guaranteed backup if it fails to load.
+    <div class="en">
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/tcp-header" target="_blank">NetworkLessons.com</a>. We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/tcp-header" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
 </div>
 <script>
 const UI = {

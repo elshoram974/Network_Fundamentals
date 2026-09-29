@@ -177,13 +177,15 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 .hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:12px 8px;text-align:center;font-size:0.8rem;color:var(--text)}
 .hdr-grid .f b{display:block;font-size:0.85rem;color:var(--text);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
 .hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
+
+.img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: left; direction: ltr; }
 </style>
 </head>
 <body class="lang-en">
 
 <div class="topbar">
   <div class="brand">
-    <a href="index.html">الفهرس</a>
+    <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
     <span class="en">CCNA Study Notes</span><span class="ar">مذكرات CCNA</span>
   </div>
   <div class="progress-wrap"><div class="progress-bar"></div></div>
@@ -196,7 +198,7 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
   </div>
   <div class="lesson-tag">2 / 11</div>
 </div>
-<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#why"><span class="en">Why IP?</span><span class="ar">ليه IP؟</span></a><a href="#structure"><span class="en">32-bit structure</span><span class="ar">تركيبة 32 بت</span></a><a href="#header"><span class="en">Packet header</span><span class="ar">هيدر الحزمة</span></a><a href="#binary"><span class="en">Binary → decimal</span><span class="ar">ثنائي لعشري</span></a><a href="#classes"><span class="en">Classes A/B/C</span><span class="ar">الأصناف</span></a><a href="#private"><span class="en">Private vs public</span><span class="ar">خاص وعام</span></a><a href="#netbcast"><span class="en">Network & broadcast</span><span class="ar">عنوان الشبكة والبث</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">Position in OSI: Layer 3 (Network)</span><span class="ar">مكانه في OSI: الطبقة 3 (Network)</span></div>
+<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">On this page</span><span class="ar">في الصفحة</span></div><a href="#recap"><span class="en">Recap Quiz</span><span class="ar">اختبار المراجعة</span></a><a href="#why"><span class="en">Why IP?</span><span class="ar">ليه IP؟</span></a><a href="#structure"><span class="en">32-bit structure</span><span class="ar">تركيبة 32 بت</span></a><a href="#header"><span class="en">Packet header</span><span class="ar">هيدر الحزمة</span></a><a href="#binary"><span class="en">Binary → decimal</span><span class="ar">ثنائي لعشري</span></a><a href="#classes"><span class="en">Classes A/B/C</span><span class="ar">الأصناف</span></a><a href="#private"><span class="en">Private vs public</span><span class="ar">خاص وعام</span></a><a href="#netbcast"><span class="en">Network & broadcast</span><span class="ar">عنوان الشبكة والبث</span></a><a href="#quiz"><span class="en">Quiz</span><span class="ar">الاختبار</span></a></nav><main><div class="hero"><div class="chip">📍 <span class="en">Position in OSI: Layer 3 (Network)</span><span class="ar">مكانه في OSI: الطبقة 3 (Network)</span></div>
 <h1>IP (Internet Protocol) Version 4 for CCNA</h1><div class="sub"><span class="en">Lesson 2 — how IP addresses are structured and classified</span><span class="ar">الدرس الثاني — تركيبة عنوان IP وتصنيفاته</span></div></div><section id="recap"><span class="badge"><span class="en">🔁 Recap — previous lesson</span><span class="ar">🔁 مراجعة — الدرس السابق</span></span><h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2><div id="recapArea"></div></section><section id="why"><h2><span class="en">Why do we need IP?</span><span class="ar">ليه أصلاً محتاجين IP؟</span></h2><div class="src"><div class="src-label"><span class="en">From the source (PDF)</span><span class="ar">من المرجع (PDF)</span></div><div class="para-block"><div class="en"><p>IP uses <span class="term">packets<span class="tip">حزمة البيانات</span></span> called IP packets to carry information. Every IP packet is a single unit of information and, besides data, it carries information to determine where to send the packet. IP determines where to send packets by looking at the destination IP address.</p>
 <p>Some characteristics:</p>
 <ul>
@@ -232,7 +234,12 @@ th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;
 <a class="next" href="lesson-03-ipv4-header.html"><span class="k"><span class="en">Next</span><span class="ar">التالي</span></span><strong>IPv4 Packet Header</strong></a>
 </div>
 <div class="source-footer">
-    Source: <a href="pdfs/02-ip__internet_protocol__v4_for_ccna_r_s_students.pdf" target="_blank">02-ip__internet_protocol__v4_for_ccna_r_s_students.pdf</a> — Cisco.com (CCNA 200-301, Unit 2) · Yellow boxes = extra explanations outside the source, alternate ways to picture the idea, not for memorization as exam-source facts · Diagrams are lightweight self-drawn boxes, not reproductions of the PDF's images.
+    <div class="en">
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/ipv4" target="_blank">NetworkLessons.com</a>. We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/ipv4" target="_blank">NetworkLessons.com</a>. لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
 </div>
 <script>
 const UI = {
