@@ -382,6 +382,7 @@ def build(num, pct, title, sub, chip_en, chip_ar, toc_items, body_sections,
         "07-tcp window size scaling.pdf": "https://networklessons.com/cisco/ccna-routing-switching/tcp-window-size-scaling",
         "08-icmp (internet control message protocol).pdf": "https://networklessons.com/ip-routing/icmp-internet-control-message-protocol",
         "09-introduction to dns.pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-dns",
+        "010-introduction to cisco ios cli (command-line interface).pdf": "https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-the-cisco-ios-command-line-interface-cli",
     }
     real_url = url_map.get(source_pdf, "https://networklessons.com/cisco/ccna-200-301")
     

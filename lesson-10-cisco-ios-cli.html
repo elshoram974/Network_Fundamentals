@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lesson 10 — Introduction to Cisco IOS CLI (Command-Line Interface) | CCNA 200-301 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Tajawal:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Premium UI Theme */
+:root {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel2: #f8fafc;
+  --line: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent2: #f59e0b;
+  --warn: #eab308;
+  --good: #10b981;
+  --bad: #ef4444;
+  --radius: 8px;
+  --maxw: 740px;
+  --font-head: 'Lora', 'Tajawal', serif;
+  --font-body: 'IBM Plex Sans', 'Tajawal', sans-serif;
+  --cli-bg: #f8fafc;
+  --cli-text: #0f172a;
+  --cli-border: #cbd5e1;
+}
+:root[data-theme="dark"] {
+  --bg: #0f172a;
+  --panel: #1e293b;
+  --panel2: #0f172a;
+  --line: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --accent2: #fbbf24;
+  --warn: #eab308;
+  --good: #34d399;
+  --bad: #f87171;
+  --cli-bg: #020617;
+  --cli-text: #cbd5e1;
+  --cli-border: #1e293b;
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:75px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.8;font-size:1.05rem;padding-bottom:100px;transition:background-color 0.2s, color 0.2s}
+code,.mono{font-family:'IBM Plex Mono',monospace;font-size:0.9em;background:var(--panel2);padding:2px 6px;border-radius:3px;color:var(--accent2)}
+img{max-width:100%;height:auto;display:block;margin:0 auto}
+p,li,td,th{overflow-wrap:break-word;word-break:break-word;color:var(--text)}
+
+body.lang-en .ar{display:none!important}
+body.lang-ar .en{display:none!important}
+body.lang-en .flip .en{display:none!important}
+body.lang-en .flip .ar{display:block!important}
+body.lang-ar .flip .ar{display:none!important}
+body.lang-ar .flip .en{display:block!important}
+.ar{direction:rtl;text-align:start}
+span.ar{direction:rtl;unicode-bidi:isolate}
+ul.ar,ol.ar{padding-inline-start:0;padding-inline-end:22px}
+
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;transition:background 0.2s}
+:root[data-theme="dark"] .topbar{background:rgba(15,23,42,0.85)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--font-head);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em}
+.brand a{text-decoration:none;color:var(--text);border:1px solid var(--line);padding:4px 10px;border-radius:6px;font-size:0.9rem;font-family:var(--font-body);transition:all 0.2s}
+.brand a:hover{background:var(--panel2);border-color:var(--muted)}
+.lesson-tag{color:var(--muted);font-family:var(--font-body);font-size:0.9rem;text-transform:uppercase;letter-spacing:0.05em}
+
+.progress-wrap{flex:1;min-width:120px;max-width:200px;height:4px;background:var(--line);overflow:hidden}
+.progress-bar{height:100%;width:91%;background:var(--accent)}
+
+.controls{display:flex;align-items:center;gap:16px}
+.theme-btn{background:transparent;border:1px solid var(--line);border-radius:4px;padding:6px 12px;cursor:pointer;font-size:1rem;color:var(--text)}
+.theme-btn:hover{background:var(--panel2)}
+.langswitch{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.langswitch button{border:none;background:transparent;color:var(--muted);font-weight:600;padding:6px 16px;cursor:pointer;font-size:0.85rem;font-family:var(--font-body)}
+.langswitch button.active{background:var(--panel2);color:var(--text)}
+
+.shell{max-width:1080px;margin:40px auto 0;padding:0 24px;display:grid;grid-template-columns:1fr;gap:60px}
+@media(min-width:1020px){.shell{grid-template-columns:220px minmax(0,var(--maxw))}.toc{display:block!important}}
+.toc{display:none;position:sticky;top:100px;align-self:start;font-size:0.9rem;font-family:var(--font-body)}
+.toc a{display:block;color:var(--muted);text-decoration:none;padding:8px 0;border-inline-start:2px solid transparent;padding-inline-start:16px;margin-bottom:4px;transition:0.1s}
+.toc a:hover,.toc a.active{color:var(--text);border-inline-start-color:var(--accent)}
+.toc-title{color:var(--text);font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px;padding-inline-start:16px}
+
+.hero{padding:20px 0 40px;border-bottom:1px solid var(--line);margin-bottom:40px}
+.hero h1{font-family:var(--font-head);font-size:2.8rem;line-height:1.2;margin:0 0 16px;letter-spacing:-0.02em}
+.hero .sub{color:var(--muted);font-size:1.15rem;max-width:90%}
+.chip{display:inline-flex;align-items:center;background:var(--panel2);padding:4px 12px;font-size:0.85rem;color:var(--text);margin-bottom:24px;font-family:var(--font-body);letter-spacing:0.02em}
+
+main{min-width:0}
+section{margin:60px 0;scroll-margin-top:75px}
+h2{font-family:var(--font-head);font-size:1.8rem;margin-bottom:24px;color:var(--accent)}
+h3{font-family:var(--font-head);font-size:1.3rem;margin:32px 0 16px}
+p{margin:0 0 20px;max-width:70ch}
+ul,ol{padding-inline-start:24px;margin:0 0 24px;max-width:70ch}
+li{margin-bottom:10px}
+.badge{display:inline-block;border:1px solid var(--line);color:var(--text);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;padding:4px 10px;margin-bottom:16px}
+
+.para-block{margin-bottom:24px}
+.tr-btn{display:inline-flex;align-items:center;margin-top:8px;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent);background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.2);padding:6px 14px;border-radius:20px;cursor:pointer;font-weight:600;transition:all 0.2s;font-family:var(--font-body)}
+.tr-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px)}
+
+.term{border-bottom:1px dashed var(--accent);cursor:help;position:relative;color:var(--text);font-weight:600}
+.term .tip{visibility:hidden;opacity:0;position:absolute;bottom:140%;inset-inline-start:0;background:var(--text);color:var(--bg);padding:8px 14px;font-size:0.9rem;z-index:20;transition:opacity .15s;font-family:var(--font-body);direction:rtl;text-align:start;width:max-content;max-width:min(280px,70vw);font-weight:400}
+.term:hover .tip,.term.tap .tip{visibility:visible;opacity:1}
+
+/* Editorial styling for source materials */
+.src{margin:32px 0;padding:0 0 0 24px;border-inline-start:3px solid var(--accent);background:transparent}
+.src-label{font-size:0.75rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px}
+
+/* Distinct styling for extra notes */
+.extra{margin:40px 0;padding:32px;background:var(--panel2);border-top:2px solid var(--warn)}
+.extra .lab{color:var(--warn);font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px}
+
+.cli{background:var(--cli-bg);color:var(--cli-text);border:1px solid var(--cli-border);border-radius:8px;padding:20px;overflow-x:auto;margin:24px 0;direction:ltr;text-align:start;white-space:pre;font-family:'IBM Plex Mono',monospace;font-size:0.9rem;line-height:1.6;box-shadow:inset 0 2px 4px rgba(0,0,0,0.02)}
+.cli b{color:var(--accent)}
+
+.table-wrap{overflow-x:auto;margin:32px 0}
+table{width:100%;border-collapse:collapse;font-size:0.95rem;min-width:500px;text-align:start}
+th,td{border-bottom:1px solid var(--line);padding:14px 16px;text-align:start}
+th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:0.8rem;letter-spacing:0.05em}
+.mono-cell{font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:start}
+
+.img-card{margin:40px 0}
+.img-card img{border:1px solid var(--line);border-radius:4px}
+.img-card figcaption{font-size:0.9rem;color:var(--muted);text-align:center;margin-top:16px;font-style:italic}
+.img-fallback{display:none;padding:32px 24px;background:var(--panel2);border:1px solid var(--line);text-align:center}
+.img-fallback .fb-desc{color:var(--muted);margin-bottom:16px}
+.img-fallback .fb-diagram > div { background: var(--panel2); color: var(--text); padding: 20px; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; overflow-x: auto; text-align: start; direction: ltr; }
+
+.quiz-intro{color:var(--muted);font-size:0.95rem;margin-bottom:24px}
+.q-card{background:var(--panel);border:1px solid var(--line);padding:32px;margin-bottom:24px;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -1px rgba(0,0,0,0.03);transition:all 0.2s}
+.q-card:hover{box-shadow:0 10px 15px -3px rgba(0,0,0,0.05),0 4px 6px -2px rgba(0,0,0,0.03)}
+.q-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.q-num{color:var(--muted);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;font-weight:600}
+.q-text{font-weight:500;margin-bottom:24px;font-size:1.15rem;font-family:var(--font-head)}
+.q-card[data-lang=ar] .q-text,.q-card[data-lang=ar] .explain,.q-card[data-lang=ar] .opt span{direction:rtl;text-align:start}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1px solid var(--line);margin-bottom:8px;cursor:pointer;border-radius:4px;transition:0.1s}
+.opt:hover{border-color:var(--text)}
+.opt input{margin-top:6px;accent-color:var(--accent)}
+.opt.correct{border-color:var(--good);background:rgba(5,150,105,.05)}
+.opt.wrong{border-color:var(--bad);background:rgba(220,38,38,.05)}
+.opt.disabled{pointer-events:none;opacity:0.8}
+.q-actions{display:flex;gap:12px;margin-top:24px}
+.btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;font-weight:600;cursor:pointer;font-size:0.95rem;border-radius:6px;font-family:var(--font-body);transition:all 0.2s;box-shadow:0 2px 4px rgba(37,99,235,0.2)}
+.btn:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 4px 6px rgba(37,99,235,0.3)}
+.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text);box-shadow:none}
+.btn.secondary:hover{background:var(--panel2);border-color:var(--muted);transform:translateY(0)}
+.btn.tiny{padding:6px 12px;font-size:0.8rem;border-radius:4px}
+.btn:disabled{opacity:0.3;cursor:not-allowed}
+.explain{display:none;margin-top:24px;padding:20px;background:var(--panel2);border-inline-start:3px solid var(--accent);font-size:0.95rem}
+.explain.show{display:block}
+.q-result{font-size:0.95rem;font-weight:600;margin-top:16px}
+.q-result.ok{color:var(--good)}.q-result.no{color:var(--bad)}
+
+.lesson-nav{max-width:1080px;margin:80px auto 0;padding:32px 24px;display:flex;justify-content:space-between;border-top:1px solid var(--line);gap:24px}
+.lesson-nav a{color:var(--text);text-decoration:none;border:1px solid var(--line);padding:20px;flex:1;display:flex;flex-direction:column;gap:8px;border-radius:var(--radius);transition:0.1s}
+.lesson-nav a:hover{border-color:var(--text)}
+.lesson-nav a .k{color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em}
+.lesson-nav a strong{font-size:1.1rem;font-family:var(--font-head)}
+.lesson-nav a.next{text-align:end;align-items:flex-end}
+
+.source-footer{max-width:1080px;margin:0 auto 40px;padding:0 24px;color:var(--muted);font-size:0.85rem}
+.source-footer a{color:var(--text);text-decoration:underline;text-underline-offset:4px}
+
+/* CSS Diagrams Minimalist */
+.diagram{border:1px solid var(--line);padding:32px;margin:32px 0}
+.diagram .cap{text-align:center;color:var(--muted);font-size:0.85rem;margin-top:24px;font-style:italic}
+.osi-stack{display:flex;flex-direction:column;gap:4px;max-width:400px;margin:0 auto}
+.osi-stack .layer{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--panel2);font-weight:500;color:var(--text);border:1px solid var(--line)}
+.osi-stack .layer span.num{opacity:0.5;font-size:0.85rem;margin-inline-end:12px}
+.stack-h{display:flex;gap:4px;direction:ltr;flex-wrap:wrap}
+.stack-h .seg{flex:1;min-width:100px;text-align:center;padding:16px 10px;background:var(--panel2);border:1px solid var(--line);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:0.85rem}
+.ip32{display:flex;gap:4px;direction:ltr}
+.ip32 .oct{flex:1;text-align:center;padding:16px 8px;background:var(--panel2);border:1px solid var(--line);font-family:'IBM Plex Mono',monospace}
+.ip32 .lbl{font-size:0.75rem;opacity:0.7;display:block;margin-top:8px}
+.bits-row{display:flex;direction:ltr;gap:4px;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:0.85rem}
+.bits-row .bit{flex:1;text-align:center;background:var(--panel2);border:1px solid var(--line);padding:8px 4px}
+.class-bar{display:flex;direction:ltr;margin:12px 0;font-family:'IBM Plex Mono',monospace;font-size:0.85rem}
+.class-bar div{padding:12px 8px;text-align:center;border:1px solid var(--line)}
+.cb-net{background:var(--panel2);color:var(--text)}
+.cb-host{background:transparent;color:var(--muted)}
+.hdr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;direction:ltr}
+.hdr-grid .f{background:var(--panel2);border:1px solid var(--line);padding:12px 8px;text-align:center;font-size:0.8rem;color:var(--text)}
+.hdr-grid .f b{display:block;font-size:0.85rem;color:var(--text);margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
+.hdr-grid .span2{grid-column:span 2}.hdr-grid .span4{grid-column:span 4}
+</style>
+<script>
+(function(){
+  const savedTheme = localStorage.getItem('ccna-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  document.documentElement.lang = savedLang;
+  document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.classList.add('lang-'+savedLang);
+})();
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', current);
+  localStorage.setItem('ccna-theme', current);
+}
+</script>
+</head>
+<body class="lang-en">
+
+<div class="topbar">
+  <div class="brand">
+    <a href="index.html"><span class="en">Index</span><span class="ar">الفهرس</span></a>
+    <span class="lesson-title">Introduction to Cisco IOS CLI (Command-Line Interface)</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar"></div></div>
+  <div class="controls">
+    <button id="btnTheme" onclick="toggleTheme()" class="theme-btn" title="Toggle Light/Dark Mode">🌓</button>
+    <div class="langswitch">
+      <button id="btnEn" class="active" onclick="setGlobalLang('en')">EN</button>
+      <button id="btnAr" onclick="setGlobalLang('ar')">AR</button>
+    </div>
+  </div>
+  <div class="lesson-tag">10 / 11</div>
+</div>
+<div class="shell"><nav class="toc"><div class="toc-title"><span class="en">Contents</span><span class="ar">المحتويات</span></div><a href="#recap"><span class="en">Recap Quiz</span><span class="ar">اختبار المراجعة</span></a><a href="#connecting"><span class="en">Connecting via Console</span><span class="ar">الاتصال عبر منفذ الكونسول</span></a><a href="#modes"><span class="en">Cisco IOS Modes</span><span class="ar">أوضاع ومستويات أوامر سيسكو</span></a><a href="#config"><span class="en">Running vs Startup Config</span><span class="ar">ملفات الإعدادات والذاكرة</span></a><a href="#help"><span class="en">Help, Completion & Errors</span><span class="ar">المساعدة والإكمال واكتشاف الأخطاء</span></a><a href="#shortcuts"><span class="en">Navigation Shortcuts</span><span class="ar">اختصارات لوحة المفاتيح وسجل الأوامر</span></a><a href="#do"><span class="en">The 'do' Command</span><span class="ar">أمر do للتنفيذ السريع</span></a><a href="#pipe"><span class="en">Piping Output Modifiers</span><span class="ar">فلترة مخرجات الأوامر (Piping)</span></a><a href="#conclusion"><span class="en">Conclusion</span><span class="ar">الخاتمة</span></a><a href="#quiz"><span class="en">Lesson Quiz</span><span class="ar">اختبار الدرس</span></a></nav><main><div class="hero"><div class="chip"><span class="en">Unit 2: Network Fundamentals</span><span class="ar">الوحدة الثانية: أساسيات الشبكات</span></div>
+<h1>Introduction to Cisco IOS CLI (Command-Line Interface)</h1><div class="sub"><span class="en">Mastering terminal emulation, console connections, CLI modes, and navigation shortcuts</span><span class="ar">احتراف الاتصال بالكونسول، أوضاع الـ CLI، وإدارة إعدادات أجهزة سيسكو</span></div></div><section id="recap"><span class="badge"><span class="en">Recap</span><span class="ar">مراجعة سريعة</span></span><h2><span class="en">Quick recap quiz</span><span class="ar">اختبار مراجعة سريع</span></h2><div id="recapArea"></div></section><section id="connecting"><h2><span class="en">Connecting via Console & Terminal Emulator</span><span class="ar">الاتصال بجهاز سيسكو عبر منفذ الكونسول وبرامج المحاكاة</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">Most Cisco network devices (including routers and switches) use a <b>CLI (Command-Line Interface)</b> for configuration and management. The CLI is a text-based interface where you type commands to configure features or use <code>show</code> commands to verify and troubleshoot device operations.</div><div class="ar">أغلب أجهزة سيسكو (الروترات والسويتشات) بتعتمد على <span class="term">CLI<span class="tip">Command-Line Interface — واجهة السطر البرمجي</span></span> للضبط والإدارة. الـ CLI هي واجهة نصية بتكتب فيها الأوامر لإعداد وتفعيل الخصائص، أو بتستخدم أوامر <code>show</code> لفحص واستكشاف أخطاء الشبكة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en"><b>Console Cabling:</b> When a device is fresh out of the box with no IP configuration, you cannot connect over the network (SSH/Telnet). You must establish an out-of-band physical connection using the <b>Console Port</b> (colored in light cyan/blue). Older devices use an RJ-45 console port paired with a light blue rollover cable (RJ-45 to DB9 serial or USB adapter). Modern Cisco switches also feature a mini-USB or micro-USB console port.</div><div class="ar"><b>كابل الكونسول (Console Cabling):</b> لما الجهاز يكون جديد وخارج من كرتونته بدون أي إعدادات IP، مش هتقدر تتصل بيه عبر الشبكة (بـ SSH أو Telnet). لازم تعمل اتصال فيزيائي مباشر عبر <b>منفذ الكونسول (Console Port)</b> اللي لونه أزرق سماوي. الأجهزة بتستخدم منفذ RJ-45 مع كابل كونسول أزرق (Rollover Cable) بينتهي بـ DB9 serial أو USB، والأجهزة الحديثة فيها كمان منفذ mini-USB أو micro-USB.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="diagram"><div style="font-family:var(--font-body);display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:16px;"><div style="padding:16px;border:2px solid var(--accent);background:var(--panel2);border-radius:8px;text-align:center;"><b>Engineer Laptop</b><br><span style="font-size:0.85rem;color:var(--muted);">Running PuTTY / Tera Term</span></div><div style="text-align:center;color:var(--accent);font-weight:bold;font-size:0.9rem;">&larr; Light Blue Rollover / USB Cable &rarr;<br><span style="font-size:0.8rem;color:var(--text);font-family:monospace;">Serial: 9600-8-N-1</span></div><div style="padding:16px;border:2px solid var(--line);background:var(--panel2);border-radius:8px;text-align:center;"><b>Cisco Switch / Router</b><br><span style="font-size:0.85rem;color:var(--good);font-weight:bold;">[Console Port (RJ45 / USB)]</span></div></div><div class="cap"><span class="en">Out-of-Band Management via Console Cable</span><span class="ar">الاتصال المباشر لإدارة الأجهزة عبر كابل الكونسول</span></div></div><div class="para-block"><div class="en"><b>Terminal Emulator Settings:</b> To connect via serial port using tools like <b>PuTTY</b>, <b>Tera Term</b>, or <b>SecureCRT</b>, you must configure the exact serial parameters required by Cisco IOS:</div><div class="ar"><b>إعدادات برامج المحاكاة (Terminal Emulator):</b> عشان تفتح شاشة الكونسول ببرامج زي <b>PuTTY</b> أو <b>SecureCRT</b>، لازم تضبط إعدادات الاتصال التسلسلي (Serial) القياسية لأجهزة سيسكو:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="table-wrap"><table><tr><th><span class="en">Serial Parameter</span><span class="ar">خاصية الاتصال</span></th><th><span class="en">Standard Cisco Value</span><span class="ar">القيمة القياسية في سيسكو</span></th><th><span class="en">Description</span><span class="ar">الوصف والوظيفة</span></th></tr><tr><td class="mono-cell"><b>Baud Rate (Speed)</b></td><td class="mono-cell">9600 bps</td><td><span class="en">Speed of data transmission over serial line</span><span class="ar">سرعة نقل البيانات عبر الكابل التسلسلي</span></td></tr><tr><td class="mono-cell"><b>Data Bits</b></td><td class="mono-cell">8</td><td><span class="en">Number of data bits in each character</span><span class="ar">عدد بتات البيانات لكل حرف</span></td></tr><tr><td class="mono-cell"><b>Parity</b></td><td class="mono-cell">None (N)</td><td><span class="en">No parity bit used for error checking</span><span class="ar">عدم استخدام بت تطابق</span></td></tr><tr><td class="mono-cell"><b>Stop Bits</b></td><td class="mono-cell">1</td><td><span class="en">Single stop bit marking character end</span><span class="ar">بت توقف واحد يشير لنهاية الحرف</span></td></tr><tr><td class="mono-cell"><b>Flow Control</b></td><td class="mono-cell">None</td><td><span class="en">No hardware/software flow control</span><span class="ar">بدون تحكم في تدفق الإشارة</span></td></tr></table></div><div class="para-block"><div class="en"><b>First Boot & POST:</b> When a switch or router powers on, it executes the <b>POST (Power-On Self-Test)</b> to verify CPU, DRAM, flash memory, and interface ASICs. Once POST passes successfully, the bootloader loads the Cisco IOS software image into RAM, presents licensing information, and initiates the CLI prompt.</div><div class="ar"><b>بدء التشغيل واختبار POST:</b> لما تشغل الراوتر أو السويتش، بيبدأ باختبار الفحص الذاتي {T('POST', 'Power-On Self-Test — فحص عتاد الجهاز عند التشغيل')} للتحقق من المعالج والذاكرة والمنافذ. بعد نجاح الاختبار، بيتم تحميل نظام تشغيل سيسكو (IOS) من الفلاش إلى ذاكرة الـ RAM، وتظهر شاشة البداية.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Crucial Exam & Practical Tip (9600 8-N-1): Always memorize '9600, 8, None, 1, None'. If you connect to a Cisco switch and see weird unreadable gibberish characters (like #@), the baud rate on your terminal emulator doesn't match the switch! Change the baud rate in PuTTY until clear English text appears.</div><div class="ar">نصيحة عملية هامة جداً (9600 8-N-1): احفظ المعادلة دي صم. لو وصلت كابل الكونسول وفتحت PuTTY ولقيت طالعلك رموز غريبة وغير مفهومة (زي #@)، ده معناه فوراً إن سرعة الـ Baud Rate في البرنامج مش متطابقة مع سرعة السويتش! غير السرعة في PuTTY لحد ما الكلام يظهر إنجليزي سليم ومقروء.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="modes"><h2><span class="en">Cisco IOS Modes & Navigation Hierarchy</span><span class="ar">أوضاع ومستويات أوامر سيسكو والتنقل بينها</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">Cisco IOS is organized into a hierarchical structure of command modes. Each mode has its own distinct prompt, access privileges, and set of available commands:</div><div class="ar">أوامر سيسكو متقسمة لهيكل هرمي من الأوضاع (Modes). كل وضع ليه علامة مميزة (Prompt)، وصلاحيات معينة، ومجموعة أوامر خاصة بيه:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="diagram"><div style="font-family:monospace;display:flex;flex-direction:column;gap:12px;"><div style="padding:12px;border:1px solid var(--line);background:var(--panel2);border-radius:6px;"><b style="color:var(--muted);">1. User EXEC Mode:</b> <code>Switch&gt;</code><br><span style="font-size:0.85rem;color:var(--text);">Basic view-only monitoring (ping, traceroute, limited show). No config changes allowed.</span></div><div style="text-align:center;color:var(--accent);font-weight:bold;">&darr; type: enable &nbsp;|&nbsp; type: disable &uarr;</div><div style="padding:12px;border:1px solid var(--accent);background:var(--panel2);border-radius:6px;"><b style="color:var(--accent);">2. Privileged EXEC Mode (Enable Mode):</b> <code>Switch#</code><br><span style="font-size:0.85rem;color:var(--text);">Full viewing and maintenance (all show commands, debug, copy, erase, reload).</span></div><div style="text-align:center;color:var(--accent);font-weight:bold;">&darr; type: configure terminal &nbsp;|&nbsp; type: exit / end &uarr;</div><div style="padding:12px;border:1px solid var(--accent2);background:var(--panel2);border-radius:6px;"><b style="color:var(--accent2);">3. Global Configuration Mode:</b> <code>Switch(config)#</code><br><span style="font-size:0.85rem;color:var(--text);">System-wide changes (hostname, banner, domain name, routing protocols).</span></div><div style="text-align:center;color:var(--warn);font-weight:bold;">&darr; enter specific sub-modes &darr;</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;"><div style="padding:8px;border:1px dashed var(--line);border-radius:4px;background:var(--panel);font-size:0.85rem;"><b>Interface Mode:</b><br><code>Switch(config-if)#</code></div><div style="padding:8px;border:1px dashed var(--line);border-radius:4px;background:var(--panel);font-size:0.85rem;"><b>Line Mode:</b><br><code>Switch(config-line)#</code></div><div style="padding:8px;border:1px dashed var(--line);border-radius:4px;background:var(--panel);font-size:0.85rem;"><b>Router Mode:</b><br><code>Switch(config-router)#</code></div></div></div><div class="cap"><span class="en">Hierarchical Navigation of Cisco IOS Modes</span><span class="ar">الهيكل الهرمي للتنقل بين أوضاع تشغيل سيسكو</span></div></div><div class="para-block"><div class="en"><b>Navigating Between Modes:</b> Here is how you move up and down through the hierarchy in practice:</div><div class="ar"><b>طريقة التنقل عملياً بين الأوضاع:</b> ده مثال حي للتنقل بين المستويات المختلفة:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch> <b>enable</b>
+Switch# <b>configure terminal</b>
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)# <b>interface FastEthernet 0/1</b>
+Switch(config-if)# <b>description LAN_UPLINK</b>
+Switch(config-if)# <b>exit</b>
+Switch(config)# <b>exit</b>
+Switch# <b>disable</b>
+Switch></div><div class="para-block"><div class="en"><b>Exit vs End vs Ctrl+Z:</b><br>• <code>exit</code> moves you back <b>one level up</b> the hierarchy (e.g. from <code>(config-if)#</code> to <code>(config)#</code>).<br>• <code>end</code> or pressing <b>Ctrl+Z</b> jumps directly from <b>any configuration sub-mode</b> all the way back to Privileged EXEC mode (<code>Switch#</code>).</div><div class="ar"><b>الفرق بين exit و end و Ctrl+Z:</b><br>• أمر <code>exit</code> بيرجعك <b>خطوة واحدة للخلف</b> للمستوى اللي قبله (مثلاً من <code>(config-if)#</code> إلى <code>(config)#</code>).<br>• أمر <code>end</code> أو الضغط على <b>Ctrl+Z</b> بيخرجك فوراً من <b>أي وضع فرعي</b> ويرجعك مباشرة لوضع الـ Privileged EXEC الرئيسي (<code>Switch#</code>).</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Why does Cisco separate User Mode (>) from Privileged Mode (#)? For Security! In User Mode, a guest or junior technician can view basic interface status and run ping tests without being able to see sensitive configurations, passwords, or reload the router. Privileged Mode is password-protected (via 'enable secret') to ensure only authorized admins can view configs or make modifications.</div><div class="ar">ليه سيسكو فصلت بين User Mode (>) و Privileged Mode (#)؟ عشان الأمان! في الـ User Mode، أي فني مبتدئ يقدر يشوف حاجات بسيطة ويعمل ping للتأكد من الشبكة، لكن ميقدرش يشوف الإعدادات الحساسة ولا الباسوردات ولا يطفي الجهاز. وضع الـ Privileged بيكون محمي بباسورد قوية (عبر أمر 'enable secret') عشان الأدمن المعتمد بس هو اللي يقدر يغير حاجة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="config"><h2><span class="en">Running-Config vs Startup-Config & Memory Types</span><span class="ar">ملفات الإعدادات وأنواع الذاكرة في أجهزة سيسكو</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">Cisco routers and switches use multiple types of memory to store their operating system, active configuration, and persistent boot configuration:</div><div class="ar">روترات وسويتشات سيسكو بتستخدم كذا نوع من الذاكرة لتخزين نظام التشغيل والإعدادات الحالية وإعدادات الإقلاع الدائمة:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="table-wrap"><table><tr><th><span class="en">Memory Type</span><span class="ar">نوع الذاكرة</span></th><th><span class="en">Volatility</span><span class="ar">طبيعة الذاكرة</span></th><th><span class="en">Stores What?</span><span class="ar">ماذا تخزن؟</span></th><th><span class="en">Command to View</span><span class="ar">أمر العرض</span></th></tr><tr><td class="mono-cell"><b>RAM (DRAM)</b></td><td>Volatile (Lost on power off)</td><td><b>running-config</b>, routing tables, ARP cache, packet buffers</td><td class="mono-cell"><code>show running-config</code></td></tr><tr><td class="mono-cell"><b>NVRAM</b></td><td>Non-Volatile (Permanent)</td><td><b>startup-config</b>, software configuration register</td><td class="mono-cell"><code>show startup-config</code></td></tr><tr><td class="mono-cell"><b>Flash Memory</b></td><td>Non-Volatile (Permanent)</td><td>Cisco IOS Software images (.bin files), backup files</td><td class="mono-cell"><code>show flash:</code></td></tr><tr><td class="mono-cell"><b>ROM</b></td><td>Permanent (Read-Only)</td><td>Bootstrap program, POST diagnostics, ROMMON recovery mode</td><td class="mono-cell"><code>show version</code></td></tr></table></div><div class="para-block"><div class="en"><b>Saving Configurations:</b> Any command you type in configuration mode takes effect <b>immediately</b> in RAM (running-config). However, if the power drops or the switch reboots, all unsaved changes are lost! To save changes permanently to NVRAM:</div><div class="ar"><b>حفظ الإعدادات:</b> أي أمر بتكتبه بيتطبق <b>في نفس اللحظة</b> في ذاكرة الـ RAM (الـ running-config). لكن لو الكهرباء قطعت أو الجهاز اتعمله ريستارت، كل اللي كتبته هيروح! عشان تحفظ الإعدادات بشكل دائم في الـ NVRAM:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch# <b>copy running-config startup-config</b>
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+
+! Shorthand legacy command (widely used in real life):
+Switch# <b>write memory</b>  ! or simply: <b>wr</b></div><div class="para-block"><div class="en"><b>Erasing and Resetting to Factory Defaults:</b> To completely wipe a switch or router configuration back to clean factory state:</div><div class="ar"><b>مسح الإعدادات والعودة لضبط المصنع:</b> عشان تمسح كل الإعدادات القديمة وترجع الجهاز جديد تماماً:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch# <b>write erase</b>   ! or: <b>erase startup-config</b>
+Erasing the nvram filesystem will remove all configuration files! Continue? [confirm]
+[OK]
+Erase of nvram: complete
+Switch# <b>reload</b>
+Proceed with reload? [confirm]</div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Golden Rule in Telecom & Enterprise Networks: Always do 'copy run start' (or 'wr') after finishing your work! In Egyptian ISPs and enterprise NOCs, engineers who forget to save configs before a maintenance window reboots the router can cause major service outages. Also note: On Catalyst switches, erasing startup-config does NOT delete the VLAN database (`vlan.dat` in flash)! You must also run `delete flash:vlan.dat` to completely factory reset a switch.</div><div class="ar">القاعدة الذهبية في كل شركات الاتصالات وشبكات الشركات: دايماً اكتب 'wr' أو 'copy run start' أول ما تخلص شغلك! في شركات الـ NOC، لو مهندس نسي يحفظ والراوتر اتعمله ريستارت فجأة، الإعدادات بتضيع والخدمة بتقف. ملحوظة هامة جداً للامتحانات: مسح الـ startup-config في السويتش مش بيمسح الـ VLANs! لأن الـ VLANs بتتخزن في ملف اسمه `vlan.dat` في الفلاش، ولازم تمسحه بأمر `delete flash:vlan.dat` عشان تصفر السويتش بالكامل.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="help"><h2><span class="en">Context Help, Autocompletion & Error Messages</span><span class="ar">المساعدة الذكية، الإكمال التلقائي، واكتشاف الأخطاء</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">Cisco IOS features powerful built-in help and diagnostic tools to assist you without needing to memorize every complex command syntax:</div><div class="ar">نظام سيسكو مزود بأدوات مساعدة ذكية متطورة بتساعدك توصل لأي أمر ومعاملاته بسهولة من غير ما تحفظ كل التفاصيل:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en"><b>1. Context-Sensitive Help with Question Mark (?):</b><br>• <code>?</code> alone at prompt: lists all available commands in current mode.<br>• <code>c?</code> (no space): lists all commands that start with the letter 'c' (e.g., clear, clock, configure).<br>• <code>clock ?</code> (with a space): shows the next keyword or argument required by the command.</div><div class="ar"><b>1. المساعدة السياقية بعلامة الاستفهام (?):</b><br>• كتابة <code>?</code> لوحدها: بتعرض كل الأوامر المتاحة في الوضع الحالي.<br>• كتابة <code>c?</code> (بدون مسافة): بتعرض كل الأوامر اللي بتبدأ بحرف c (زي clear و clock و configure).<br>• كتابة <code>clock ?</code> (بمسافة): بتوريك الكلمة أو المعامل التالي المطلوب إدخاله بعد clock.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch# <b>clock ?</b>
+  set  Set the time and date
+
+Switch# <b>clock set ?</b>
+  hh:mm:ss  Current Time
+
+Switch# <b>clock set 15:30:00 ?</b>
+  <1-31>  Day of the month
+  MONTH   Month of the year</div><div class="para-block"><div class="en"><b>2. Tab Key (Autocompletion):</b> Pressing <b>Tab</b> automatically completes the remainder of a command word, provided you have typed enough characters to make it unique (e.g. typing <code>conf</code> and pressing Tab expands to <code>configure</code>).</div><div class="ar"><b>2. زر الـ Tab للإكمال التلقائي:</b> الضغط على زر <b>Tab</b> بيكمل باقي الكلمة تلقائياً طالما كتبت حروف كافية تميزها عن غيرها (مثلاً لو كتبت <code>conf</code> وضغطت Tab هتتكمل تلقائياً إلى <code>configure</code>).</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en"><b>3. Understanding CLI Error Messages:</b> When an error occurs, Cisco IOS tells you exactly what went wrong:</div><div class="ar"><b>3. فهم رسائل الأخطاء في سيسكو:</b> لما يحصل خطأ، الـ CLI بيوضحلك نوع المشكلة بدقة:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="table-wrap"><table><tr><th><span class="en">Error Message</span><span class="ar">رسالة الخطأ</span></th><th><span class="en">What it Means</span><span class="ar">المعنى وسبب الخطأ</span></th><th><span class="en">Example & Fix</span><span class="ar">مثال وطريقة الحل</span></th></tr><tr><td class="mono-cell"><b>% Ambiguous command</b></td><td>Not enough characters were typed to distinguish between multiple matching commands</td><td>Typing <code>c</code> in enable mode (could be <code>clear</code>, <code>clock</code>, or <code>configure</code>). Type more letters like <code>conf</code>.</td></tr><tr><td class="mono-cell"><b>% Incomplete command</b></td><td>The command is valid so far, but requires additional mandatory parameters</td><td>Typing <code>clock set 14:00:00</code> without specifying day/month. Use <code>?</code> to see missing arguments.</td></tr><tr><td class="mono-cell"><b>% Invalid input detected at '^' marker</b></td><td>A syntax error was detected. The caret symbol (<code>^</code>) points directly to the first unrecognized character</td><td>Typing <code>shwo version</code>. The <code>^</code> points under &apos;w&apos; showing where the typo began.</td></tr></table></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Exam Trick on Caret (^) Marker: In the CCNA exam simulations, if you see the caret symbol `^`, look directly above it! The error is ALWAYS at or immediately following that specific character. It saves you from re-reading a 50-character command when only one letter is wrong.</div><div class="ar">خدعة امتحانات CCNA بخصوص علامة السهم (^): في أسئلة الامتحان العملي والمحاكاة، لو طلعلك رمز `^`، بص فوقه مباشرة! الخطأ دايماً بيكون في الحرف اللي فوق السهم بالضبط. الحركة دي بتوفر عليك وقت قراءة الأمر الطويل وتعرفك الحرف الغلط فوراً.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="shortcuts"><h2><span class="en">CLI Shortcuts & Command History</span><span class="ar">اختصارات لوحة المفاتيح وسجل الأوامر (History)</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">Professional network engineers work rapidly in the CLI using built-in keyboard shortcuts and command recall history:</div><div class="ar">مهندسو الشبكات المحترفون بيتحركوا بسرعة كبيرة في الـ CLI باستخدام اختصارات لوحة المفاتيح وسجل استرجاع الأوامر:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="table-wrap"><table><tr><th><span class="en">Keyboard Shortcut</span><span class="ar">الاختصار</span></th><th><span class="en">Action Performed</span><span class="ar">الوظيفة</span></th></tr><tr><td class="mono-cell"><b>Ctrl + A</b></td><td>Moves the cursor to the <b>beginning</b> of the current line</td></tr><tr><td class="mono-cell"><b>Ctrl + E</b></td><td>Moves the cursor to the <b>end</b> of the current line</td></tr><tr><td class="mono-cell"><b>Ctrl + Z</b> (or <code>end</code>)</td><td>Instantly returns to Privileged EXEC mode (<code>#</code>) from any configuration sub-mode</td></tr><tr><td class="mono-cell"><b>Ctrl + C</b></td><td>Aborts the current command execution or exits Setup Mode</td></tr><tr><td class="mono-cell"><b>Up / Down Arrows</b></td><td>Recalls previously entered commands from the history buffer</td></tr><tr><td class="mono-cell"><b>Ctrl + Shift + 6</b></td><td>Breaks/aborts an ongoing ping, traceroute, or unwanted DNS broadcast hang</td></tr></table></div><div class="para-block"><div class="en"><b>Command History Buffer:</b> Cisco IOS automatically remembers the last <b>10 commands</b> you typed by default. You can view them using <code>show history</code> or increase the buffer size with <code>terminal history size &lt;number&gt;</code>.</div><div class="ar"><b>سجل الأوامر (History Buffer):</b> سيسكو تلقائياً بيحفظ آخر <b>10 أوامر</b> كتبتها افتراضياً. تقدر تعرضهم بأمر <code>show history</code> أو تكبر حجم السجل لغاية 256 بأمر <code>terminal history size 50</code>.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Life-Saving Shortcut: Ctrl + Shift + 6! If you accidentally type an invalid command and forgot to configure 'no ip domain-lookup', the router begins broadcasting to 255.255.255.255 and freezes your terminal. Pressing Ctrl+Shift+6 immediately breaks and terminates the lookup loop!</div><div class="ar">اختصار الإنقاذ السريع: Ctrl + Shift + 6! لو كتبت كلمة غلط بالغلط وكنت ناسي تحط أمر 'no ip domain-lookup'، الراوتر هيبدأ يعمل broadcast ويهنج الشاشة. دوس مع بعض على Ctrl + Shift + 6 وهيوقف المحاولة ويرجعلك شاشة التحكم فوراً!</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="do"><h2><span class="en">The 'do' Command</span><span class="ar">أمر do للتنفيذ المباشر من أوضاع الإعدادات</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">Normally, <code>show</code> and <code>debug</code> commands can only be executed in Privileged EXEC mode (<code>Switch#</code>). If you are deep inside configuration mode, typing a show command generates an error:</div><div class="ar">في العادة، أوامر <code>show</code> و <code>debug</code> بتشتغل بس في وضع الـ Privileged EXEC (<code>Switch#</code>). لو أنت جوا وضع الإعدادات وكتبت أمر show، بيطلعلك خطأ:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch(config-if)# <b>show ip interface brief</b>
+                    ^
+% Invalid input detected at '^' marker.</div><div class="para-block"><div class="en">Without the <code>do</code> command, you would have to type <code>exit</code> or <code>end</code>, run the show command, and then navigate all the way back into the interface sub-mode. To avoid this frustration, Cisco introduced the <b>do</b> prefix:</div><div class="ar">من غير أمر <code>do</code>، كنت هتضطر تخرج بـ <code>exit</code>، وتشغل أمر الـ show، وبعدين ترجع تدخل تاني لكل المستويات الفرعية. عشان يحلوا المشكلة دي، سيسكو أضافت بادئة <b>do</b>:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch(config-if)# <b>do show ip interface brief</b>
+Interface              IP-Address      OK? Method Status                Protocol
+FastEthernet0/1        unassigned      YES unset  up                    up      
+FastEthernet0/2        unassigned      YES unset  down                  down
+
+Switch(config)# <b>do ping 10.1.1.1</b>
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.1.1.1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5)</div><div class="para-block"><div class="en">The <code>do</code> command allows you to run ANY privileged mode command (like <code>show</code>, <code>ping</code>, <code>traceroute</code>, or <code>write memory</code>) from within configuration mode!</div><div class="ar">أمر <code>do</code> بيسمحلك تشغل أي أمر من أوامر وضع الـ Privileged (زي <code>show</code> أو <code>ping</code> أو <code>traceroute</code> أو حتى <code>write memory</code>) وأنت في مكانك جوا وضع الإعدادات!</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Historical Limitation to Remember: In older Cisco IOS versions, context-sensitive help (`?`) does not work after the `do` command (typing `do show ?` would output an error or show nothing). You had to know the exact syntax of the command. Modern Cisco IOS versions have resolved this, but it remains a famous interview trivia question!</div><div class="ar">معلومة امتحانات تاريخية: في إصدارات سيسكو IOS القديمة، علامة الاستفهام (`?`) مكنتش بتشتغل بعد كلمة `do` (يعني لو كتبت `do show ?` مكنش بيطلعلك مساعدة). كنت لازم تكون حافظ صيغة الأمر بالضبط. الإصدارات الحديثة حلت الموضوع ده، بس لسه سؤال شهير في المقابلات!</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="pipe"><h2><span class="en">Filtering Output with Pipe (|) Modifiers</span><span class="ar">فلترة مخرجات الأوامر باستخدام الـ Pipe (|)</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">On complex production devices, commands like <code>show running-config</code> produce hundreds of lines of output. Scrolling through all of them is slow and inefficient. Cisco IOS allows you to pipe the output through filters using the vertical bar (<b>|</b>):</div><div class="ar">في بيئات العمل الحقيقية، أمر زي <code>show running-config</code> بيطلع مئات الأسطر. إنك تقعد تقلب فيهم كلهم مضيعة كبيرة للوقت. سيسكو بتوفرلك إمكانية فلترة النتائج باستخدام علامة الـ Pipe (<b>|</b>):</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch# <b>show running-config | ?</b>
+  append    Append redirected output to URL
+  begin     Begin with the line that matches
+  exclude   Exclude lines that match
+  include   Include lines that match
+  section   Filter a section of the output</div><div class="table-wrap"><table><tr><th><span class="en">Filter Modifier</span><span class="ar">نوع الفلتر</span></th><th><span class="en">How it Works</span><span class="ar">طريقة عمله</span></th><th><span class="en">Practical Command Example</span><span class="ar">مثال عملي شهير</span></th></tr><tr><td class="mono-cell"><b>| include &lt;regex&gt;</b></td><td>Shows <b>only</b> the lines that contain the matching pattern (like grep)</td><td class="mono-cell"><code>show ip int br | include up</code></td></tr><tr><td class="mono-cell"><b>| exclude &lt;regex&gt;</b></td><td>Displays all lines <b>except</b> those matching the pattern</td><td class="mono-cell"><code>show ip int br | exclude unassigned</code></td></tr><tr><td class="mono-cell"><b>| begin &lt;regex&gt;</b></td><td>Starts displaying output from the first line that matches the pattern onward</td><td class="mono-cell"><code>show run | begin line vty</code></td></tr><tr><td class="mono-cell"><b>| section &lt;regex&gt;</b></td><td>Displays the entire configuration block/paragraph associated with that keyword</td><td class="mono-cell"><code>show run | section router ospf</code></td></tr></table></div><div class="para-block"><div class="en">Example of <code>| section</code> in action:</div><div class="ar">مثال عملي على استخدام <code>| section</code>:</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="cli">Switch# <b>show running-config | section line</b>
+line con 0
+ logging synchronous
+line vty 0 4
+ login
+ transport input ssh</div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">NOC & Exam Time-Saver: `show ip int br | ex unassigned` is universally the favorite command of NOC engineers. Instead of scrolling through 48 FastEthernet switchports with 'unassigned', this command instantly displays only the ports that actually have configured IP addresses and active connections!</div><div class="ar">أسرع أمر في غرف الـ NOC والامتحانات: أمر `show ip int br | ex unassigned` هو السحر لكل مهندسي الشبكات. بدل ما تشوف جدول عملاق فيه 48 بورت مكتوب عليهم unassigned، الأمر ده بيخفيهم كلهم في ثانية ويعرضلك بس البورتات اللي عليها IPs وروترات شغالة!</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="conclusion"><h2><span class="en">Conclusion</span><span class="ar">خلاصة الدرس</span></h2><div class="src"><div class="src-label"><span class="en">SOURCE MATERIAL</span><span class="ar">النص الأصلي من المرجع</span></div><div class="para-block"><div class="en">The Cisco IOS Command-Line Interface is the primary tool of every network engineer. Mastering navigation, configuration saving, shortcuts, and output filters transforms configuration and troubleshooting from a tedious task into an efficient process.</div><div class="ar">واجهة السطر البرمجي لسيسكو (IOS CLI) هي السلاح الأساسي لكل مهندس شبكات. إتقان التنقل بين الأوضاع، وحفظ الإعدادات، واستخدام الاختصارات وفلاتر البحث بيحول عملية الإدارة واستكشاف الأعطال لمهمة سريعة واحترافية.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div><div class="para-block"><div class="en">Key Takeaways for CCNA:<br>• <b>Serial Settings:</b> 9600 baud, 8 data bits, no parity, 1 stop bit, no flow control (9600-8-N-1).<br>• <b>Modes:</b> User Mode (<code>&gt;</code>), Privileged Mode (<code>#</code>), Global Config (<code>(config)#</code>).<br>• <b>Memory:</b> RAM = running-config (volatile), NVRAM = startup-config (persistent). Save with <code>copy run start</code> or <code>wr</code>.<br>• <b>do command:</b> Executes privileged commands from within configuration sub-modes.<br>• <b>Piping:</b> Use <code>| include</code>, <code>| exclude</code>, <code>| begin</code>, and <code>| section</code> to instantly pinpoint information.</div><div class="ar">أهم نقاط CCNA المستفادة:<br>• <b>إعدادات الكونسول:</b> 9600 سرعة، 8 بت، بدون تطابق، 1 بت توقف، بدون تحكم في التدفق (9600-8-N-1).<br>• <b>الأوضاع:</b> وضع المستخدم (<code>&gt;</code>)، وضع الصلاحيات (<code>#</code>)، وضع الإعدادات العامة (<code>(config)#</code>).<br>• <b>الذاكرة:</b> RAM = running-config (مؤقتة)، NVRAM = startup-config (دائمة). احفظ بـ <code>copy run start</code> أو <code>wr</code>.<br>• <b>أمر do:</b> بيشغل أوامر الـ show والـ ping وأنت داخل أوضاع الإعدادات.<br>• <b>الفلترة:</b> استخدم <code>| include</code> و <code>| section</code> للوصول الفوري للمعلومة المطلوبة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><div class="extra"><div class="lab"><span class="en">AUTHOR NOTE</span><span class="ar">ملاحظة إضافية للتوضيح</span></div><div class="para-block"><div class="en">Looking Ahead to Lesson 11: In the next lesson, we will build directly upon this foundation to learn how to secure the Cisco CLI: setting up console passwords, securing privileged mode with `enable secret`, configuring vty lines for remote management, and encrypting stored passwords with service password-encryption.</div><div class="ar">تمهيد للدرس القادم (الدرس 11): في الدرس الجاي هنبني مباشرة على اللي اتعلمناه هنا عشان نعرف إزاي نأمّن أجهزة سيسكو: باسورد الكونسول، وحماية وضع الـ enable بأمر `enable secret`، وتأمين خطوط الـ vty، وتشفير كلمات المرور المخزنة.</div><button class="tr-btn" onclick="toggleParaLang(this)"></button></div></div><section id="quiz"><h2><span class="en">Lesson quiz</span><span class="ar">اختبار الدرس</span></h2><p class="quiz-intro"><span class="en">Select an answer and check. You can toggle language for each question individually.</span><span class="ar">اختر إجابة وتحقق. يمكنك تبديل اللغة لكل سؤال على حدة.</span></p><div id="quizArea"></div></section></main></div><div class="lesson-nav">
+<a class="prev" href="lesson-09-dns.html"><span class="k"><span class="en">Previous Lesson</span><span class="ar">الدرس السابق</span></span><strong>Introduction to DNS</strong></a>
+<a class="next" href="lesson-11-user-mode-privileged-mode-security.html"><span class="k"><span class="en">Next Lesson</span><span class="ar">الدرس التالي</span></span><strong>User Mode & Privileged Mode Security</strong></a>
+</div>
+<div class="source-footer">
+    <div class="en">
+      📝 <strong>Source Material:</strong> This lesson is officially sourced from <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-the-cisco-ios-command-line-interface-cli" target="_blank">NetworkLessons.com</a> (PDF: <a href="pdfs/010-introduction to cisco ios cli (command-line interface).pdf" target="_blank">010-introduction to cisco ios cli (command-line interface).pdf</a>). We transformed it into an interactive, bilingual format with extra simplified notes (yellow boxes) and realistic exam questions for an optimal learning experience!
+    </div>
+    <div class="ar">
+      📝 <strong>المصدر الرسمي:</strong> هذا الدرس مأخوذ رسمياً من <a href="https://networklessons.com/cisco/ccna-routing-switching-icnd1/introduction-to-the-cisco-ios-command-line-interface-cli" target="_blank">NetworkLessons.com</a> (ملف الـ PDF: <a href="pdfs/010-introduction to cisco ios cli (command-line interface).pdf" target="_blank">010-introduction to cisco ios cli (command-line interface).pdf</a>). لقد قمنا بتحويله إلى شكل تفاعلي ثنائي اللغة مع إضافة شروحات مبسطة (المربعات الصفراء) وأسئلة امتحانات حقيقية لتسهيل المذاكرة!
+    </div>
+</div>
+<script>
+const UI = {
+  en:{tr:'🌐 Translate to Arabic', trBack:'🌐 Show English', check:'Check answer', reveal:'Reveal answer', q:'Question', ok:'Correct', no:'Incorrect', qlang:'🌐 العربية'},
+  ar:{tr:'🌐 ترجمة للعربية', trBack:'🌐 عرض الإنجليزية', check:'تحقق من الإجابة', reveal:'إظهار الإجابة', q:'سؤال', ok:'إجابة صحيحة', no:'إجابة خاطئة', qlang:'🌐 English'}
+};
+const curLang = () => document.body.classList.contains('lang-ar') ? 'ar' : 'en';
+function arShown(pb){ return (curLang()==='ar') !== pb.classList.contains('flip'); }
+function updBtn(pb){
+  const b = pb.querySelector(':scope > .tr-btn'); if(!b) return;
+  if(curLang()==='en') {
+    b.textContent = arShown(pb) ? UI.en.trBack : UI.en.tr;
+  } else {
+    b.textContent = arShown(pb) ? UI.ar.trBack : UI.ar.tr;
+  }
+}
+function toggleParaLang(btn){ const pb = btn.closest('.para-block'); pb.classList.toggle('flip'); updBtn(pb); }
+function setGlobalLang(l){
+  document.documentElement.dir = (l === 'ar') ? 'rtl' : 'ltr';
+  document.body.classList.remove('lang-en', 'lang-ar');
+  document.body.classList.add('lang-'+l);
+  document.documentElement.lang = l;
+  document.documentElement.classList.remove('lang-en', 'lang-ar');
+  document.documentElement.classList.add('lang-'+l);
+  document.getElementById('btnEn').classList.toggle('active', l==='en');
+  document.getElementById('btnAr').classList.toggle('active', l==='ar');
+  document.querySelectorAll('.para-block').forEach(pb=>{ pb.classList.remove('flip'); updBtn(pb); });
+  document.querySelectorAll('.q-card').forEach(c=>applyQuizLang(c, l));
+  localStorage.setItem('ccna-lang', l);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem('ccna-lang') || 'en';
+  setGlobalLang(savedLang);
+});
+
+function imgFail(img){
+  if(img.dataset.alt && !img.dataset.tried){ img.dataset.tried='1'; img.src=img.dataset.alt; return; }
+  img.style.display='none';
+  const f=img.parentElement.querySelector('.img-fallback'); if(f) f.style.display='block';
+}
+document.querySelectorAll('.para-block').forEach(updBtn);
+document.querySelectorAll('.term').forEach(t=>t.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.term.tap').forEach(o=>{if(o!==t)o.classList.remove('tap')});t.classList.toggle('tap');}));
+document.addEventListener('click',()=>document.querySelectorAll('.term.tap').forEach(o=>o.classList.remove('tap')));
+const tocLinks=[...document.querySelectorAll('.toc a')], secs=tocLinks.map(a=>document.querySelector(a.getAttribute('href')));
+window.addEventListener('scroll',()=>{let i=0;secs.forEach((s,k)=>{if(s&&s.getBoundingClientRect().top<150)i=k});tocLinks.forEach(a=>a.classList.remove('active'));tocLinks[i]&&tocLinks[i].classList.add('active');});
+
+function applyQuizLang(card, l){
+  const it=card._item, Tx=UI[l];
+  card.dataset.lang=l;
+  card.querySelector('.q-text').textContent=it.q[l];
+  card.querySelectorAll('.opt span').forEach((s,i)=>s.textContent=it.opts[i][l]);
+  card.querySelector('.explain').textContent=it.explain[l];
+  card.querySelector('.q-num').textContent=Tx.q+' '+card._n+' / '+card._total;
+  card.querySelector('.check').textContent=Tx.check;
+  card.querySelector('.reveal').textContent=Tx.reveal;
+  card.querySelector('.qlang').textContent=Tx.qlang;
+  const r=card.querySelector('.q-result'); if(card._state) r.textContent = card._state==='ok'?Tx.ok:Tx.no;
+}
+function buildQuiz(id, items){
+  const area=document.getElementById(id);
+  if(!area) return;
+  items.forEach((it,qi)=>{
+    const card=document.createElement('div'); card.className='q-card'; card._item=it; card._n=qi+1; card._total=items.length;
+    card.innerHTML=`<div class="q-top"><div class="q-num"></div><button class="btn secondary tiny qlang"></button></div>
+      <div class="q-text"></div><div class="opts"></div>
+      <div class="q-actions"><button class="btn check" disabled></button><button class="btn secondary reveal"></button></div>
+      <div class="q-result"></div><div class="explain"></div>`;
+    const ow=card.querySelector('.opts');
+    it.opts.forEach((o,oi)=>{const lb=document.createElement('label');lb.className='opt';lb.innerHTML=`<input type="radio" name="${id}-${qi}" value="${oi}"><span></span>`;ow.appendChild(lb);});
+    area.appendChild(card);
+    applyQuizLang(card, curLang());
+    card.querySelector('.qlang').onclick=()=>applyQuizLang(card, card.dataset.lang==='en'?'ar':'en');
+    const chk=card.querySelector('.check'), rev=card.querySelector('.reveal'), ex=card.querySelector('.explain'), labs=card.querySelectorAll('.opt'), res=card.querySelector('.q-result');
+    card.querySelectorAll('input').forEach(r=>r.onchange=()=>chk.disabled=false);
+    chk.onclick=()=>{const c=card.querySelector('input:checked'); if(!c) return; const ci=+c.value;
+      labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct'); else if(i===ci) l.classList.add('wrong');});
+      card._state = ci===it.correct?'ok':'no'; res.className='q-result '+card._state; res.textContent=UI[card.dataset.lang][card._state];
+      ex.classList.add('show'); chk.disabled=true;};
+    rev.onclick=()=>{labs.forEach((l,i)=>{l.classList.add('disabled'); if(i===it.correct) l.classList.add('correct');}); ex.classList.add('show');};
+  });
+}
+</script>
+<script>
+buildQuiz('recapArea',[{q:{en:'In the previous lesson on DNS, what transport layer protocol and destination port are used for standard host queries?',ar:'في الدرس السابق الخاص بـ DNS، ما هو بروتوكول طبقة النقل ومنفذ الوجهة المستخدم لاستعلامات الأجهزة العادية؟'},opts:[{en:'TCP port 80',ar:'منفذ TCP 80'},{en:'UDP port 53',ar:'منفذ UDP 53'},{en:'TCP port 53',ar:'منفذ TCP 53'},{en:'UDP port 67',ar:'منفذ UDP 67'}],correct:1,explain:{en:'Standard client DNS queries use UDP port 53 for speed, low overhead, and absence of connection setup delay.',ar:'استعلامات DNS العادية للأجهزة بتستخدم UDP منفذ 53 لسرعته وخفة وزنه وعدم وجود تأخير لفتح الاتصال.'}},{q:{en:"In the FQDN 'server.cisco.com.', what does the trailing period (.) at the very end represent?",ar:"في اسم النطاق المؤهل بالكامل 'server.cisco.com.'، ماذا تمثل النقطة الأخيرة (.) في النهاية؟"},opts:[{en:'The root of the DNS namespace hierarchy',ar:'جذر الهيكل الهرمي لنظام أسماء النطاقات (DNS Root)'},{en:'A syntax error that prevents resolution',ar:'خطأ إملائي يمنع الترجمة'},{en:'The top-level domain extension',ar:'امتداد نطاق المستوى الأعلى'},{en:'An alias pointer to the IP address',ar:'مؤشر مستعار لعنوان الـ IP'}],correct:0,explain:{en:'The trailing dot explicitly signifies the root of the DNS hierarchy. While web browsers hide it, it is officially present in a Fully Qualified Domain Name.',ar:'النقطة الأخيرة بتمثل رسمياً جذر شجرة الـ DNS بالكامل. ورغم أن المتصفحات بتخفيها، إلا إنها جزء أساسي من الاسم الكامل FQDN.'}},{q:{en:"Why do network engineers commonly enter 'no ip domain-lookup' on Cisco routers?",ar:"لماذا يحرص مهندسو الشبكات على إدخال أمر 'no ip domain-lookup' على أجهزة سيسكو؟"},opts:[{en:'To disable the Ethernet interfaces',ar:'لتعطيل منافذ الإيثرنت'},{en:'To stop the router from freezing and broadcasting DNS queries when a command is mistyped',ar:'لمنع الراوتر من تجميد الشاشة وعمل بث DNS عند كتابة أمر خاطئ دون قصد'},{en:'To turn off IP routing',ar:'لتعطيل توجيه حزم الـ IP'},{en:'To allow Telnet access without a password',ar:'للسماح بالدخول عبر Telnet بدون كلمة مرور'}],correct:1,explain:{en:"Without 'no ip domain-lookup', any mistyped command causes Cisco IOS to treat the input as a hostname and broadcast DNS queries, freezing the console for up to 30 seconds.",ar:'بدون هذا الأمر، أي كلمة تتكتب غلط في سيسكو بيعتبرها الراوتر اسم جهاز وبيعمل بث DNS لمحاولة ترجمته، فتهنج الشاشة لمدة تصل لـ 30 ثانية.'}}]);
+buildQuiz('quizArea',[{q:{en:'What are the standard serial communication parameters required to connect a console cable to a Cisco device?',ar:'ما هي إعدادات الاتصال التسلسلي (Serial) القياسية المطلوبة للاتصال بجهاز سيسكو عبر كابل الكونسول؟'},opts:[{en:'9600 baud, 8 data bits, no parity, 1 stop bit, no flow control (9600-8-N-1)',ar:'سرعة 9600، 8 بت بيانات، بدون تطابق، 1 بت توقف، بدون تحكم بالتدفق (9600-8-N-1)'},{en:'115200 baud, 7 data bits, even parity, 2 stop bits',ar:'سرعة 115200، 7 بت بيانات، تطابق زوجي، 2 بت توقف'},{en:'4800 baud, 8 data bits, odd parity, 1 stop bit',ar:'سرعة 4800، 8 بت بيانات، تطابق فردي، 1 بت توقف'},{en:'9600 baud, 8 data bits, mark parity, flow control hardware',ar:'سرعة 9600، 8 بت بيانات، تطابق علامة، تحكم تدفق بالعتاد'}],correct:0,explain:{en:'The universal standard settings for connecting to a Cisco console port are: 9600 baud, 8 data bits, no parity, 1 stop bit, and no flow control (9600-8-N-1).',ar:'الإعدادات القياسية الثابتة للاتصال بمنفذ الكونسول في سيسكو هي: 9600 baud و 8 بت و None و 1 بت و None (9600-8-N-1).'}},{q:{en:"When you configure a command in 'Switch(config)#', where is the change immediately stored?",ar:"عند إدخال وتطبيق أمر في وضع الإعدادات 'Switch(config)#'، أين يتم تخزين التعديل فوراً؟"},opts:[{en:'In NVRAM as part of the startup-config',ar:'في ذاكرة NVRAM كجزء من startup-config'},{en:'In RAM as part of the running-config',ar:'في ذاكرة RAM كجزء من running-config'},{en:'In Flash memory alongside the IOS image',ar:'في ذاكرة الفلاش بجانب نظام التشغيل'},{en:'In ROM permanently',ar:'في ذاكرة ROM بشكل دائم'}],correct:1,explain:{en:"Configuration changes take effect immediately in volatile RAM as part of the running-config. They are not stored in persistent NVRAM until you run 'copy running-config startup-config' or 'write memory'.",ar:'التعديلات بتدخل حيز التنفيذ فوراً في ذاكرة RAM المؤقتة ضمن الـ running-config. ومش بتتحفظ في NVRAM إلا بعد كتابة أمر الحفظ `copy run start` أو `wr`.'}},{q:{en:"You enter 'clock set 14:00:00' in Privileged EXEC mode and the CLI returns '% Incomplete command'. What does this mean?",ar:"قمت بكتابة 'clock set 14:00:00' في وضع الصلاحيات وظهرت الرسالة '% Incomplete command'. ماذا تعني هذه الرسالة؟"},opts:[{en:'The command is misspelled and does not exist',ar:'الأمر مكتوب بشكل خاطئ وغير موجود في النظام'},{en:'The command syntax is valid so far, but requires additional mandatory arguments (e.g. month, day, year)',ar:'صيغة الأمر صحيحة حتى الآن، لكن ينقصها معاملات إجبارية إضافية (مثل الشهر واليوم والسنة)'},{en:'You lack administrative privileges to run this command',ar:'ليس لديك الصلاحيات الكافية لتشغيل هذا الأمر'},{en:'The switch clock hardware has failed',ar:'ساعة السويتش الداخلية معطلة فيزيائياً'}],correct:1,explain:{en:"'% Incomplete command' means you haven't provided all required arguments for the command. Using '?' shows what parameters are still needed to complete the command.",ar:"رسالة '% Incomplete command' معناها إن الأمر صح لحد دلوقتي، لكن لسه ناقصه معاملات إجبارية عشان يتنفذ. استخدام علامة `?` بيوريك إيه اللي ناقص."}},{q:{en:"From deep within sub-interface configuration mode 'Router(config-subif)#', what shortcut takes you directly back to Privileged EXEC mode 'Router#'?",ar:"وأنت داخل وضع إعدادات المنفذ الفرعي 'Router(config-subif)#'، ما الاختصار الذي يعيدك فوراً إلى وضع 'Router#' الرئيسي؟"},opts:[{en:'Ctrl + C',ar:'Ctrl + C'},{en:"Ctrl + Z (or typing 'end')",ar:"Ctrl + Z (أو كتابة أمر 'end')"},{en:'Ctrl + Shift + 6',ar:'Ctrl + Shift + 6'},{en:'Ctrl + A',ar:'Ctrl + A'}],correct:1,explain:{en:"Pressing Ctrl+Z or typing 'end' jumps directly from any configuration sub-mode back to Privileged EXEC mode (#), unlike 'exit' which only moves up one level.",ar:"الضغط على Ctrl+Z أو كتابة أمر 'end' بينقلك فوراً من أي وضع إعدادات فرعي إلى وضع الـ Privileged EXEC (#) مباشرة، بعكس أمر exit اللي بيرجعك خطوة واحدة بس."}},{q:{en:"An engineer is configuring an interface 'SW1(config-if)#' and wants to check IP interface statuses without exiting to privileged mode. Which command does this?",ar:"مهندس يقوم بضبط منفذ 'SW1(config-if)#' ويريد فحص حالة عناوين IP للمنافذ دون الخروج لوضع الـ privileged. أي أمر يحقق ذلك؟"},opts:[{en:'show ip interface brief',ar:'show ip interface brief'},{en:'do show ip interface brief',ar:'do show ip interface brief'},{en:'run show ip interface brief',ar:'run show ip interface brief'},{en:'exec show ip interface brief',ar:'exec show ip interface brief'}],correct:1,explain:{en:"The 'do' prefix allows executing any Privileged EXEC command (such as show, ping, traceroute, or write) directly from within configuration mode.",ar:"بادئة 'do' بتسمح بتشغيل أي أمر من أوامر وضع الصلاحيات (زي show و ping و wr) وأنت في مكانك داخل أوضاع الإعدادات دون الحاجة للخروج."}},{q:{en:"Which output modifier command displays only the configuration block corresponding to 'line vty' inside the running configuration?",ar:"أي أمر فلترة باستخدام الـ Pipe يعرض فقرة الإعدادات الخاصة بـ 'line vty' فقط من ملف الـ running-config؟"},opts:[{en:'show running-config | include line vty',ar:'show running-config | include line vty'},{en:'show running-config | section line vty',ar:'show running-config | section line vty'},{en:'show running-config | begin line vty',ar:'show running-config | begin line vty'},{en:'show running-config | exclude line vty',ar:'show running-config | exclude line vty'}],correct:1,explain:{en:"The '| section' modifier displays the matching line along with all its indented sub-configuration lines belonging to that section.",ar:"فلتر '| section' بيعرض السطر المطابق وكل الأسطر والخصائص التابعة ليه في نفس الفقرة، مما يوفر وقتاً كبيراً في استعراض الإعدادات."}}]);
+</script>
+</body>
+</html>
